@@ -39,18 +39,15 @@ export default function Nav() {
       <div className="flex items-center">
         <a href="#top" className="inline-flex items-center gap-3 group">
           <BrandMark />
-          <div className="flex flex-col gap-[3px] leading-none">
-            <span
-              className="text-[1.2rem] font-serif italic text-fg"
-              style={{ lineHeight: 1 }}
-            >
-              twinly
+          <span
+            className="text-[1.35rem] font-serif italic text-fg flex items-baseline"
+            style={{ lineHeight: 1 }}
+          >
+            twinly
+            <span className="text-accent ml-[2px] text-[1.6rem] leading-none relative -top-[2px]">
+              .
             </span>
-            <span className="flex items-center gap-[7px] text-[0.54rem] font-medium tracking-[0.22em] text-fg-3 uppercase">
-              <span className="live-dot" style={{ width: 5, height: 5 }} />
-              In private beta
-            </span>
-          </div>
+          </span>
         </a>
       </div>
 
@@ -118,15 +115,43 @@ export default function Nav() {
   );
 }
 
+/**
+ * Custom "twin" mark: two offset squares that overlap to form a ligature.
+ * The overlap fills with the accent colour — a geometric nod to "twin".
+ */
 function BrandMark() {
   return (
-    <div className="relative h-[38px] w-[38px] shrink-0">
-      <svg viewBox="0 0 38 38" className="h-full w-full overflow-visible">
-        <circle cx="19" cy="19" r="17.5" fill="none" stroke="hsl(var(--rule-hi))" strokeWidth="1" />
-        <circle cx="19" cy="19" r="12" fill="none" stroke="hsl(var(--accent))" strokeWidth="1" opacity="0.5" strokeDasharray="2 3" />
-        <circle cx="19" cy="19" r="5" fill="hsl(var(--accent))" />
-        <circle cx="19" cy="19" r="2" fill="hsl(var(--bg))" />
-        <style>{`@keyframes brand-spin { to { transform: rotate(360deg); } }`}</style>
+    <div className="relative h-[34px] w-[34px] shrink-0">
+      <svg viewBox="0 0 34 34" className="h-full w-full">
+        <defs>
+          <mask id="tw-mark-cut">
+            <rect width="34" height="34" fill="black" />
+            <rect x="4" y="4" width="18" height="18" fill="white" />
+            <rect x="12" y="12" width="18" height="18" fill="white" />
+          </mask>
+        </defs>
+        {/* Base: two overlapping squares, lime fill, with a cut-out that
+            shows the bg where they don't overlap */}
+        <rect
+          x="4"
+          y="4"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="hsl(var(--fg))"
+          strokeWidth="1.4"
+        />
+        <rect
+          x="12"
+          y="12"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="hsl(var(--fg))"
+          strokeWidth="1.4"
+        />
+        {/* Overlap region filled with accent */}
+        <rect x="12" y="12" width="10" height="10" fill="hsl(var(--accent))" />
       </svg>
     </div>
   );

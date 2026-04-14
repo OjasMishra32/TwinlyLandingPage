@@ -182,9 +182,8 @@ function Stage({
   active: number;
   barScale: ReturnType<typeof useTransform<number, number>>;
 }) {
-  const step = steps[active];
   return (
-    <div className="relative panel overflow-hidden min-h-[420px] md:min-h-[520px]">
+    <div className="relative panel overflow-hidden h-[480px] md:h-[540px]">
       {/* Chrome */}
       <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-rule bg-bg-3 f-mono text-[0.64rem] font-medium tracking-[0.14em] uppercase text-fg-3">
         <span className="flex items-center gap-3">
@@ -205,57 +204,72 @@ function Stage({
         </span>
       </div>
 
-      {/* Slide area — key on active re-mounts the content, triggering
-          a fresh enter animation. No AnimatePresence, so there's never
-          a moment where both slides are invisible. */}
-      <div className="relative px-5 md:px-10 py-10 md:py-14 min-h-[340px] md:min-h-[420px] overflow-hidden">
-        <motion.div
-          key={step.key}
-          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col justify-center"
-        >
-          <div className="f-mono text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-accent">
-            {step.label}
-          </div>
-          <h3
-            className="mt-2 font-semibold text-fg"
-            style={{
-              fontSize: "clamp(1.6rem,3.2vw,2.8rem)",
-              letterSpacing: "-0.025em",
-              lineHeight: 1.02,
-            }}
-          >
-            {step.title}
-          </h3>
-          <p className="mt-5 max-w-[640px] text-[15.5px] md:text-[16px] leading-relaxed text-fg-2">
-            {step.body}
-          </p>
-          {step.key === "draft" && (
-            <div className="mt-6 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-fg-3">
-              <span className="text-accent">Drafted</span> · matched 14 past replies
+      {/* Slide stack — every step is absolutely positioned, only the
+          active one is visible. No keys, no mounts/unmounts, so there's
+          zero chance of overlap or empty states during scroll. */}
+      <div className="relative h-[calc(100%-56px)] md:h-[calc(100%-58px)]">
+        {steps.map((step, i) => {
+          const isActive = i === active;
+          return (
+            <div
+              key={step.key}
+              aria-hidden={!isActive}
+              className="absolute inset-0 px-5 md:px-10 py-10 md:py-14 flex flex-col justify-center will-change-transform"
+              style={{
+                opacity: isActive ? 1 : 0,
+                transform: isActive
+                  ? "translateY(0) scale(1)"
+                  : i < active
+                  ? "translateY(-20px) scale(0.98)"
+                  : "translateY(20px) scale(0.98)",
+                filter: isActive ? "blur(0px)" : "blur(6px)",
+                pointerEvents: isActive ? "auto" : "none",
+                transition:
+                  "opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1), filter 0.5s ease",
+              }}
+            >
+              <div className="f-mono text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-accent">
+                {step.label}
+              </div>
+              <h3
+                className="mt-2 font-semibold text-fg"
+                style={{
+                  fontSize: "clamp(1.6rem,3.2vw,2.8rem)",
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.02,
+                }}
+              >
+                {step.title}
+              </h3>
+              <p className="mt-5 max-w-[640px] text-[15.5px] md:text-[16px] leading-relaxed text-fg-2">
+                {step.body}
+              </p>
+              {step.key === "draft" && (
+                <div className="mt-6 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-fg-3">
+                  <span className="text-accent">Drafted</span> · matched 14 past replies
+                </div>
+              )}
+              {step.key === "approve" && (
+                <div className="mt-6 flex items-center gap-2">
+                  <button className="btn primary !py-3 !px-4 !text-[0.64rem]">
+                    Approve &amp; send
+                    <span className="arrow" />
+                  </button>
+                  <button className="btn !py-3 !px-4 !text-[0.64rem]">
+                    Edit
+                    <span className="arrow" />
+                  </button>
+                </div>
+              )}
+              {step.key === "done" && (
+                <div className="mt-6 inline-flex items-center gap-2 border border-rule bg-bg-2 px-3 py-2 f-mono text-[0.66rem] font-medium text-fg w-fit">
+                  <span className="w-[6px] h-[6px] rounded-full bg-accent" />
+                  Sent · just now
+                </div>
+              )}
             </div>
-          )}
-          {step.key === "approve" && (
-            <div className="mt-6 flex items-center gap-2">
-              <button className="btn primary !py-3 !px-4 !text-[0.64rem]">
-                Approve &amp; send
-                <span className="arrow" />
-              </button>
-              <button className="btn !py-3 !px-4 !text-[0.64rem]">
-                Edit
-                <span className="arrow" />
-              </button>
-            </div>
-          )}
-          {step.key === "done" && (
-            <div className="mt-6 inline-flex items-center gap-2 border border-rule bg-bg-2 px-3 py-2 f-mono text-[0.66rem] font-medium text-fg w-fit">
-              <span className="w-[6px] h-[6px] rounded-full bg-accent" />
-              Sent · just now
-            </div>
-          )}
-        </motion.div>
+          );
+        })}
       </div>
 
       {/* Progress bar */}

@@ -5,15 +5,15 @@ export default function Footer() {
         <div className="grid md:grid-cols-[1.1fr_1fr_1fr_1fr] gap-10 md:gap-16 pb-16">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <svg viewBox="0 0 38 38" className="h-10 w-10">
-                <circle cx="19" cy="19" r="17.5" fill="none" stroke="hsl(var(--rule-hi))" strokeWidth="1" />
-                <circle cx="19" cy="19" r="12" fill="none" stroke="hsl(var(--accent))" strokeWidth="1" opacity="0.5" strokeDasharray="2 3" />
-                <circle cx="19" cy="19" r="5" fill="hsl(var(--accent))" />
-                <circle cx="19" cy="19" r="2" fill="hsl(var(--bg))" />
+              <svg viewBox="0 0 34 34" className="h-10 w-10">
+                <rect x="4" y="4" width="18" height="18" fill="none" stroke="hsl(var(--fg))" strokeWidth="1.4" />
+                <rect x="12" y="12" width="18" height="18" fill="none" stroke="hsl(var(--fg))" strokeWidth="1.4" />
+                <rect x="12" y="12" width="10" height="10" fill="hsl(var(--accent))" />
               </svg>
               <div className="flex flex-col gap-1 leading-none">
-                <span className="text-[1.3rem] font-serif italic text-fg" style={{ lineHeight: 1 }}>
+                <span className="text-[1.4rem] font-serif italic text-fg flex items-baseline" style={{ lineHeight: 1 }}>
                   twinly
+                  <span className="text-accent ml-[2px] text-[1.65rem] relative -top-[2px]">.</span>
                 </span>
                 <span className="f-mono text-[0.56rem] tracking-[0.2em] uppercase text-fg-3">
                   A personal AI operator

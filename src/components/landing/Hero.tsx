@@ -1,7 +1,7 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import SplineRobot from "./SplineRobot";
+import HeroComposer from "./HeroComposer";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
 const BASE = 0.1;
@@ -71,18 +71,28 @@ export default function Hero() {
     <section
       id="top"
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
-      style={{ padding: "130px 0 64px" }}
+      style={{ padding: "140px 0 80px" }}
     >
       {/* Ambient washes */}
       <div className="absolute inset-0 hero-wash" aria-hidden />
-      <div className="absolute inset-0 grid-overlay opacity-80" aria-hidden />
+      <div className="absolute inset-0 grid-overlay opacity-70" aria-hidden />
 
-      {/* Spline robot + HUD — positioned right on desktop, full-width behind text on mobile */}
-      <div className="absolute inset-y-0 right-0 w-full md:w-[64%] z-[1]">
+      {/* Spline robot — fills the right half as the premium visual */}
+      <div className="absolute inset-y-0 right-[-4%] w-full md:w-[68%] z-[1]">
         <div className="relative h-full w-full">
           <SplineRobot />
         </div>
       </div>
+
+      {/* Left-edge gradient so text stays readable */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 left-0 w-[62%] z-[2] pointer-events-none hidden md:block"
+        style={{
+          background:
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 26%, hsl(var(--bg) / 0.8) 55%, hsl(var(--bg) / 0.3) 82%, transparent 100%)",
+        }}
+      />
 
       <div className="relative z-[4] w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <Fade delay={0}>
@@ -101,7 +111,7 @@ export default function Hero() {
         <h1
           className="tw-display text-fg mb-8"
           style={{
-            fontSize: "clamp(2.8rem, 7.6vw, 8.4rem)",
+            fontSize: "clamp(2.8rem, 7.2vw, 8rem)",
             lineHeight: 0.88,
             letterSpacing: "-0.045em",
             maxWidth: "14ch",
@@ -125,9 +135,8 @@ export default function Hero() {
             className="text-fg-2 mb-9"
             style={{
               maxWidth: "46ch",
-              fontSize: "clamp(1.02rem, 1.2vw, 1.22rem)",
+              fontSize: "clamp(1rem, 1.18vw, 1.2rem)",
               lineHeight: 1.5,
-              fontWeight: 400,
             }}
           >
             Twinly learns how you <b className="text-fg font-semibold">write</b>, what you
@@ -153,7 +162,7 @@ export default function Hero() {
         <Fade delay={0.78}>
           <div
             ref={statsRef}
-            className="grid gap-10 pt-6 border-t border-rule max-w-[680px]"
+            className="grid gap-10 pt-6 border-t border-rule max-w-[620px]"
             style={{ gridTemplateColumns: "repeat(3, auto)" }}
           >
             {[
@@ -178,6 +187,11 @@ export default function Hero() {
             ))}
           </div>
         </Fade>
+      </div>
+
+      {/* Composer card — floating overlay anchored bottom-right, above the robot */}
+      <div className="hidden lg:block absolute z-[5] bottom-[12%] right-[3%] xl:right-[4%] w-[420px] pointer-events-auto">
+        <HeroComposer />
       </div>
 
       {/* Scroll indicator */}

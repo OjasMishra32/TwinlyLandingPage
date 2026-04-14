@@ -7,15 +7,22 @@ import {
 } from "framer-motion";
 
 const words = ["MEMORY", "VOICE", "ACTION", "APPROVAL"];
-const subtitles = [
-  "Knows how you sound, what you care about, who you work with.",
-  "Drafts replies in your tone. Not a generic AI voice.",
-  "Plans, gathers context, composes, executes. End to end.",
-  "You stay in the loop. Nothing moves without your nod.",
-];
+const subtitles: Record<string, string> = {
+  MEMORY: "Knows how you sound, what you care about, who you work with.",
+  VOICE: "Drafts replies in your tone. Not a generic AI voice.",
+  ACTION: "Plans, gathers context, composes, executes. End to end.",
+  APPROVAL: "You stay in the loop. Nothing moves without your nod.",
+};
+
+/**
+ * Duplicate the word list a few times so the track is much wider than the
+ * viewport. Pair each word with a stable id so React keys are unique across
+ * duplicates.
+ */
+const TRACK = [...words, ...words, ...words].map((w, i) => ({ w, id: i }));
 
 export default function BigScroll() {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -23,36 +30,39 @@ export default function BigScroll() {
     offset: ["start end", "end start"],
   });
 
-  // Horizontal pan — tuned so the track drifts from slightly right to slightly left
-  const x = useTransform(scrollYProgress, [0, 1], ["10%", "-34%"]);
+  /**
+   * Horizontal pan from fully off-screen right → fully off-screen left.
+   * With three duplicated word sets, moving the track by ~66% of its width
+   * ensures every word passes through the viewport centre on the way.
+   */
+  const x = useTransform(scrollYProgress, [0, 1], ["18%", "-78%"]);
 
-  const [active, setActive] = useState(2); // ACTION as default highlight
-  const [ready, setReady] = useState(false);
+  const [active, setActive] = useState<string>("ACTION");
 
-  // On each animation frame via scroll change, find the word closest to viewport centre
+  // Pick the word closest to the viewport centre on every scroll tick
   useMotionValueEvent(scrollYProgress, "change", () => {
     if (!trackRef.current) return;
-    const track = trackRef.current;
     const items = Array.from(
-      track.querySelectorAll<HTMLElement>("[data-word]")
+      trackRef.current.querySelectorAll<HTMLElement>("[data-word]")
     );
     if (!items.length) return;
     const centre = window.innerWidth / 2;
-    let best = 0;
+    let best = items[0];
     let min = Infinity;
-    for (let i = 0; i < items.length; i++) {
-      const r = items[i].getBoundingClientRect();
+    for (const el of items) {
+      const r = el.getBoundingClientRect();
       const c = r.left + r.width / 2;
       const d = Math.abs(c - centre);
       if (d < min) {
         min = d;
-        best = i;
+        best = el;
       }
     }
-    const idx = best % words.length;
-    if (idx !== active) setActive(idx);
+    const w = best.dataset.wordText;
+    if (w && w !== active) setActive(w);
   });
 
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     const t = window.setTimeout(() => setReady(true), 40);
     return () => window.clearTimeout(t);
@@ -62,7 +72,7 @@ export default function BigScroll() {
     <section
       ref={ref}
       className="relative border-t border-rule bg-bg-2/40 overflow-hidden"
-      style={{ padding: "clamp(96px, 14vh, 180px) 0" }}
+      style={{ padding: "clamp(110px, 16vh, 200px) 0" }}
     >
       {/* Soft radial behind */}
       <div
@@ -70,7 +80,7 @@ export default function BigScroll() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 40% at 50% 50%, hsl(var(--accent) / 0.06) 0%, transparent 60%)",
+            "radial-gradient(55% 38% at 50% 50%, hsl(var(--accent) / 0.06) 0%, transparent 60%)",
         }}
       />
 
@@ -84,36 +94,53 @@ export default function BigScroll() {
         }}
       />
 
+      {/* Edge fade masks so words gracefully exit left/right */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 w-[18%] z-[2]"
+        style={{
+          background:
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, transparent 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-0 w-[18%] z-[2]"
+        style={{
+          background:
+            "linear-gradient(270deg, hsl(var(--bg)) 0%, transparent 100%)",
+        }}
+      />
+
       {/* Big horizontal track */}
       <motion.div
         ref={trackRef}
         style={{ x }}
-        className="relative flex items-center gap-[0.22em] whitespace-nowrap font-semibold text-fg"
+        className="relative flex items-center gap-[0.25em] whitespace-nowrap font-semibold text-fg will-change-transform"
         aria-hidden
       >
-        {[...words, ...words].map((w, i) => {
-          const isActive = i % words.length === active;
+        {TRACK.map(({ w, id }) => {
+          const isActive = w === active;
           return (
             <span
-              key={`${w}-${i}`}
+              key={id}
               data-word
-              className="flex items-center gap-[0.3em] will-change-transform"
+              data-word-text={w}
+              className="flex items-center gap-[0.32em]"
             >
               <motion.span
                 initial={false}
                 animate={{
-                  scale: isActive ? 1 : 0.94,
-                  opacity: isActive ? 1 : 0.28,
-                  filter: isActive ? "blur(0px)" : "blur(1.5px)",
-                  color: isActive
-                    ? "hsl(var(--accent))"
-                    : "hsl(var(--fg))",
+                  scale: isActive ? 1 : 0.92,
+                  opacity: isActive ? 1 : 0.22,
+                  filter: isActive ? "blur(0px)" : "blur(2px)",
+                  color: isActive ? "hsl(var(--accent))" : "hsl(var(--fg))",
                 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  fontSize: "clamp(5rem,16vw,16rem)",
+                  fontSize: "clamp(4.5rem,14vw,14rem)",
                   lineHeight: 0.82,
-                  letterSpacing: "-0.055em",
+                  letterSpacing: "-0.05em",
                   fontFamily: isActive
                     ? "'Instrument Serif', serif"
                     : undefined,
@@ -125,11 +152,7 @@ export default function BigScroll() {
                   display: "inline-block",
                 }}
               >
-                {ready ? (
-                  <SplitLetters text={w} active={isActive} />
-                ) : (
-                  w
-                )}
+                {ready && isActive ? <SplitLetters text={w} /> : w}
               </motion.span>
               <motion.span
                 animate={{
@@ -137,7 +160,7 @@ export default function BigScroll() {
                   scale: isActive ? 1.2 : 1,
                 }}
                 transition={{ duration: 0.5 }}
-                className="inline-block w-[0.2em] h-[0.2em] rounded-full bg-accent"
+                className="inline-block w-[0.18em] h-[0.18em] rounded-full bg-accent"
               />
             </span>
           );
@@ -158,8 +181,8 @@ export default function BigScroll() {
             transition={{ duration: 0.5 }}
             className="max-w-[46ch]"
           >
-            <div className="font-serif italic text-fg text-[1.8rem] leading-none">
-              {words[active].toLowerCase()}
+            <div className="font-serif italic text-fg text-[1.9rem] leading-none">
+              {active.toLowerCase()}
             </div>
             <p className="mt-2 text-[14px] text-fg-2 leading-relaxed">
               {subtitles[active]}
@@ -174,12 +197,7 @@ export default function BigScroll() {
   );
 }
 
-/**
- * Splits a word into individual letters so the active word gets a
- * subtle staggered wave. Non-active words render the plain word.
- */
-function SplitLetters({ text, active }: { text: string; active: boolean }) {
-  if (!active) return <>{text}</>;
+function SplitLetters({ text }: { text: string }) {
   return (
     <>
       {text.split("").map((ch, i) => (
