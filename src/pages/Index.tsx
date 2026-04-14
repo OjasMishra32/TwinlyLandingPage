@@ -1,15 +1,10 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
 import Problem from "@/components/landing/Problem";
-import Pillars from "@/components/landing/Pillars";
-import BigScroll from "@/components/landing/BigScroll";
-import Marquee from "@/components/landing/Marquee";
-import Demo from "@/components/landing/Demo";
 import UseCases from "@/components/landing/UseCases";
 import TwinEdge from "@/components/landing/TwinEdge";
 import TwinReveal from "@/components/landing/TwinReveal";
 import Trust from "@/components/landing/Trust";
-import Thesis from "@/components/landing/Thesis";
 import Waitlist from "@/components/landing/Waitlist";
 import Footer from "@/components/landing/Footer";
 import GrainOverlay from "@/components/landing/GrainOverlay";
@@ -25,16 +20,11 @@ const Index = () => {
       <Nav />
       <main>
         <Hero />
-        <Marquee />
         <TwinReveal />
         <Problem />
-        <Pillars />
-        <BigScroll />
-        <Demo />
         <UseCases />
         <TwinEdge />
         <Trust />
-        <Thesis />
         <Waitlist />
       </main>
       <Footer />

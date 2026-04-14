@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const centerLinks = [
-  { label: "Product", href: "#product" },
-  { label: "Demo", href: "#demo" },
+  { label: "Playbooks", href: "#use-cases" },
+  { label: "Edge", href: "#edge" },
   { label: "Trust", href: "#trust" },
-  { label: "Thesis", href: "#thesis" },
+  { label: "Access", href: "#waitlist" },
 ];
 
 export default function Nav() {

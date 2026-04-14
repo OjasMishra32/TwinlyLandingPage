@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import SplineRobot from "./SplineRobot";
-import HeroComposer from "./HeroComposer";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
 const BASE = 0.1;
@@ -95,19 +94,6 @@ export default function Hero() {
       />
 
       <div className="relative z-[4] w-full max-w-[1680px] mx-auto px-6 md:px-14">
-        <Fade delay={0}>
-          <div className="inline-flex items-center gap-3 mb-8">
-            <span className="live-dot" />
-            <span className="f-mono text-[0.66rem] font-medium tracking-[0.22em] text-fg-2 uppercase">
-              In private beta
-            </span>
-            <span className="text-fg-4 f-mono text-[0.66rem]">—</span>
-            <span className="f-mono text-[0.66rem] font-medium tracking-[0.22em] text-fg-3 uppercase">
-              Invite only
-            </span>
-          </div>
-        </Fade>
-
         <h1
           className="tw-display text-fg mb-8"
           style={{
@@ -152,8 +138,8 @@ export default function Hero() {
               Request access
               <span className="arrow" />
             </a>
-            <a ref={secondaryRef} href="#demo" className="btn will-change-transform">
-              Watch it work
+            <a ref={secondaryRef} href="#use-cases" className="btn will-change-transform">
+              See a playbook
               <span className="arrow" />
             </a>
           </div>
@@ -187,11 +173,6 @@ export default function Hero() {
             ))}
           </div>
         </Fade>
-
-        {/* Live twin activity — inline below the stats, far from the robot */}
-        <div className="hidden md:block mt-10 max-w-[680px]">
-          <HeroComposer />
-        </div>
       </div>
 
       {/* Scroll indicator */}
