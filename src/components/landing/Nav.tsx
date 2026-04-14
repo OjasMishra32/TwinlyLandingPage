@@ -51,13 +51,13 @@ export default function Nav() {
         </a>
       </div>
 
-      <nav className="hidden lg:flex items-center gap-1 p-1 bg-bg-2 border border-rule text-[0.68rem] font-medium tracking-[0.14em] uppercase">
+      <nav className="hidden lg:flex items-center gap-9 text-[0.66rem] font-medium tracking-[0.18em] uppercase">
         {centerLinks.map((l) => (
           <a
             key={l.href}
             href={l.href}
-            className="relative px-4 py-2.5 text-fg-2 hover:text-bg transition-colors
-              before:content-[''] before:absolute before:inset-0 before:bg-accent before:scale-y-0 before:origin-bottom before:transition-transform before:duration-300 before:-z-10 hover:before:scale-y-100"
+            className="relative text-fg-2 hover:text-fg transition-colors py-2
+              after:content-[''] after:absolute after:inset-x-0 after:-bottom-0 after:h-[1px] after:bg-accent after:scale-x-0 after:origin-left after:transition-transform after:duration-400 hover:after:scale-x-100"
           >
             {l.label}
           </a>
@@ -74,9 +74,8 @@ export default function Nav() {
         </a>
         <a
           href="#waitlist"
-          className="inline-flex items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 bg-accent text-bg border border-accent relative overflow-hidden font-semibold
+          className="inline-flex items-center gap-3 px-5 py-3 bg-accent text-bg border border-accent relative overflow-hidden font-medium
             before:content-[''] before:absolute before:inset-0 before:bg-fg before:translate-y-full before:transition-transform before:duration-500 before:-z-10 hover:before:translate-y-0"
-          style={{ boxShadow: "0 0 0 1px hsl(var(--accent) / 0.3), 0 10px 40px -12px hsl(var(--accent) / 0.5)" }}
         >
           Request access
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none" className="shrink-0">

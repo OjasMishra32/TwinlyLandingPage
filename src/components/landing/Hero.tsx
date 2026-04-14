@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
 import SplineRobot from "./SplineRobot";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
@@ -32,37 +32,7 @@ function Fade({ children, delay = 0 }: { children: ReactNode; delay?: number }) 
   );
 }
 
-function CountUp({
-  to,
-  decimals = 0,
-  duration = 1400,
-  start,
-}: {
-  to: number;
-  decimals?: number;
-  duration?: number;
-  start: boolean;
-}) {
-  const [v, setV] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let raf = 0;
-    const from = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - from) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setV(eased * to);
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [start, to, duration]);
-  return <>{v.toFixed(decimals)}</>;
-}
-
 export default function Hero() {
-  const statsRef = useRef<HTMLDivElement>(null);
-  const statsInView = useInView(statsRef, { once: true, margin: "-10%" });
   const primaryRef = useMagnetic<HTMLAnchorElement>({ radius: 150, strength: 0.32 });
   const secondaryRef = useMagnetic<HTMLAnchorElement>({ radius: 130, strength: 0.22 });
 
@@ -95,12 +65,13 @@ export default function Hero() {
 
       <div className="relative z-[4] w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <h1
-          className="tw-display text-fg mb-8"
+          className="tw-display text-fg mb-10"
           style={{
-            fontSize: "clamp(2.8rem, 7.2vw, 8rem)",
-            lineHeight: 0.88,
-            letterSpacing: "-0.045em",
-            maxWidth: "14ch",
+            fontSize: "clamp(3rem, 7.6vw, 8.6rem)",
+            lineHeight: 0.96,
+            letterSpacing: "-0.025em",
+            maxWidth: "13ch",
+            fontWeight: 400,
           }}
         >
           <Line delay={0}>
@@ -118,22 +89,24 @@ export default function Hero() {
 
         <Fade delay={0.5}>
           <p
-            className="text-fg-2 mb-9"
+            className="text-fg-2 mb-11 f-sans"
             style={{
-              maxWidth: "46ch",
-              fontSize: "clamp(1rem, 1.18vw, 1.2rem)",
-              lineHeight: 1.5,
+              maxWidth: "48ch",
+              fontSize: "clamp(1.05rem, 1.22vw, 1.24rem)",
+              lineHeight: 1.62,
+              fontWeight: 400,
             }}
           >
-            Twinly learns how you <b className="text-fg font-semibold">write</b>, what you
-            <b className="text-fg font-semibold"> prefer</b>, and how you handle things —
-            then it drafts, schedules, follows up, and moves life-admin forward while you
-            <b className="text-fg font-semibold"> stay in control</b>.
+            A personal operator that learns how you{" "}
+            <b className="text-fg font-medium">write</b>, what you{" "}
+            <b className="text-fg font-medium">prefer</b>, and how you handle
+            things — then drafts, schedules, negotiates, and moves life-admin
+            forward while you <b className="text-fg font-medium">stay in control</b>.
           </p>
         </Fade>
 
         <Fade delay={0.62}>
-          <div className="flex gap-3 flex-wrap mb-14">
+          <div className="flex gap-3 flex-wrap">
             <a ref={primaryRef} href="#waitlist" className="btn primary will-change-transform">
               Request access
               <span className="arrow" />
@@ -144,44 +117,15 @@ export default function Hero() {
             </a>
           </div>
         </Fade>
-
-        <Fade delay={0.78}>
-          <div
-            ref={statsRef}
-            className="grid gap-10 pt-6 border-t border-rule max-w-[620px]"
-            style={{ gridTemplateColumns: "repeat(3, auto)" }}
-          >
-            {[
-              { k: "Tasks / day", v: 12, d: 0, em: "avg" },
-              { k: "Hours saved / wk", v: 8.5, d: 1, em: "median" },
-              { k: "Approved auto", v: 94, d: 0, em: "%" },
-            ].map((kv) => (
-              <div key={kv.k} className="flex flex-col gap-1.5">
-                <span className="f-mono text-[0.6rem] font-medium tracking-[0.18em] uppercase text-fg-3">
-                  {kv.k}
-                </span>
-                <span
-                  className="font-semibold text-fg flex items-baseline gap-1"
-                  style={{ fontSize: "1.85rem", letterSpacing: "-0.025em" }}
-                >
-                  <CountUp to={kv.v} decimals={kv.d} start={statsInView} />
-                  <em className="not-italic text-accent f-mono text-[0.72rem] font-normal">
-                    {kv.em}
-                  </em>
-                </span>
-              </div>
-            ))}
-          </div>
-        </Fade>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — tiny, unobtrusive */}
       <Fade delay={1}>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[4] flex flex-col items-center gap-2">
-          <span className="f-mono text-[0.58rem] tracking-[0.22em] uppercase text-fg-3">
-            Scroll
+        <div className="absolute bottom-10 left-6 md:left-14 z-[4] flex items-center gap-3">
+          <div className="h-px w-8 bg-fg-4" />
+          <span className="f-mono text-[0.55rem] tracking-[0.26em] uppercase text-fg-3">
+            Scroll to begin
           </span>
-          <div className="h-8 w-px bg-gradient-to-b from-fg-3 to-transparent" />
         </div>
       </Fade>
     </section>
