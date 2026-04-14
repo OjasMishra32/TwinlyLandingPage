@@ -6,11 +6,13 @@ type Status = "idle" | "submitting" | "success" | "error";
 const intents = [
   "File my taxes",
   "Plan the whole trip",
-  "Write the hard thing",
-  "Kill the bloat",
-  "Fill every form",
+  "Do my homework",
+  "Chase the refund",
+  "Find me a place",
   "Run my inbox",
 ];
+
+const FOUNDER_EMAIL = "founders@twinly.tech";
 
 export default function Waitlist() {
   const [email, setEmail] = useState("");
@@ -24,7 +26,22 @@ export default function Waitlist() {
       return;
     }
     setStatus("submitting");
-    setTimeout(() => setStatus("success"), 900);
+
+    const subject = encodeURIComponent(`Waitlist · ${email}`);
+    const body = encodeURIComponent(
+      [
+        `Email: ${email}`,
+        `Would hand over first: ${intent || "(not specified)"}`,
+        "",
+        "— Sent from twinly.tech waitlist",
+      ].join("\n")
+    );
+    const mailto = `mailto:${FOUNDER_EMAIL}?subject=${subject}&body=${body}`;
+
+    window.setTimeout(() => {
+      window.location.href = mailto;
+      setStatus("success");
+    }, 400);
   }
 
   return (
@@ -56,7 +73,7 @@ export default function Waitlist() {
           </h2>
           <p className="mt-6 max-w-[58ch] text-[17px] leading-relaxed text-fg-2 font-normal">
             We're letting people in a few at a time. Tell us what you'd hand over first —
-            we'll bring you in when your twin is ready.
+            we'll bring you in when your twin is ready. Founders read every reply.
           </p>
         </motion.div>
 
@@ -69,12 +86,17 @@ export default function Waitlist() {
           className="mt-12 panel p-6 md:p-8"
         >
           <div className="flex flex-col md:flex-row gap-3 md:gap-0">
-            <label htmlFor="email" className="sr-only">Email</label>
+            <label htmlFor="email" className="sr-only">
+              Email
+            </label>
             <input
               id="email"
               type="email"
               value={email}
-              onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle"); }}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status === "error") setStatus("idle");
+              }}
               placeholder="you@domain.com"
               required
               className="flex-1 h-14 bg-bg border border-rule-hi px-5 text-[15px] text-fg placeholder:text-fg-3 focus:outline-none focus:border-accent focus:bg-bg-2 f-sans transition-colors"
@@ -84,10 +106,10 @@ export default function Waitlist() {
               disabled={status === "submitting" || status === "success"}
               className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 md:-ml-[1px] disabled:opacity-80"
             >
-              {status === "submitting" && "Adding you…"}
+              {status === "submitting" && "Opening mail…"}
               {status === "success" && (
                 <>
-                  You're in
+                  Hit send
                   <span className="arrow" />
                 </>
               )}
@@ -103,6 +125,11 @@ export default function Waitlist() {
           {status === "error" && (
             <p className="mt-3 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-ember">
               Please enter a valid email
+            </p>
+          )}
+          {status === "success" && (
+            <p className="mt-3 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-accent">
+              Your mail client opened — hit send and you're on the list.
             </p>
           )}
 
@@ -128,16 +155,19 @@ export default function Waitlist() {
             </div>
           </div>
 
-          <div className="mt-8 pt-5 border-t border-rule flex items-center justify-between f-mono text-[0.6rem] font-medium tracking-[0.14em] uppercase text-fg-3">
+          <div className="mt-8 pt-5 border-t border-rule flex flex-col md:flex-row md:items-center md:justify-between gap-3 f-mono text-[0.6rem] font-medium tracking-[0.14em] uppercase text-fg-3">
             <span>
               <b className="text-fg font-medium">No spam, ever.</b>
               <span className="text-fg-4 mx-2">/</span>
               Privacy-first
             </span>
-            <span className="flex items-center gap-2">
+            <a
+              href={`mailto:${FOUNDER_EMAIL}`}
+              className="inline-flex items-center gap-2 text-fg-2 hover:text-accent transition-colors"
+            >
               <span className="live-dot" />
-              Rolling access
-            </span>
+              or reach us directly · {FOUNDER_EMAIL}
+            </a>
           </div>
         </motion.form>
       </div>

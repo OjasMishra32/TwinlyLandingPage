@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /**
- * Pure-transform cursor. No width/height transitions (which cause layout
- * thrashing), no text I-beam mode (which glitches on DOM churn), no label
- * overlay. Just: a ring that tracks the cursor with smooth lerp, a dot
- * that tracks near-instant, and a scale up on interactive hover.
+ * Reticle — a tight targeting aperture that tracks the cursor.
+ * Single element, single transform per frame, rAF idle-stops when
+ * the cursor is still.
  */
 export default function Reticle() {
-  const ringRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -21,88 +18,97 @@ export default function Reticle() {
       return;
     }
 
-    const ring = ringRef.current;
-    const dot = dotRef.current;
-    if (!ring || !dot) return;
+    const el = ref.current;
+    if (!el) return;
 
     document.body.classList.add("cursor-on");
 
-    // Cache last hover state so we don't thrash classList every pointermove
-    let lastHover = false;
-
     let tx = window.innerWidth / 2;
     let ty = window.innerHeight / 2;
-    let rx = tx;
-    let ry = ty;
-    let dx = tx;
-    let dy = ty;
-    let ringScale = 1;
-    let dotScale = 1;
-    let targetRingScale = 1;
-    let targetDotScale = 1;
+    let x = tx;
+    let y = ty;
+    let scale = 1;
+    let targetScale = 1;
+    let rot = 0;
+    let targetRot = 0;
+    let hover = false;
+    let running = false;
+    let raf = 0;
     let hasMoved = false;
+
+    const tick = () => {
+      const dx = tx - x;
+      const dy = ty - y;
+      const ds = targetScale - scale;
+      const dr = targetRot - rot;
+      x += dx * 0.5;
+      y += dy * 0.5;
+      scale += ds * 0.22;
+      rot += dr * 0.18;
+      el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale}) rotate(${rot}deg)`;
+      if (
+        Math.abs(dx) < 0.1 &&
+        Math.abs(dy) < 0.1 &&
+        Math.abs(ds) < 0.001 &&
+        Math.abs(dr) < 0.05
+      ) {
+        running = false;
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    const kick = () => {
+      if (!running) {
+        running = true;
+        raf = requestAnimationFrame(tick);
+      }
+    };
 
     const onMove = (e: PointerEvent) => {
       tx = e.clientX;
       ty = e.clientY;
       if (!hasMoved) {
-        rx = tx;
-        ry = ty;
-        dx = tx;
-        dy = ty;
+        x = tx;
+        y = ty;
         hasMoved = true;
-        setReady(true);
+        el.style.opacity = "1";
       }
 
       const target = e.target;
-      const hover =
+      const h =
         target instanceof Element &&
         !!target.closest(
           "a, button, input, textarea, select, label, [role='button'], [data-magnetic]"
         );
-      if (hover !== lastHover) {
-        lastHover = hover;
-        targetRingScale = hover ? 1.7 : 1;
-        targetDotScale = hover ? 0.5 : 1;
+      if (h !== hover) {
+        hover = h;
+        targetScale = hover ? 1.55 : 1;
+        targetRot = hover ? 45 : 0;
       }
+      kick();
     };
 
     const onDown = () => {
-      targetRingScale = lastHover ? 1.2 : 0.7;
-      targetDotScale = 1.6;
+      targetScale = hover ? 1.15 : 0.78;
+      kick();
     };
     const onUp = () => {
-      targetRingScale = lastHover ? 1.7 : 1;
-      targetDotScale = lastHover ? 0.5 : 1;
+      targetScale = hover ? 1.55 : 1;
+      kick();
     };
     const onEnter = () => {
-      if (hasMoved) setReady(true);
+      if (hasMoved) el.style.opacity = "1";
     };
-    const onLeave = () => setReady(false);
+    const onLeave = () => {
+      el.style.opacity = "0";
+    };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
     document.documentElement.addEventListener("pointerenter", onEnter);
     document.documentElement.addEventListener("pointerleave", onLeave);
-
-    let raf = 0;
-    const tick = () => {
-      // Dot tracks snappy
-      dx += (tx - dx) * 0.55;
-      dy += (ty - dy) * 0.55;
-      // Ring lerps smoothly behind with a noticeable trail
-      rx += (tx - rx) * 0.22;
-      ry += (ty - ry) * 0.22;
-      ringScale += (targetRingScale - ringScale) * 0.22;
-      dotScale += (targetDotScale - dotScale) * 0.3;
-
-      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%) scale(${ringScale})`;
-      dot.style.transform = `translate3d(${dx}px, ${dy}px, 0) translate(-50%, -50%) scale(${dotScale})`;
-
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -117,50 +123,47 @@ export default function Reticle() {
 
   return (
     <>
-      <div
-        ref={ringRef}
-        className={`reticle-ring${ready ? " ready" : ""}`}
-        aria-hidden
-      />
-      <div
-        ref={dotRef}
-        className={`reticle-dot${ready ? " ready" : ""}`}
-        aria-hidden
-      />
+      <div ref={ref} className="reticle" aria-hidden>
+        <span className="bracket tl" />
+        <span className="bracket tr" />
+        <span className="bracket bl" />
+        <span className="bracket br" />
+        <span className="dot" />
+      </div>
       <style>{`
-        .reticle-ring,
-        .reticle-dot {
+        .reticle {
           position: fixed;
           top: 0;
           left: 0;
+          width: 30px;
+          height: 30px;
           pointer-events: none;
           z-index: 10000;
           opacity: 0;
-          will-change: transform;
           transform: translate3d(-200px, -200px, 0) translate(-50%, -50%);
-          transition: opacity 0.3s ease;
+          transition: opacity 0.25s ease;
+          will-change: transform;
         }
-
-        .reticle-ring {
-          width: 38px;
-          height: 38px;
-          border: 1.5px solid hsl(var(--accent));
-          border-radius: 999px;
-          box-shadow:
-            0 0 18px 0 hsl(var(--accent) / 0.45),
-            inset 0 0 8px 0 hsl(var(--accent) / 0.18);
+        .reticle .bracket {
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          box-sizing: border-box;
         }
-
-        .reticle-dot {
-          width: 5px;
-          height: 5px;
+        .reticle .bracket.tl { top: 0; left: 0; border-top: 1.2px solid hsl(var(--accent)); border-left: 1.2px solid hsl(var(--accent)); }
+        .reticle .bracket.tr { top: 0; right: 0; border-top: 1.2px solid hsl(var(--accent)); border-right: 1.2px solid hsl(var(--accent)); }
+        .reticle .bracket.bl { bottom: 0; left: 0; border-bottom: 1.2px solid hsl(var(--accent)); border-left: 1.2px solid hsl(var(--accent)); }
+        .reticle .bracket.br { bottom: 0; right: 0; border-bottom: 1.2px solid hsl(var(--accent)); border-right: 1.2px solid hsl(var(--accent)); }
+        .reticle .dot {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 3px;
+          height: 3px;
           background: hsl(var(--accent));
-          border-radius: 999px;
-          box-shadow: 0 0 14px 2px hsl(var(--accent) / 0.7);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
         }
-
-        .reticle-ring.ready,
-        .reticle-dot.ready { opacity: 1; }
 
         body.cursor-on,
         body.cursor-on a,
@@ -168,8 +171,10 @@ export default function Reticle() {
         body.cursor-on input,
         body.cursor-on textarea,
         body.cursor-on label { cursor: none; }
+
         @media (max-width: 900px), (hover: none) {
           body.cursor-on, body.cursor-on * { cursor: auto !important; }
+          .reticle { display: none; }
         }
       `}</style>
     </>

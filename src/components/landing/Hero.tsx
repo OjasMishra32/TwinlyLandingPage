@@ -77,8 +77,8 @@ export default function Hero() {
       <div className="absolute inset-0 hero-wash" aria-hidden />
       <div className="absolute inset-0 grid-overlay opacity-70" aria-hidden />
 
-      {/* Spline robot — fills the right half as the premium visual */}
-      <div className="absolute inset-y-0 right-[-10%] w-full md:w-[72%] z-[1]">
+      {/* Spline robot — pushed further right so it doesn't compete with text */}
+      <div className="absolute inset-y-0 right-[-18%] w-full md:w-[80%] z-[1]">
         <div className="relative h-full w-full">
           <SplineRobot />
         </div>
@@ -87,10 +87,10 @@ export default function Hero() {
       {/* Left-edge gradient so text stays readable */}
       <div
         aria-hidden
-        className="absolute inset-y-0 left-0 w-[64%] z-[2] pointer-events-none hidden md:block"
+        className="absolute inset-y-0 left-0 w-[68%] z-[2] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 28%, hsl(var(--bg) / 0.82) 56%, hsl(var(--bg) / 0.32) 82%, transparent 100%)",
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 32%, hsl(var(--bg) / 0.88) 58%, hsl(var(--bg) / 0.4) 84%, transparent 100%)",
         }}
       />
 
