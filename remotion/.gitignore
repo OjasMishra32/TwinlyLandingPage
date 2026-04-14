@@ -1,0 +1,4 @@
+node_modules/
+out/
+# Source video is user-supplied — drop it in as public/source.mp4 before rendering
+public/*.mp4
