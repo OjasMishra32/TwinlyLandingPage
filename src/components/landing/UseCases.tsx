@@ -276,7 +276,6 @@ function StepRow({ step, i }: { step: Step; i: number }) {
             : isWin
             ? "hsl(var(--accent))"
             : "transparent",
-          boxShadow: isWin ? "0 0 10px hsl(var(--accent) / 0.55)" : undefined,
         }}
       />
 
@@ -314,21 +313,17 @@ function StepRow({ step, i }: { step: Step; i: number }) {
       <span className="flex items-center justify-end pt-0.5">
         {isGate && (
           <span
-            className="inline-block w-[6px] h-[6px] rounded-full"
+            className="inline-block w-[5px] h-[5px] rounded-full"
             style={{
               background: "hsl(var(--ember))",
-              boxShadow: "0 0 8px hsl(var(--ember) / 0.6)",
-              animation: "pb-pulse 1.4s ease-in-out infinite",
+              animation: "pb-pulse 1.6s ease-in-out infinite",
             }}
           />
         )}
         {isWin && (
           <span
-            className="inline-block w-[6px] h-[6px] rounded-full"
-            style={{
-              background: "hsl(var(--accent))",
-              boxShadow: "0 0 10px hsl(var(--accent) / 0.8)",
-            }}
+            className="inline-block w-[5px] h-[5px] rounded-full"
+            style={{ background: "hsl(var(--accent))" }}
           />
         )}
         {!isGate && !isWin && (
@@ -355,8 +350,6 @@ export default function UseCases() {
               04<span className="sl">/</span>
             </span>
             Playbooks
-            <br />
-            <b>Watch it actually work</b>
           </div>
           <div>
             <RevealH2>
@@ -422,7 +415,6 @@ export default function UseCases() {
                     <motion.span
                       layoutId="pb-underline"
                       className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent"
-                      style={{ boxShadow: "0 0 10px hsl(var(--accent) / 0.6)" }}
                     />
                   )}
                 </button>
@@ -500,13 +492,12 @@ export default function UseCases() {
           </AnimatePresence>
 
           {/* RIGHT — timeline */}
-          <div className="relative border border-rule-hi bg-bg-2/40">
-            <div className="px-5 py-3 border-b border-rule flex items-center justify-between bg-bg-3/60">
-              <div className="flex items-center gap-2.5 f-mono text-[0.58rem] font-medium tracking-[0.18em] uppercase text-fg-2">
-                <span className="live-dot" />
+          <div className="relative border-t border-rule">
+            <div className="px-5 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2.5 f-mono text-[0.56rem] font-medium tracking-[0.18em] uppercase text-fg-3">
                 trace · {pb.code}
               </div>
-              <div className="f-mono text-[0.54rem] tracking-[0.14em] uppercase text-fg-4">
+              <div className="f-mono text-[0.52rem] tracking-[0.14em] uppercase text-fg-4">
                 {pb.steps.length} events
               </div>
             </div>
@@ -519,23 +510,6 @@ export default function UseCases() {
               </motion.ol>
             </AnimatePresence>
 
-            <div className="px-5 py-3 border-t border-rule bg-bg-3/40 flex items-center justify-between f-mono text-[0.54rem] font-medium tracking-[0.14em] uppercase text-fg-3">
-              <span>
-                <b className="text-fg font-medium">end</b>
-                <span className="text-fg-4 mx-2">/</span>
-                {pb.metrics[0]?.value ?? ""} wall time
-              </span>
-              <span className="flex items-center gap-2">
-                <span
-                  className="w-[6px] h-[6px] rounded-full"
-                  style={{
-                    background: "hsl(var(--accent))",
-                    boxShadow: "0 0 10px hsl(var(--accent) / 0.6)",
-                  }}
-                />
-                delivered
-              </span>
-            </div>
           </div>
         </div>
       </div>

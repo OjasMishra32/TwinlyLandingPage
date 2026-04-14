@@ -14,20 +14,20 @@
     --rule: 232 10% 20%;        /* #2f3038 */
     --rule-hi: 232 8% 32%;      /* #4c4d57 */
 
-    /* Foreground */
-    --fg: 44 35% 96%;           /* #faf6ee warm off-white */
-    --fg-2: 42 14% 78%;         /* #cfc8ba */
-    --fg-3: 40 7% 55%;          /* #918c7f */
-    --fg-4: 232 8% 38%;         /* #5a5b68 */
+    /* Foreground — slightly softer to ease contrast */
+    --fg: 44 28% 94%;           /* #f3ede1 warm off-white */
+    --fg-2: 42 12% 72%;         /* #bdb6a6 */
+    --fg-3: 40 6% 48%;          /* #7e7971 */
+    --fg-4: 232 8% 34%;         /* #505160 */
 
-    /* Accent: electric lime */
-    --accent: 72 100% 58%;      /* #d2ff29 */
-    --accent-hi: 72 100% 66%;
-    --accent-dim: 72 100% 50%;
+    /* Accent: softer pistachio-lime (was electric #d2ff29) */
+    --accent: 74 74% 62%;       /* #bde055 — lower sat, lower brightness */
+    --accent-hi: 74 74% 70%;
+    --accent-dim: 74 74% 52%;
 
     /* Secondary accent: warm coral */
-    --ember: 16 92% 60%;        /* #f26a3c */
-    --ember-hi: 16 100% 68%;
+    --ember: 16 82% 62%;        /* #f07555 */
+    --ember-hi: 16 90% 68%;
 
     /* Semantic */
     --red: 350 85% 62%;
@@ -162,49 +162,49 @@
     border-color: hsl(var(--rule-hi));
   }
 
-  /* Section: ident column + big heading + lede */
-  .sec { padding: clamp(110px, 15vh, 180px) 0; position: relative; }
+  /* Section: lighter left ident column + big heading + lede */
+  .sec { padding: clamp(100px, 13vh, 160px) 0; position: relative; }
   .sec-head {
     display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 64px;
-    margin-bottom: 72px;
+    grid-template-columns: 180px 1fr;
+    gap: 56px;
+    margin-bottom: 56px;
     align-items: start;
   }
   @media (max-width: 980px) {
-    .sec-head { grid-template-columns: 1fr; gap: 28px; margin-bottom: 48px; }
+    .sec-head { grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
   }
   .sec-ident {
-    padding-top: 18px;
-    border-top: 1px solid hsl(var(--rule));
+    padding-top: 4px;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 0.66rem;
+    font-size: 0.6rem;
     font-weight: 500;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: hsl(var(--fg-3));
     line-height: 1.8;
   }
   .sec-ident b { color: hsl(var(--fg)); font-weight: 600; }
   .sec-ident .num {
-    display: block;
-    font-weight: 800;
-    font-size: 3rem;
-    letter-spacing: -0.035em;
-    line-height: 0.88;
-    color: hsl(var(--fg));
-    margin-bottom: 14px;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    color: hsl(var(--accent));
+    margin-bottom: 0;
+    margin-right: 4px;
   }
-  .sec-ident .num .sl { color: hsl(var(--accent)); font-weight: 400; }
+  .sec-ident .num .sl { color: hsl(var(--fg-4)); font-weight: 400; }
 
   .sec-h2 {
-    font-weight: 800;
-    font-size: clamp(2.6rem, 8vw, 8.2rem);
-    line-height: 0.9;
-    letter-spacing: -0.045em;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6.8vw, 6.8rem);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
     color: hsl(var(--fg));
-    margin-bottom: 32px;
-    max-width: 16ch;
+    margin-bottom: 28px;
+    max-width: 18ch;
   }
   .sec-h2 .italic-accent {
     font-family: 'Instrument Serif', 'Times New Roman', serif;
@@ -260,8 +260,8 @@
     background: hsl(var(--accent));
     color: hsl(var(--bg));
     border-color: hsl(var(--accent));
-    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.2),
-                0 18px 50px -18px hsl(var(--accent) / 0.6);
+    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.15),
+                0 14px 34px -18px hsl(var(--accent) / 0.35);
   }
   .btn.primary::before { background: hsl(var(--fg)); }
   .btn.primary:hover {
@@ -290,43 +290,43 @@
   }
   .btn:hover .arrow { width: 38px; }
 
-  /* Live blinking dot */
+  /* Live blinking dot — softer */
   .live-dot {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 999px;
     background: hsl(var(--accent));
-    box-shadow: 0 0 12px hsl(var(--accent) / 0.7);
-    animation: blink 1.6s ease-in-out infinite;
+    box-shadow: 0 0 6px hsl(var(--accent) / 0.35);
+    animation: blink 2s ease-in-out infinite;
     display: inline-block;
     flex-shrink: 0;
   }
   @keyframes blink {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 0.55; transform: scale(0.9); }
   }
 
-  /* Glow text */
+  /* Glow text — much softer, reserved for hero numbers */
   .glow-accent {
-    text-shadow: 0 0 32px hsl(var(--accent) / 0.45);
+    text-shadow: 0 0 18px hsl(var(--accent) / 0.2);
   }
 
-  /* Gradient wash across hero */
+  /* Gradient wash across hero — lighter */
   .hero-wash {
     background:
-      radial-gradient(80% 60% at 75% 20%, hsl(var(--accent) / 0.08) 0%, transparent 50%),
-      radial-gradient(50% 50% at 15% 80%, hsl(var(--ember) / 0.06) 0%, transparent 60%);
+      radial-gradient(80% 60% at 75% 20%, hsl(var(--accent) / 0.05) 0%, transparent 50%),
+      radial-gradient(50% 50% at 15% 80%, hsl(var(--ember) / 0.035) 0%, transparent 60%);
     pointer-events: none;
   }
 
-  /* Grid overlay (subtle) */
+  /* Grid overlay — much more subtle */
   .grid-overlay {
     background-image:
-      linear-gradient(to right, hsl(var(--fg) / 0.025) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--fg) / 0.025) 1px, transparent 1px);
-    background-size: 80px 80px;
-    mask-image: radial-gradient(ellipse at 50% 40%, #000 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 40%, transparent 80%);
+      linear-gradient(to right, hsl(var(--fg) / 0.014) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--fg) / 0.014) 1px, transparent 1px);
+    background-size: 96px 96px;
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
   }
 
   /* Chip / tag */
