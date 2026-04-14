@@ -78,7 +78,7 @@ export default function Hero() {
       <div className="absolute inset-0 grid-overlay opacity-70" aria-hidden />
 
       {/* Spline robot — fills the right half as the premium visual */}
-      <div className="absolute inset-y-0 right-[-4%] w-full md:w-[68%] z-[1]">
+      <div className="absolute inset-y-0 right-[-10%] w-full md:w-[72%] z-[1]">
         <div className="relative h-full w-full">
           <SplineRobot />
         </div>
@@ -87,10 +87,10 @@ export default function Hero() {
       {/* Left-edge gradient so text stays readable */}
       <div
         aria-hidden
-        className="absolute inset-y-0 left-0 w-[62%] z-[2] pointer-events-none hidden md:block"
+        className="absolute inset-y-0 left-0 w-[64%] z-[2] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 26%, hsl(var(--bg) / 0.8) 55%, hsl(var(--bg) / 0.3) 82%, transparent 100%)",
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 28%, hsl(var(--bg) / 0.82) 56%, hsl(var(--bg) / 0.32) 82%, transparent 100%)",
         }}
       />
 
@@ -187,11 +187,11 @@ export default function Hero() {
             ))}
           </div>
         </Fade>
-      </div>
 
-      {/* Twin Ops Console — floating overlay, wider to fit multi-task view */}
-      <div className="hidden lg:block absolute z-[5] bottom-[9%] right-[3%] xl:right-[4%] w-[520px] xl:w-[560px] pointer-events-auto">
-        <HeroComposer />
+        {/* Live twin activity — inline below the stats, far from the robot */}
+        <div className="hidden md:block mt-10 max-w-[680px]">
+          <HeroComposer />
+        </div>
       </div>
 
       {/* Scroll indicator */}
