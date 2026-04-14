@@ -54,26 +54,28 @@ export default function Waitlist() {
           transition={{ duration: 0.9 }}
           className="max-w-[880px]"
         >
-          <div className="inline-flex items-center gap-3 mb-7">
-            <span className="live-dot" />
-            <span className="f-mono text-[0.64rem] font-medium tracking-[0.22em] text-fg-2 uppercase">
-              Request access
+          <div className="sec-ident mb-7">
+            <span className="num">
+              07<span className="sl">/</span>
             </span>
+            Request access
           </div>
           <h2
-            className="font-semibold text-fg"
+            className="tw-display text-fg"
             style={{
               fontSize: "clamp(3rem, 9vw, 10rem)",
-              lineHeight: 0.9,
-              letterSpacing: "-0.045em",
+              lineHeight: 0.96,
+              letterSpacing: "-0.025em",
               maxWidth: "14ch",
+              fontWeight: 400,
             }}
           >
             Meet your <span className="tw-italic text-accent">twin.</span>
           </h2>
-          <p className="mt-6 max-w-[58ch] text-[17px] leading-relaxed text-fg-2 font-normal">
-            We're letting people in a few at a time. Tell us what you'd hand over first —
-            we'll bring you in when your twin is ready. Founders read every reply.
+          <p className="mt-8 max-w-[58ch] text-[17px] leading-relaxed text-fg-2 font-normal">
+            We're letting people in a few at a time. Tell us what you'd hand
+            over first — we'll bring you in when your twin is ready. Founders
+            read every reply.
           </p>
         </motion.div>
 
@@ -83,9 +85,9 @@ export default function Waitlist() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.9, delay: 0.15 }}
-          className="mt-12 panel p-6 md:p-8"
+          className="mt-14 border-t border-rule pt-10"
         >
-          <div className="flex flex-col md:flex-row gap-3 md:gap-0">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-0 max-w-[640px]">
             <label htmlFor="email" className="sr-only">
               Email
             </label>
@@ -99,12 +101,12 @@ export default function Waitlist() {
               }}
               placeholder="you@domain.com"
               required
-              className="flex-1 h-14 bg-bg border border-rule-hi px-5 text-[15px] text-fg placeholder:text-fg-3 focus:outline-none focus:border-accent focus:bg-bg-2 f-sans transition-colors"
+              className="flex-1 h-14 bg-transparent border-b border-rule-hi md:border-b md:border-r-0 px-0 md:pr-5 text-[16px] text-fg placeholder:text-fg-3 focus:outline-none focus:border-accent f-sans transition-colors"
             />
             <button
               type="submit"
               disabled={status === "submitting" || status === "success"}
-              className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 md:-ml-[1px] disabled:opacity-80"
+              className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 disabled:opacity-80"
             >
               {status === "submitting" && "Opening mail…"}
               {status === "success" && (
@@ -133,8 +135,8 @@ export default function Waitlist() {
             </p>
           )}
 
-          <div className="mt-8">
-            <div className="f-mono text-[0.62rem] font-medium tracking-[0.18em] uppercase text-fg-3 mb-3">
+          <div className="mt-12">
+            <div className="f-mono text-[0.58rem] font-medium tracking-[0.22em] uppercase text-fg-4 mb-4">
               What would you hand over first?
             </div>
             <div className="flex flex-wrap gap-2">
@@ -143,10 +145,10 @@ export default function Waitlist() {
                   key={i}
                   type="button"
                   onClick={() => setIntent((cur) => (cur === i ? "" : i))}
-                  className={`f-mono text-[0.64rem] font-medium tracking-[0.08em] px-3 py-2 border transition-colors uppercase ${
+                  className={`f-mono text-[0.62rem] font-medium tracking-[0.1em] px-3 py-2 border transition-colors uppercase ${
                     intent === i
-                      ? "border-accent bg-accent text-bg"
-                      : "border-rule-hi text-fg-2 hover:border-accent hover:text-accent"
+                      ? "border-accent text-accent"
+                      : "border-rule text-fg-3 hover:border-fg-3 hover:text-fg-2"
                   }`}
                 >
                   {i}
@@ -155,18 +157,17 @@ export default function Waitlist() {
             </div>
           </div>
 
-          <div className="mt-8 pt-5 border-t border-rule flex flex-col md:flex-row md:items-center md:justify-between gap-3 f-mono text-[0.6rem] font-medium tracking-[0.14em] uppercase text-fg-3">
+          <div className="mt-12 pt-6 border-t border-rule flex flex-col md:flex-row md:items-center md:justify-between gap-3 f-mono text-[0.58rem] font-medium tracking-[0.18em] uppercase text-fg-4">
             <span>
-              <b className="text-fg font-medium">No spam, ever.</b>
+              <b className="text-fg-2 font-medium">No spam, ever.</b>
               <span className="text-fg-4 mx-2">/</span>
               Privacy-first
             </span>
             <a
               href={`mailto:${FOUNDER_EMAIL}`}
-              className="inline-flex items-center gap-2 text-fg-2 hover:text-accent transition-colors"
+              className="text-fg-3 hover:text-accent transition-colors"
             >
-              <span className="live-dot" />
-              or reach us directly · {FOUNDER_EMAIL}
+              or email us · {FOUNDER_EMAIL}
             </a>
           </div>
         </motion.form>
