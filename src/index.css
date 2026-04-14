@@ -351,6 +351,15 @@
     background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
   }
 
+  /* Clip-based text reveal — content wrapped in .reveal-word is masked and
+     slides into view. Used for dramatic section headline entries. */
+  .clip-reveal {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.08em;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;

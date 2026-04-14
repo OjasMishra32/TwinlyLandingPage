@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
+import TiltCard from "./TiltCard";
+import RevealH2 from "./RevealH2";
 
 type Pillar = {
   key: string;
@@ -77,15 +79,9 @@ export default function Pillars() {
             <b>Four pillars</b>
           </div>
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="sec-h2"
-            >
+            <RevealH2>
               Four pieces that make a <span className="tw-italic text-accent">twin.</span>
-            </motion.h2>
+            </RevealH2>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -99,46 +95,48 @@ export default function Pillars() {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 border-y border-rule">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           {pillars.map((p, i) => (
             <motion.div
               key={p.key}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative p-6 md:p-8 bg-bg hover:bg-bg-2 transition-colors border-rule
-                lg:[&:not(:last-child)]:border-r
-                sm:max-lg:[&:nth-child(odd)]:border-r
-                sm:max-lg:[&:nth-child(-n+2)]:border-b
-                max-sm:[&:not(:last-child)]:border-b"
             >
-              <div className="flex items-start justify-between">
-                <div className="h-12 w-12 inline-flex items-center justify-center border border-rule-hi bg-bg-2 text-fg group-hover:text-accent transition-colors">
-                  {p.icon}
+              <TiltCard className="h-full" max={10}>
+                <div className="group relative h-full p-6 md:p-8 bg-bg-2 border border-rule hover:border-rule-hi transition-colors overflow-hidden">
+                  {/* corner scanlines that draw in on hover */}
+                  <span className="absolute top-0 left-0 w-10 h-[1px] bg-accent scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500" />
+                  <span className="absolute top-0 left-0 w-[1px] h-10 bg-accent scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-500" />
+                  <span className="absolute bottom-0 right-0 w-10 h-[1px] bg-accent scale-x-0 origin-right group-hover:scale-x-100 transition-transform duration-500" />
+                  <span className="absolute bottom-0 right-0 w-[1px] h-10 bg-accent scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500" />
+
+                  <div className="flex items-start justify-between" style={{ transform: "translateZ(30px)" }}>
+                    <div className="h-12 w-12 inline-flex items-center justify-center border border-rule-hi bg-bg-3 text-fg group-hover:text-accent group-hover:border-accent transition-colors">
+                      {p.icon}
+                    </div>
+                    <span
+                      className="font-serif italic text-fg-4 group-hover:text-accent transition-colors"
+                      style={{ fontSize: "2.6rem", lineHeight: 0.88 }}
+                    >
+                      0{i + 1}
+                    </span>
+                  </div>
+                  <div className="mt-16 md:mt-20" style={{ transform: "translateZ(20px)" }}>
+                    <div className="f-mono text-[0.62rem] font-medium tracking-[0.18em] uppercase text-accent">
+                      {p.label}
+                    </div>
+                    <h3
+                      className="mt-2 font-semibold text-fg"
+                      style={{ fontSize: "1.6rem", letterSpacing: "-0.025em", lineHeight: 1 }}
+                    >
+                      {p.title}
+                    </h3>
+                    <p className="mt-3 text-[14px] leading-relaxed text-fg-2">{p.copy}</p>
+                  </div>
                 </div>
-                <span
-                  className="font-serif italic text-fg-4"
-                  style={{ fontSize: "2.4rem", lineHeight: 0.88 }}
-                >
-                  0{i + 1}
-                </span>
-              </div>
-              <div className="mt-16">
-                <div className="f-mono text-[0.62rem] font-medium tracking-[0.18em] uppercase text-accent">
-                  {p.label}
-                </div>
-                <h3
-                  className="mt-2 font-semibold text-fg"
-                  style={{ fontSize: "1.6rem", letterSpacing: "-0.025em", lineHeight: 1 }}
-                >
-                  {p.title}
-                </h3>
-                <p className="mt-3 text-[14px] leading-relaxed text-fg-2">{p.copy}</p>
-              </div>
-              {/* Accent corner */}
-              <span className="absolute top-0 left-0 w-8 h-[1px] bg-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="absolute top-0 left-0 w-[1px] h-8 bg-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </TiltCard>
             </motion.div>
           ))}
         </div>

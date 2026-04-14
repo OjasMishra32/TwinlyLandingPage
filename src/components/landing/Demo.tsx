@@ -1,7 +1,20 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
-const steps = [
+type Step = {
+  key: string;
+  label: string;
+  title: string;
+  body: string;
+};
+
+const steps: Step[] = [
   {
     key: "request",
     label: "Request",
@@ -42,16 +55,35 @@ const steps = [
 
 export default function Demo() {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 20, mass: 0.3 });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 22,
+    mass: 0.35,
+  });
   const indexFloat = useTransform(progress, [0, 1], [0, steps.length - 0.001]);
-  const barScale = useTransform(indexFloat, [0, steps.length - 1], [0, 1]);
+  const barScale = useTransform(progress, [0, 1], [0, 1]);
+
+  const [active, setActive] = useState(0);
+  useMotionValueEvent(indexFloat, "change", (v) => {
+    const next = Math.min(steps.length - 1, Math.max(0, Math.round(v)));
+    if (next !== active) setActive(next);
+  });
 
   return (
-    <section id="demo" ref={ref} className="relative border-t border-rule" style={{ height: `${steps.length * 90 + 40}vh` }}>
+    <section
+      id="demo"
+      ref={ref}
+      className="relative border-t border-rule"
+      style={{ height: `${steps.length * 90 + 40}vh` }}
+    >
       <div className="sticky top-0 h-[100svh] w-full flex items-center overflow-hidden bg-bg">
-        <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
-          <div className="sec-head !mb-12">
+        <div className="absolute inset-0 grid-overlay opacity-60" aria-hidden />
+        <div className="relative z-[2] w-full max-w-[1680px] mx-auto px-6 md:px-14">
+          <div className="sec-head !mb-10">
             <div className="sec-ident">
               <span className="num">
                 03<span className="sl">/</span>
@@ -69,14 +101,16 @@ export default function Demo() {
                   letterSpacing: "-0.04em",
                 }}
               >
-                Watch a task move from <span className="tw-italic text-accent">request</span> to <span className="tw-italic text-accent">done.</span>
+                Watch a task move from{" "}
+                <span className="tw-italic text-accent">request</span> to{" "}
+                <span className="tw-italic text-accent">done.</span>
               </h2>
             </div>
           </div>
 
           <div className="grid md:grid-cols-[220px_1fr] gap-8 md:gap-10 items-start">
-            <Stepper indexFloat={indexFloat} />
-            <Stage indexFloat={indexFloat} barScale={barScale} />
+            <Stepper active={active} />
+            <Stage active={active} barScale={barScale} />
           </div>
         </div>
       </div>
@@ -84,66 +118,86 @@ export default function Demo() {
   );
 }
 
-type IndexFloat = ReturnType<typeof useTransform<number, number>>;
-
-function Stepper({ indexFloat }: { indexFloat: IndexFloat }) {
+function Stepper({ active }: { active: number }) {
   return (
     <ol className="relative flex md:flex-col gap-2 md:gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0">
-      {steps.map((step, i) => (
-        <StepItem key={step.key} step={step} i={i} indexFloat={indexFloat} />
-      ))}
+      {steps.map((step, i) => {
+        const state =
+          i < active ? "done" : i === active ? "active" : "pending";
+        return (
+          <motion.li
+            key={step.key}
+            animate={{
+              backgroundColor:
+                state === "active"
+                  ? "hsl(72 100% 58% / 0.10)"
+                  : "hsl(232 13% 9%)",
+              borderColor:
+                state === "active"
+                  ? "hsl(72 100% 58%)"
+                  : "hsl(232 10% 20%)",
+              opacity: state === "pending" ? 0.4 : 1,
+            }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="shrink-0 md:shrink border px-4 py-3 min-w-[170px]"
+          >
+            <div className="flex items-center gap-3 f-mono">
+              <span
+                className={
+                  state === "active"
+                    ? "text-[0.6rem] font-semibold text-accent tracking-[0.16em]"
+                    : "text-[0.6rem] font-semibold text-fg-3 tracking-[0.16em]"
+                }
+              >
+                0{i + 1}
+              </span>
+              <span className="text-[0.72rem] font-medium tracking-[0.14em] uppercase text-fg">
+                {step.label}
+              </span>
+              {state === "done" && (
+                <svg
+                  viewBox="0 0 16 16"
+                  className="ml-auto h-3 w-3 text-accent"
+                >
+                  <path
+                    d="M2 8l4 4 8-9"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+              )}
+            </div>
+          </motion.li>
+        );
+      })}
     </ol>
   );
 }
 
-function StepItem({
-  step,
-  i,
-  indexFloat,
+function Stage({
+  active,
+  barScale,
 }: {
-  step: (typeof steps)[number];
-  i: number;
-  indexFloat: IndexFloat;
+  active: number;
+  barScale: ReturnType<typeof useTransform<number, number>>;
 }) {
-  const active = useTransform(indexFloat, (v) => {
-    if (v >= i && v < i + 1) return 1;
-    if (v >= i + 1) return 0.55;
-    return 0.3;
-  });
-  const borderColor = useTransform(indexFloat, (v) =>
-    v >= i && v < i + 1 ? "hsl(var(--accent))" : "hsl(var(--rule))"
-  );
-  const bg = useTransform(indexFloat, (v) =>
-    v >= i && v < i + 1 ? "hsl(var(--accent) / 0.08)" : "hsl(var(--bg-2))"
-  );
+  const step = steps[active];
   return (
-    <motion.li
-      style={{ opacity: active, borderColor, background: bg }}
-      className="shrink-0 md:shrink border px-4 py-3 min-w-[170px]"
-    >
-      <div className="flex items-center gap-3 f-mono">
-        <span className="text-[0.6rem] font-semibold text-accent tracking-[0.16em]">0{i + 1}</span>
-        <span className="text-[0.72rem] font-medium tracking-[0.14em] uppercase text-fg">
-          {step.label}
-        </span>
-      </div>
-    </motion.li>
-  );
-}
-
-function Stage({ indexFloat, barScale }: { indexFloat: IndexFloat; barScale: IndexFloat }) {
-  return (
-    <div className="relative panel overflow-hidden min-h-[380px] md:min-h-[480px]">
+    <div className="relative panel overflow-hidden min-h-[420px] md:min-h-[520px]">
       {/* Chrome */}
       <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-rule bg-bg-3 f-mono text-[0.64rem] font-medium tracking-[0.14em] uppercase text-fg-3">
         <span className="flex items-center gap-3">
           <span className="flex gap-[6px]">
             <i className="w-[9px] h-[9px] rounded-full bg-red-500/70" />
             <i className="w-[9px] h-[9px] rounded-full bg-amber-500/70" />
-            <i className="w-[9px] h-[9px] rounded-full" style={{ background: "hsl(var(--accent) / 0.7)" }} />
+            <i
+              className="w-[9px] h-[9px] rounded-full"
+              style={{ background: "hsl(var(--accent) / 0.7)" }}
+            />
           </span>
           <b className="text-fg font-medium">twinly.app</b>
-          <span>/ thread · reschedule-lena</span>
+          <span className="hidden sm:inline">/ thread · reschedule-lena</span>
         </span>
         <span className="flex items-center gap-[8px] text-accent font-medium">
           <span className="live-dot" />
@@ -151,11 +205,57 @@ function Stage({ indexFloat, barScale }: { indexFloat: IndexFloat; barScale: Ind
         </span>
       </div>
 
-      {/* Slides */}
-      <div className="relative px-5 md:px-8 pt-8 pb-14 min-h-[320px] md:min-h-[400px]">
-        {steps.map((step, i) => (
-          <StageSlide key={step.key} step={step} i={i} indexFloat={indexFloat} />
-        ))}
+      {/* Slide area — key on active re-mounts the content, triggering
+          a fresh enter animation. No AnimatePresence, so there's never
+          a moment where both slides are invisible. */}
+      <div className="relative px-5 md:px-10 py-10 md:py-14 min-h-[340px] md:min-h-[420px] overflow-hidden">
+        <motion.div
+          key={step.key}
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col justify-center"
+        >
+          <div className="f-mono text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-accent">
+            {step.label}
+          </div>
+          <h3
+            className="mt-2 font-semibold text-fg"
+            style={{
+              fontSize: "clamp(1.6rem,3.2vw,2.8rem)",
+              letterSpacing: "-0.025em",
+              lineHeight: 1.02,
+            }}
+          >
+            {step.title}
+          </h3>
+          <p className="mt-5 max-w-[640px] text-[15.5px] md:text-[16px] leading-relaxed text-fg-2">
+            {step.body}
+          </p>
+          {step.key === "draft" && (
+            <div className="mt-6 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-fg-3">
+              <span className="text-accent">Drafted</span> · matched 14 past replies
+            </div>
+          )}
+          {step.key === "approve" && (
+            <div className="mt-6 flex items-center gap-2">
+              <button className="btn primary !py-3 !px-4 !text-[0.64rem]">
+                Approve &amp; send
+                <span className="arrow" />
+              </button>
+              <button className="btn !py-3 !px-4 !text-[0.64rem]">
+                Edit
+                <span className="arrow" />
+              </button>
+            </div>
+          )}
+          {step.key === "done" && (
+            <div className="mt-6 inline-flex items-center gap-2 border border-rule bg-bg-2 px-3 py-2 f-mono text-[0.66rem] font-medium text-fg w-fit">
+              <span className="w-[6px] h-[6px] rounded-full bg-accent" />
+              Sent · just now
+            </div>
+          )}
+        </motion.div>
       </div>
 
       {/* Progress bar */}
@@ -166,60 +266,5 @@ function Stage({ indexFloat, barScale }: { indexFloat: IndexFloat; barScale: Ind
         />
       </div>
     </div>
-  );
-}
-
-function StageSlide({
-  step,
-  i,
-  indexFloat,
-}: {
-  step: (typeof steps)[number];
-  i: number;
-  indexFloat: IndexFloat;
-}) {
-  const opacity = useTransform(indexFloat, (v) => {
-    const d = Math.abs(v - i);
-    return d < 0.5 ? 1 : d < 1 ? 1 - (d - 0.5) * 2 : 0;
-  });
-  const y = useTransform(indexFloat, (v) => (v - i) * -16);
-
-  return (
-    <motion.div style={{ opacity, y }} className="absolute inset-0 px-5 md:px-8 pt-8 flex flex-col justify-center">
-      <div className="f-mono text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-accent">
-        {step.label}
-      </div>
-      <h3
-        className="mt-2 font-semibold text-fg"
-        style={{
-          fontSize: "clamp(1.6rem,3.2vw,2.8rem)",
-          letterSpacing: "-0.025em",
-          lineHeight: 1,
-        }}
-      >
-        {step.title}
-      </h3>
-      <p className="mt-5 max-w-[620px] text-[15.5px] leading-relaxed text-fg-2">
-        {step.body}
-      </p>
-      {step.key === "approve" && (
-        <div className="mt-6 flex items-center gap-2">
-          <button className="btn primary !py-3 !px-4 !text-[0.64rem]">
-            Approve &amp; send
-            <span className="arrow" />
-          </button>
-          <button className="btn !py-3 !px-4 !text-[0.64rem]">
-            Edit
-            <span className="arrow" />
-          </button>
-        </div>
-      )}
-      {step.key === "done" && (
-        <div className="mt-6 inline-flex items-center gap-2 border border-rule bg-bg-2 px-3 py-2 f-mono text-[0.66rem] font-medium text-fg">
-          <span className="w-[6px] h-[6px] rounded-full bg-accent" />
-          Sent · just now
-        </div>
-      )}
-    </motion.div>
   );
 }

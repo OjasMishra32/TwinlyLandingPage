@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import RevealH2 from "./RevealH2";
 
 const items = [
   { title: "Editable memory", copy: "See what Twinly knows. Change, pin, or forget anything." },
@@ -28,17 +29,11 @@ export default function Trust() {
             <b>Approval-first, by default</b>
           </div>
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{ duration: 0.9 }}
-              className="sec-h2"
-            >
+            <RevealH2>
               You decide what <span className="tw-italic text-accent">moves.</span>
               <br />
               Everything stays <span className="tw-italic text-accent">visible.</span>
-            </motion.h2>
+            </RevealH2>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}

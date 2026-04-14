@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Generative "twin" orb: a ring of particles tethered to a moving attractor,
- * forming a living silhouette that reacts to the cursor. Pure canvas, no deps.
+ * 3D particle sphere with constellation connections, cursor-driven camera
+ * tilt, depth-based shading and a breathing inner core. Pure canvas — no
+ * three.js required, so the runtime cost is minimal.
  */
 export default function TwinOrb() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0, active: false });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,7 +19,8 @@ export default function TwinOrb() {
     let h = 0;
     let cx = 0;
     let cy = 0;
-    let radius = 0;
+    let R = 0;
+    let focal = 520;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -31,171 +32,233 @@ export default function TwinOrb() {
       ctx.scale(dpr, dpr);
       cx = w / 2;
       cy = h / 2;
-      radius = Math.min(w, h) * 0.34;
+      R = Math.min(w, h) * 0.32;
+      focal = Math.max(480, R * 1.8);
     };
     resize();
-
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    const PARTICLE_COUNT = 180;
+    // Fibonacci sphere distribution — even coverage, organic feel
+    const COUNT = 420;
     type P = {
-      angle: number;
-      baseR: number;
-      r: number;
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      hue: number;
+      // Base unit-sphere coordinates
+      bx: number;
+      by: number;
+      bz: number;
+      // World position after rotation
+      wx: number;
+      wy: number;
+      wz: number;
+      // Projected screen position
+      sx: number;
+      sy: number;
+      sz: number;
+      // Per-particle offset to add organic motion
+      phase: number;
       size: number;
     };
-    const particles: P[] = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
-      const angle = (i / PARTICLE_COUNT) * Math.PI * 2;
-      const baseR = 1 + Math.random() * 0.06;
-      return {
-        angle,
-        baseR,
-        r: baseR,
-        x: 0,
-        y: 0,
-        vx: 0,
-        vy: 0,
-        hue: 72 + Math.random() * 8,
-        size: 1 + Math.random() * 1.6,
-      };
-    });
 
-    let raf = 0;
-    let t = 0;
-    let mouseVX = 0;
-    let mouseVY = 0;
-    let prevMX = 0;
-    let prevMY = 0;
+    const particles: P[] = [];
+    const phi = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < COUNT; i++) {
+      const y = 1 - (i / (COUNT - 1)) * 2;
+      const r = Math.sqrt(1 - y * y);
+      const theta = phi * i;
+      const x = Math.cos(theta) * r;
+      const z = Math.sin(theta) * r;
+      particles.push({
+        bx: x,
+        by: y,
+        bz: z,
+        wx: 0,
+        wy: 0,
+        wz: 0,
+        sx: 0,
+        sy: 0,
+        sz: 0,
+        phase: Math.random() * Math.PI * 2,
+        size: 0.85 + Math.random() * 0.8,
+      });
+    }
 
-    const rect = () => canvas.getBoundingClientRect();
+    // Pre-compute constellation links between nearest neighbours (unit sphere)
+    type Link = { a: number; b: number };
+    const links: Link[] = [];
+    const LINK_DIST = 0.32;
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+      for (let j = i + 1; j < particles.length; j++) {
+        const b = particles[j];
+        const dx = a.bx - b.bx;
+        const dy = a.by - b.by;
+        const dz = a.bz - b.bz;
+        if (dx * dx + dy * dy + dz * dz < LINK_DIST * LINK_DIST) {
+          links.push({ a: i, b: j });
+        }
+      }
+    }
+
+    // Camera tilt driven by cursor (lerped)
+    let tiltX = 0;
+    let tiltY = 0;
+    let targetTiltX = 0;
+    let targetTiltY = 0;
+
+    let mouseInside = false;
+    let mouseX = 0;
+    let mouseY = 0;
+
     const onMove = (e: PointerEvent) => {
-      const r = rect();
-      const nx = e.clientX - r.left;
-      const ny = e.clientY - r.top;
-      mouseVX = nx - prevMX;
-      mouseVY = ny - prevMY;
-      prevMX = nx;
-      prevMY = ny;
-      mouseRef.current.x = nx;
-      mouseRef.current.y = ny;
-      mouseRef.current.active = true;
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      mouseInside =
+        mouseX >= 0 && mouseX <= w && mouseY >= 0 && mouseY <= h;
+      // Normalized to [-1, 1] relative to canvas centre
+      const nx = (mouseX - cx) / (w / 2);
+      const ny = (mouseY - cy) / (h / 2);
+      targetTiltY = nx * 0.55;
+      targetTiltX = -ny * 0.45;
     };
     const onLeave = () => {
-      mouseRef.current.active = false;
+      mouseInside = false;
+      targetTiltX = 0;
+      targetTiltY = 0;
     };
+
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerleave", onLeave);
 
+    let raf = 0;
+    let t = 0;
     const draw = () => {
-      t += 0.014;
+      t += 0.006;
       ctx.clearRect(0, 0, w, h);
 
-      // Core glow
-      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 2.2);
-      grad.addColorStop(0, "hsla(72, 100%, 60%, 0.10)");
-      grad.addColorStop(0.35, "hsla(72, 100%, 60%, 0.04)");
-      grad.addColorStop(1, "hsla(72, 100%, 60%, 0)");
-      ctx.fillStyle = grad;
+      // Soft glow halo behind
+      const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 2.4);
+      halo.addColorStop(0, "hsla(72, 100%, 60%, 0.10)");
+      halo.addColorStop(0.35, "hsla(72, 100%, 60%, 0.045)");
+      halo.addColorStop(1, "hsla(72, 100%, 60%, 0)");
+      ctx.fillStyle = halo;
       ctx.beginPath();
-      ctx.arc(cx, cy, radius * 2.2, 0, Math.PI * 2);
+      ctx.arc(cx, cy, R * 2.4, 0, Math.PI * 2);
       ctx.fill();
 
-      // Connect nearby particles with thin lines for "silhouette" feel
-      ctx.lineWidth = 0.6;
-      ctx.strokeStyle = "hsla(72, 100%, 62%, 0.25)";
+      // Lerp camera tilt
+      tiltX += (targetTiltX - tiltX) * 0.08;
+      tiltY += (targetTiltY - tiltY) * 0.08;
+      const autoY = t * 0.35;
+      const rotY = tiltY + autoY;
+      const rotX = tiltX + Math.sin(t * 0.6) * 0.05;
 
-      // Mouse influence
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-      const mActive = mouseRef.current.active;
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
 
-      // Update + draw particles
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        const wave =
-          0.04 * Math.sin(t * 1.6 + p.angle * 3) +
-          0.025 * Math.sin(t * 0.7 + p.angle * 5);
-        const target = p.baseR + wave;
-        p.r += (target - p.r) * 0.1;
+      // Transform + project every particle
+      for (const p of particles) {
+        // Breathing scale
+        const breathe = 1 + 0.035 * Math.sin(t * 1.2 + p.phase);
+        const sx = p.bx * breathe;
+        const sy = p.by * breathe;
+        const sz = p.bz * breathe;
 
-        const tx = cx + Math.cos(p.angle + t * 0.25) * radius * p.r;
-        const ty = cy + Math.sin(p.angle + t * 0.25) * radius * p.r;
+        // Rotate around Y then X
+        const xy = sx * cosY - sz * sinY;
+        const zy = sx * sinY + sz * cosY;
+        const yx = sy * cosX - zy * sinX;
+        const zx = sy * sinX + zy * cosX;
 
-        // Spring toward target
-        p.vx += (tx - p.x) * 0.14;
-        p.vy += (ty - p.y) * 0.14;
+        // Scale to sphere radius
+        p.wx = xy * R;
+        p.wy = yx * R;
+        p.wz = zx * R;
 
-        // Mouse repulsion + swirl
-        if (mActive) {
-          const ddx = p.x - mx;
-          const ddy = p.y - my;
-          const dist2 = ddx * ddx + ddy * ddy;
-          const R = 140;
-          if (dist2 < R * R && dist2 > 1) {
-            const dist = Math.sqrt(dist2);
-            const force = (1 - dist / R) * 3.2;
-            p.vx += (ddx / dist) * force;
-            p.vy += (ddy / dist) * force;
-            // tangential swirl
-            p.vx += -(ddy / dist) * force * 0.45;
-            p.vy += (ddx / dist) * force * 0.45;
-          }
-        }
+        // Perspective projection
+        const persp = focal / (focal + p.wz);
+        p.sx = cx + p.wx * persp;
+        p.sy = cy + p.wy * persp;
+        p.sz = persp;
 
-        p.vx *= 0.78;
-        p.vy *= 0.78;
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x === 0 && p.y === 0) {
-          p.x = tx;
-          p.y = ty;
-        }
-
-        // Lines to next few neighbours
-        if (i % 2 === 0) {
-          const next = particles[(i + 1) % particles.length];
-          if (next.x) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(next.x, next.y);
-            ctx.stroke();
+        // Cursor repulsion in screen space
+        if (mouseInside) {
+          const ddx = p.sx - mouseX;
+          const ddy = p.sy - mouseY;
+          const d2 = ddx * ddx + ddy * ddy;
+          const rad = 110;
+          if (d2 < rad * rad && d2 > 1) {
+            const d = Math.sqrt(d2);
+            const pull = (1 - d / rad) * 16;
+            p.sx += (ddx / d) * pull;
+            p.sy += (ddy / d) * pull;
           }
         }
       }
 
-      // Draw particles on top
-      for (const p of particles) {
-        ctx.fillStyle = `hsla(${p.hue}, 100%, 65%, 0.9)`;
+      // Draw constellation links — alpha scales with combined depth
+      ctx.lineWidth = 0.8;
+      for (const L of links) {
+        const a = particles[L.a];
+        const b = particles[L.b];
+        const depth = (a.sz + b.sz) * 0.5;
+        if (depth < 0.5) continue;
+        const alpha = Math.max(0, Math.min(0.28, (depth - 0.55) * 0.8));
+        if (alpha <= 0) continue;
+        ctx.strokeStyle = `hsla(72, 100%, 62%, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.moveTo(a.sx, a.sy);
+        ctx.lineTo(b.sx, b.sy);
+        ctx.stroke();
+      }
+
+      // Sort particles front-to-back so near particles pop
+      const sorted = particles.slice().sort((a, b) => a.sz - b.sz);
+      for (const p of sorted) {
+        const d = p.sz; // 0.5..1.5 roughly
+        const r = p.size * d * 1.6;
+        const alpha = Math.max(0.15, Math.min(1, (d - 0.55) * 1.6));
+        if (d > 1.05) {
+          // front particles glow subtly
+          ctx.shadowBlur = 8 * d;
+          ctx.shadowColor = `hsla(72, 100%, 60%, ${alpha * 0.7})`;
+        } else {
+          ctx.shadowBlur = 0;
+        }
+        ctx.fillStyle = `hsla(72, 100%, ${55 + d * 12}%, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
         ctx.fill();
       }
+      ctx.shadowBlur = 0;
 
       // Inner core
-      ctx.fillStyle = "hsla(72, 100%, 68%, 0.9)";
+      const coreR = R * 0.08 * (1 + 0.12 * Math.sin(t * 1.8));
+      const coreG = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR * 3.5);
+      coreG.addColorStop(0, "hsla(72, 100%, 85%, 0.55)");
+      coreG.addColorStop(0.4, "hsla(72, 100%, 65%, 0.25)");
+      coreG.addColorStop(1, "hsla(72, 100%, 60%, 0)");
+      ctx.fillStyle = coreG;
       ctx.beginPath();
-      ctx.arc(cx, cy, 3.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "hsla(72, 100%, 90%, 0.4)";
-      ctx.beginPath();
-      ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+      ctx.arc(cx, cy, coreR * 3.5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Orbit rings (static)
-      ctx.strokeStyle = "hsla(72, 100%, 62%, 0.10)";
+      ctx.fillStyle = "hsla(72, 100%, 88%, 0.95)";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 2.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Faint reference rings
+      ctx.strokeStyle = "hsla(72, 100%, 62%, 0.08)";
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(cx, cy, radius * 1.15, 0, Math.PI * 2);
+      ctx.arc(cx, cy, R * 1.18, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.strokeStyle = "hsla(72, 100%, 62%, 0.06)";
+      ctx.strokeStyle = "hsla(72, 100%, 62%, 0.04)";
       ctx.beginPath();
-      ctx.arc(cx, cy, radius * 1.45, 0, Math.PI * 2);
+      ctx.arc(cx, cy, R * 1.5, 0, Math.PI * 2);
       ctx.stroke();
 
       raf = requestAnimationFrame(draw);

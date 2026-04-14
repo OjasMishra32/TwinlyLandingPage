@@ -64,10 +64,12 @@ export default function Reticle() {
       points.push({ x: tx, y: ty, life: 1 });
       if (points.length > MAX_POINTS) points.shift();
 
-      const target = e.target as Element | null;
-      const interactive = !!target?.closest(
-        "a, button, input, textarea, select, label, [role='button'], [data-magnetic]"
-      );
+      const target = e.target;
+      const interactive =
+        target instanceof Element &&
+        !!target.closest(
+          "a, button, input, textarea, select, label, [role='button'], [data-magnetic]"
+        );
       ring.classList.toggle("hover", interactive);
       dot.classList.toggle("hover", interactive);
     };

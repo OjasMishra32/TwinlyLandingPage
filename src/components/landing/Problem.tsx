@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import RevealH2 from "./RevealH2";
 
 const fragments = [
   { tag: "INBOX", body: "Re: Can we move Thursday? 3pm no longer works…", tilt: -4, x: -14, y: -22 },
@@ -25,17 +26,11 @@ export default function Problem() {
             <b>Everything is on you</b>
           </div>
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="sec-h2"
-            >
+            <RevealH2>
               You don't want to manage <span className="tw-italic text-accent">tools.</span>
               <br />
               You want things <span className="tw-italic text-accent">handled.</span>
-            </motion.h2>
+            </RevealH2>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}

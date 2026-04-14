@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import RevealH2 from "./RevealH2";
 
 const columns = [
   {
@@ -35,16 +36,10 @@ export default function Thesis() {
             <b>Why now</b>
           </div>
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{ duration: 0.9 }}
-              className="sec-h2"
-            >
+            <RevealH2>
               AI got useful when it stopped being a <span className="tw-italic text-fg-3" style={{ textDecoration: "line-through", textDecorationColor: "hsl(var(--ember))" }}>toy</span>{" "}
               and started <span className="tw-italic text-accent">operating.</span>
-            </motion.h2>
+            </RevealH2>
           </div>
         </div>
 

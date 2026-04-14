@@ -1,12 +1,14 @@
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
-import TwinOrb from "./TwinOrb";
+import { ReactNode, useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import SplineRobot from "./SplineRobot";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
-const BASE = 0.12;
+const BASE = 0.1;
 
 function Line({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
-    <span className="block overflow-hidden" style={{ padding: "0.05em 0" }}>
+    <span className="block overflow-hidden" style={{ padding: "0.06em 0" }}>
       <motion.span
         initial={{ y: "108%" }}
         animate={{ y: "0%" }}
@@ -31,7 +33,40 @@ function Fade({ children, delay = 0 }: { children: ReactNode; delay?: number }) 
   );
 }
 
+function CountUp({
+  to,
+  decimals = 0,
+  duration = 1400,
+  start,
+}: {
+  to: number;
+  decimals?: number;
+  duration?: number;
+  start: boolean;
+}) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let raf = 0;
+    const from = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - from) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setV(eased * to);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [start, to, duration]);
+  return <>{v.toFixed(decimals)}</>;
+}
+
 export default function Hero() {
+  const statsRef = useRef<HTMLDivElement>(null);
+  const statsInView = useInView(statsRef, { once: true, margin: "-10%" });
+  const primaryRef = useMagnetic<HTMLAnchorElement>({ radius: 150, strength: 0.32 });
+  const secondaryRef = useMagnetic<HTMLAnchorElement>({ radius: 130, strength: 0.22 });
+
   return (
     <section
       id="top"
@@ -42,22 +77,12 @@ export default function Hero() {
       <div className="absolute inset-0 hero-wash" aria-hidden />
       <div className="absolute inset-0 grid-overlay opacity-80" aria-hidden />
 
-      {/* Orb — positioned right on desktop, centred behind on mobile */}
-      <div className="absolute inset-y-0 right-0 w-full md:w-[62%] z-[1] pointer-events-none">
+      {/* Spline robot + HUD — positioned right on desktop, full-width behind text on mobile */}
+      <div className="absolute inset-y-0 right-0 w-full md:w-[64%] z-[1]">
         <div className="relative h-full w-full">
-          <TwinOrb />
+          <SplineRobot />
         </div>
       </div>
-
-      {/* Left-edge gradient so text stays crisp over orb */}
-      <div
-        aria-hidden
-        className="absolute inset-y-0 left-0 w-[70%] z-[2] pointer-events-none hidden md:block"
-        style={{
-          background:
-            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 30%, hsl(var(--bg) / 0.85) 55%, hsl(var(--bg) / 0.4) 80%, transparent 100%)",
-        }}
-      />
 
       <div className="relative z-[4] w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <Fade delay={0}>
@@ -66,7 +91,7 @@ export default function Hero() {
             <span className="f-mono text-[0.66rem] font-medium tracking-[0.22em] text-fg-2 uppercase">
               In private beta
             </span>
-            <span className="text-fg-4 f-mono text-[0.66rem]">·</span>
+            <span className="text-fg-4 f-mono text-[0.66rem]">—</span>
             <span className="f-mono text-[0.66rem] font-medium tracking-[0.22em] text-fg-3 uppercase">
               Invite only
             </span>
@@ -87,9 +112,7 @@ export default function Hero() {
               Stop <span className="tw-italic text-accent">managing</span>
             </span>
           </Line>
-          <Line delay={0.08}>
-            your life.
-          </Line>
+          <Line delay={0.08}>your life.</Line>
           <Line delay={0.16}>
             <span>
               Meet your <span className="tw-italic text-accent">twin</span>.
@@ -116,11 +139,11 @@ export default function Hero() {
 
         <Fade delay={0.62}>
           <div className="flex gap-3 flex-wrap mb-14">
-            <a href="#waitlist" className="btn primary">
+            <a ref={primaryRef} href="#waitlist" className="btn primary will-change-transform">
               Request access
               <span className="arrow" />
             </a>
-            <a href="#demo" className="btn">
+            <a ref={secondaryRef} href="#demo" className="btn will-change-transform">
               Watch it work
               <span className="arrow" />
             </a>
@@ -129,13 +152,14 @@ export default function Hero() {
 
         <Fade delay={0.78}>
           <div
-            className="grid gap-10 pt-6 border-t border-rule max-w-[640px]"
+            ref={statsRef}
+            className="grid gap-10 pt-6 border-t border-rule max-w-[680px]"
             style={{ gridTemplateColumns: "repeat(3, auto)" }}
           >
             {[
-              { k: "Tasks / day", v: "12", em: "avg" },
-              { k: "Hours saved / wk", v: "8.5", em: "median" },
-              { k: "Approved auto", v: "94", em: "%" },
+              { k: "Tasks / day", v: 12, d: 0, em: "avg" },
+              { k: "Hours saved / wk", v: 8.5, d: 1, em: "median" },
+              { k: "Approved auto", v: 94, d: 0, em: "%" },
             ].map((kv) => (
               <div key={kv.k} className="flex flex-col gap-1.5">
                 <span className="f-mono text-[0.6rem] font-medium tracking-[0.18em] uppercase text-fg-3">
@@ -143,9 +167,9 @@ export default function Hero() {
                 </span>
                 <span
                   className="font-semibold text-fg flex items-baseline gap-1"
-                  style={{ fontSize: "1.75rem", letterSpacing: "-0.025em" }}
+                  style={{ fontSize: "1.85rem", letterSpacing: "-0.025em" }}
                 >
-                  {kv.v}
+                  <CountUp to={kv.v} decimals={kv.d} start={statsInView} />
                   <em className="not-italic text-accent f-mono text-[0.72rem] font-normal">
                     {kv.em}
                   </em>
