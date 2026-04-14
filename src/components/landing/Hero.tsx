@@ -189,8 +189,8 @@ export default function Hero() {
         </Fade>
       </div>
 
-      {/* Composer card — floating overlay anchored bottom-right, above the robot */}
-      <div className="hidden lg:block absolute z-[5] bottom-[12%] right-[3%] xl:right-[4%] w-[420px] pointer-events-auto">
+      {/* Twin Ops Console — floating overlay, wider to fit multi-task view */}
+      <div className="hidden lg:block absolute z-[5] bottom-[9%] right-[3%] xl:right-[4%] w-[520px] xl:w-[560px] pointer-events-auto">
         <HeroComposer />
       </div>
 

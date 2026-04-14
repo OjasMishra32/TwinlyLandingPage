@@ -1,12 +1,12 @@
 const items = [
-  { dot: "a", text: "Reply in your voice" },
-  { dot: "g", text: "Reschedule Thursday" },
-  { dot: "", text: "Follow up with vendor" },
-  { dot: "a", text: "Compare flights · May" },
-  { dot: "g", text: "Return the order" },
-  { dot: "", text: "Draft the email" },
+  { dot: "g", text: "Filing 2025 taxes" },
+  { dot: "a", text: "Booking Tokyo · 8 days" },
+  { dot: "", text: "Drafting research paper" },
+  { dot: "g", text: "Cancelled 3 subscriptions" },
+  { dot: "a", text: "FAFSA form · 82% complete" },
+  { dot: "", text: "Replying in your voice" },
   { dot: "r", text: "Approval requested" },
-  { dot: "g", text: "Organize the morning" },
+  { dot: "g", text: "Saved $148 / month" },
   { dot: "", text: "Handle it" },
 ];
 

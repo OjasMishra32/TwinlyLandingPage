@@ -5,45 +5,51 @@ import RevealH2 from "./RevealH2";
 const cases = [
   {
     code: "01",
-    title: "Reply in your voice.",
-    summary: "Drafts responses that sound like you — across email, DMs, and work threads.",
-    input: "You forward the thread.",
-    approval: "Approve before sending.",
+    title: "File my taxes.",
+    summary:
+      "Pulls every W-2, 1099, receipt, and deduction from your accounts. Drafts the return end-to-end. You review the summary and sign.",
+    input: "Connect your accounts.",
+    approval: "You sign the final return.",
   },
   {
     code: "02",
-    title: "Schedule & reschedule.",
-    summary: "Finds conflict-free windows, holds slots, and negotiates the shuffle for you.",
-    input: "You say who and when-ish.",
-    approval: "Final confirm before it lands.",
+    title: "Plan the whole trip.",
+    summary:
+      "Flights, hotel, rental car, rail passes, restaurant reservations, day-by-day itinerary — researched, held, and ready to book in one pass.",
+    input: "Tell it where and when.",
+    approval: "Approve the bundle before cards move.",
   },
   {
     code: "03",
-    title: "Compare & buy.",
-    summary: "Researches options to your taste, shortlists, and lines up checkout with the best pick.",
-    input: "You describe what you need.",
-    approval: "Never charges without you.",
+    title: "Write the hard thing.",
+    summary:
+      "Research papers, essays, proposals, personal statements. Reads the sources, drafts in your voice, cites properly. You edit, approve, submit.",
+    input: "Point at the prompt.",
+    approval: "Nothing submits without you.",
   },
   {
     code: "04",
-    title: "Follow up for me.",
-    summary: "Tracks who owes you what, and nudges politely — on your schedule.",
-    input: "You point at the thread.",
-    approval: "Preview the nudge before it goes.",
+    title: "Kill the bloat.",
+    summary:
+      "Audits every subscription, negotiates bills, cancels the dead ones, disputes bogus charges. Typical save: $120–$300 a month.",
+    input: "Give it a week.",
+    approval: "Approve each cancellation.",
   },
   {
     code: "05",
-    title: "Returns & support.",
-    summary: "Handles returns, claims, and support loops without the copy-paste runaround.",
-    input: "You share the order.",
-    approval: "You approve each step.",
+    title: "Fill every form.",
+    summary:
+      "Insurance claims, medical records, job applications, visa paperwork, FAFSA. Pulls your docs, fills the fields, drafts the answers. You sign.",
+    input: "Upload once. Forever.",
+    approval: "Review before submit.",
   },
   {
     code: "06",
-    title: "Organize my day.",
-    summary: "Clears the noise, surfaces what matters, and sets you up for a clean morning.",
-    input: "Twinly runs overnight.",
-    approval: "Morning digest, not decisions.",
+    title: "Run my inbox.",
+    summary:
+      "Replies in your voice, schedules meetings, follows up on threads you care about, mutes the noise, digests the rest into a morning briefing.",
+    input: "Grant inbox access.",
+    approval: "Previews every send.",
   },
 ];
 

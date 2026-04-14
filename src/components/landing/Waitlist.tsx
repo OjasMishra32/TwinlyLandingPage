@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const intents = [
-  "Reply in my voice",
-  "Schedule / reschedule",
-  "Compare & buy",
-  "Follow up for me",
-  "Returns & support",
-  "Organize my day",
+  "File my taxes",
+  "Plan the whole trip",
+  "Write the hard thing",
+  "Kill the bloat",
+  "Fill every form",
+  "Run my inbox",
 ];
 
 export default function Waitlist() {
