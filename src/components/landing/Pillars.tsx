@@ -1,44 +1,63 @@
 import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 
-const pillars = [
+type Pillar = {
+  key: string;
+  label: string;
+  title: string;
+  copy: string;
+  icon: ReactNode;
+};
+
+const pillars: Pillar[] = [
   {
-    label: "Memory",
+    key: "memory",
+    label: "MEMORY",
     title: "Knows you.",
-    copy: "Remembers your tone, preferences, people, and how you like things handled — editable, always.",
+    copy: "Remembers tone, preferences, people, and how you like things handled. Editable, always.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
-        <path d="M12 2a5 5 0 0 0-5 5v1a5 5 0 0 0-3 4.5A5 5 0 0 0 7 17v1a4 4 0 0 0 8 0v-1a5 5 0 0 0 3-4.5A5 5 0 0 0 17 8V7a5 5 0 0 0-5-5Z" stroke="currentColor" strokeWidth="1.4" />
-        <path d="M12 8v11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <svg viewBox="0 0 32 32" fill="none" className="h-6 w-6">
+        <rect x="5" y="5" width="22" height="22" stroke="currentColor" strokeWidth="1.6" />
+        <rect x="11" y="11" width="10" height="10" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="5" y1="11" x2="11" y2="11" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="21" y1="11" x2="27" y2="11" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="5" y1="21" x2="11" y2="21" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="21" y1="21" x2="27" y2="21" stroke="currentColor" strokeWidth="1.6" />
       </svg>
     ),
   },
   {
-    label: "Voice",
+    key: "voice",
+    label: "VOICE",
     title: "Writes like you.",
-    copy: "Drafts replies in your tone — not a generic AI voice. Edit once, your twin learns.",
+    copy: "Drafts replies in your tone. Not a generic AI voice. Edit once, your twin learns.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
-        <path d="M4 14h4l3 6 4-14 3 8h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      <svg viewBox="0 0 32 32" fill="none" className="h-6 w-6">
+        <path d="M4 22h4l4 6 5-20 4 12h7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" strokeLinejoin="miter" />
       </svg>
     ),
   },
   {
-    label: "Action",
+    key: "action",
+    label: "ACTION",
     title: "Moves things forward.",
-    copy: "Plans, gathers context, composes, and executes — across email, calendar, and tasks.",
+    copy: "Plans, gathers context, composes, executes. Across email, calendar, and tasks.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
-        <path d="M5 12h10M13 7l5 5-5 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      <svg viewBox="0 0 32 32" fill="none" className="h-6 w-6">
+        <path d="M4 16h18M18 8l8 8-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" strokeLinejoin="miter" />
+        <circle cx="4" cy="16" r="2" fill="currentColor" />
       </svg>
     ),
   },
   {
-    label: "Approval",
+    key: "approval",
+    label: "APPROVAL",
     title: "Checks with you.",
-    copy: "You set what Twinly does automatically and what always waits for your sign-off.",
+    copy: "You set what Twinly does auto and what always waits for your sign-off.",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
-        <path d="M5 12l4 4 10-10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <svg viewBox="0 0 32 32" fill="none" className="h-6 w-6">
+        <rect x="5" y="5" width="22" height="22" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M10 16l4 4 9-10" stroke="hsl(var(--accent))" strokeWidth="2" strokeLinecap="square" />
       </svg>
     ),
   },
@@ -46,60 +65,77 @@ const pillars = [
 
 export default function Pillars() {
   return (
-    <section id="product" className="relative py-32 md:py-40">
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-15%" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-[820px]"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
-            02 · What Twinly is
+    <section id="product" className="sec border-t border-rule">
+      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+        <div className="sec-head">
+          <div className="sec-ident">
+            <span className="num">
+              02<span className="sl">/</span>
+            </span>
+            THE SYSTEM
+            <br />
+            <b>FOUR PARTS</b>
           </div>
-          <h2 className="mt-6 text-balance font-semibold tracking-[-0.03em] text-[clamp(2.25rem,5vw,4.5rem)] leading-[0.98]">
-            Four parts of a{" "}
-            <span className="font-serif-accent text-gradient-twin">twin</span>.
-          </h2>
-          <p className="mt-6 max-w-[600px] text-[17px] leading-relaxed text-white/60">
-            Twinly isn't a bigger chatbot or a smarter workflow builder. It's the first layer
-            that makes model intelligence feel like an operator who knows you.
-          </p>
-        </motion.div>
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="sec-h2"
+            >
+              Four parts of a <em className="tw-accent-word">twin.</em>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="sec-lede"
+            >
+              Twinly isn't a bigger chatbot or a smarter workflow builder. It's the first
+              layer that turns raw model intelligence into an <b>operator that already knows
+              how you'd do it.</b>
+            </motion.p>
+          </div>
+        </div>
 
-        <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-0 border-y-[2px] border-ink">
           {pillars.map((p, i) => (
             <motion.div
-              key={p.label}
+              key={p.key}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{
-                duration: 0.7,
-                delay: 0.1 + i * 0.08,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="group relative rounded-2xl border border-white/[0.06] bg-white/[0.015] p-6 overflow-hidden hover:bg-white/[0.035] transition-colors"
+              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              className="relative p-6 md:p-8 bg-paper hover:bg-paper-2 transition-colors border-ink
+                lg:[&:not(:last-child)]:border-r
+                sm:max-lg:[&:nth-child(odd)]:border-r
+                sm:max-lg:[&:nth-child(-n+2)]:border-b
+                max-sm:[&:not(:last-child)]:border-b"
             >
-              <div
-                className="pointer-events-none absolute -top-20 -right-20 h-40 w-40 rounded-full bg-twin-cyan/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                aria-hidden
-              />
-              <div className="flex items-center justify-between">
-                <div className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-twin-cyan">
+              <div className="flex items-start justify-between">
+                <div className="h-12 w-12 inline-flex items-center justify-center border border-ink bg-surface text-ink">
                   {p.icon}
                 </div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">
+                <span
+                  className="font-black text-ink-3/50"
+                  style={{ fontSize: "2.2rem", letterSpacing: "-0.045em", lineHeight: 0.88, fontStretch: "75%" }}
+                >
                   0{i + 1}
                 </span>
               </div>
-              <div className="mt-16">
-                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/50">
+              <div className="mt-20">
+                <div className="f-mono text-[0.6rem] font-bold tracking-[0.18em] text-accent">
                   {p.label}
                 </div>
-                <h3 className="mt-2 text-[22px] font-semibold tracking-tight">{p.title}</h3>
-                <p className="mt-3 text-[13.5px] leading-relaxed text-white/60">{p.copy}</p>
+                <h3
+                  className="mt-2 font-black text-ink"
+                  style={{ fontSize: "1.55rem", letterSpacing: "-0.03em", lineHeight: 1, fontStretch: "75%" }}
+                >
+                  {p.title}
+                </h3>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-ink-2">{p.copy}</p>
               </div>
             </motion.div>
           ))}

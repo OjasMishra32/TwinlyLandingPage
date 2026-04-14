@@ -1,130 +1,147 @@
 import { motion } from "framer-motion";
 
+const items = [
+  { title: "Editable memory", copy: "See what Twinly knows. Change, pin, or forget anything." },
+  { title: "Approval thresholds", copy: "Set the bar: auto, preview, or always ask." },
+  { title: "Visible action state", copy: "Live audit trail of what Twinly did, is doing, or waiting on." },
+  { title: "Data you control", copy: "End-to-end encrypted. Yours. Export or delete anytime." },
+];
+
+const timeline = [
+  { label: "Checked calendar", t: "0.2s", done: true },
+  { label: "Found 2 conflict-free windows", t: "0.4s", done: true },
+  { label: "Matched your tone (last 14 replies)", t: "0.7s", done: true },
+  { label: "Waiting for your approval", t: "now", done: false, active: true },
+];
+
 export default function Trust() {
   return (
-    <section id="trust" className="relative py-32 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-twin-violet/5 blur-[140px]" />
-      </div>
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <div className="grid lg:grid-cols-[1fr_1.1fr] gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-15%" }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
-              05 · Trust & controls
-            </div>
-            <h2 className="mt-6 text-balance font-semibold tracking-[-0.03em] text-[clamp(2.25rem,5vw,4.5rem)] leading-[0.96]">
-              You decide what{" "}
-              <span className="font-serif-accent text-twin-cyan">moves</span>.
+    <section id="trust" className="sec border-t border-rule">
+      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+        <div className="sec-head">
+          <div className="sec-ident">
+            <span className="num">
+              05<span className="sl">/</span>
+            </span>
+            TRUST
+            <br />
+            <b>APPROVAL-FIRST</b>
+          </div>
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9 }}
+              className="sec-h2"
+            >
+              You decide what <em className="tw-accent-word">moves.</em>
               <br />
-              Everything else stays{" "}
-              <span className="font-serif-accent text-twin-violet">visible.</span>
-            </h2>
-            <p className="mt-6 max-w-[520px] text-[17px] leading-relaxed text-white/60">
-              Twinly is approvals-first by default. Every action is visible, every memory is
-              editable, and every permission is yours to grant or pull back in one tap.
-            </p>
+              Everything stays <em className="tw-accent-word">visible.</em>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="sec-lede"
+            >
+              Twinly is approvals-first by default. <b>Every action is visible, every memory
+              is editable, and every permission is yours</b> to grant or pull back in one tap.
+            </motion.p>
+          </div>
+        </div>
 
-            <ul className="mt-10 space-y-4">
-              {[
-                { title: "Editable memory", copy: "See what Twinly knows. Change, pin, or forget anything." },
-                { title: "Approval thresholds", copy: "Set the bar: auto, preview, or always ask." },
-                { title: "Visible action state", copy: "Live audit trail of what Twinly did, is doing, or waiting on." },
-                { title: "Data you control", copy: "End-to-end encrypted. Yours. Export or delete anytime." },
-              ].map((item, i) => (
-                <motion.li
-                  key={item.title}
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1 + i * 0.08 }}
-                  className="flex gap-4"
-                >
-                  <span className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-twin-cyan/15 text-twin-cyan">
-                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                      <path d="M2 6l3 3 5-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                  <div>
-                    <div className="text-[15px] font-medium text-white/90">{item.title}</div>
-                    <div className="text-[13.5px] text-white/55 mt-0.5">{item.copy}</div>
+        <div className="grid lg:grid-cols-[1fr_1.15fr] gap-12 items-start">
+          <ul className="border-y-[2px] border-ink divide-y divide-rule">
+            {items.map((item, i) => (
+              <motion.li
+                key={item.title}
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 + i * 0.08 }}
+                className="flex gap-5 py-6 px-2 items-start"
+              >
+                <span className="f-mono text-[0.6rem] font-bold tracking-[0.18em] text-accent pt-1">0{i + 1}</span>
+                <div className="flex-1">
+                  <div
+                    className="font-black text-ink"
+                    style={{ fontSize: "1.3rem", letterSpacing: "-0.03em", lineHeight: 1, fontStretch: "75%" }}
+                  >
+                    {item.title}
                   </div>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
+                  <div className="mt-1.5 text-[13.5px] text-ink-2 leading-relaxed">{item.copy}</div>
+                </div>
+                <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6 shrink-0 text-accent">
+                  <path d="M4 12l5 5 11-12" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+                </svg>
+              </motion.li>
+            ))}
+          </ul>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="relative"
+            transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="hard-panel bg-surface relative overflow-hidden"
           >
-            <div className="glass-strong border-glow rounded-3xl p-6 md:p-8 relative overflow-hidden">
-              <div className="pointer-events-none absolute inset-0 grid-noise opacity-30" />
-              <div className="relative flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-twin-cyan animate-pulse-soft" />
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-white/60">
-                    Approval required
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono text-white/30">a few seconds ago</span>
-              </div>
+            {/* Chrome */}
+            <div className="flex items-center justify-between px-5 py-4 border-b-[1.5px] border-ink bg-paper-2 f-mono text-[0.62rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+              <span className="flex items-center gap-[10px] text-accent font-bold">
+                <span className="live-dot" /> APPROVAL REQUIRED
+              </span>
+              <span className="text-ink-4">TS · 14:02:11</span>
+            </div>
 
-              <div className="relative rounded-xl border border-white/[0.06] bg-black/40 p-5">
+            <div className="p-5 md:p-6">
+              <div className="border-[1.5px] border-ink bg-paper p-5">
                 <div className="flex items-start gap-3">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-twin-cyan to-twin-violet shrink-0" />
+                  <div className="h-9 w-9 border border-ink bg-accent shrink-0 flex items-center justify-center text-white text-[0.66rem] font-bold">TW</div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 text-[11px] font-mono text-white/50">
-                      <span>Twinly</span>
-                      <span>·</span>
-                      <span>Draft · Reply to Lena</span>
+                    <div className="f-mono text-[0.58rem] font-bold tracking-[0.16em] uppercase text-ink-3">
+                      TWINLY <span className="text-ink-4">·</span> DRAFT <span className="text-ink-4">·</span> REPLY TO LENA
                     </div>
-                    <p className="mt-2 text-[13.5px] text-white/90 leading-relaxed">
-                      <span className="text-white/60">Subject:</span> Re: Thursday sync — let's shuffle
-                    </p>
-                    <p className="mt-2 text-[13px] text-white/70 leading-relaxed">
-                      Hey Lena — something came up Thursday. Would Wed 9:30 or Tue 10:00 work on your side? Sorry for the shuffle.
+                    <div className="mt-2 text-[13.5px] text-ink">
+                      <span className="text-ink-3">Subject:</span>{" "}
+                      <b className="font-semibold">Re: Thursday sync — let's shuffle</b>
+                    </div>
+                    <p className="mt-2 text-[13px] text-ink-2 leading-relaxed">
+                      Hey Lena — something came up Thursday. Would Wed 9:30 or Tue 10:00 work
+                      on your side? Sorry for the shuffle.
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center gap-2 pt-4 border-t border-white/5">
-                  <button className="rounded-full bg-twin-cyan text-black px-3.5 py-1.5 text-[11px] font-semibold">
-                    Approve & send
+                <div className="mt-5 flex flex-wrap items-center gap-2 pt-4 border-t border-rule">
+                  <button className="btn primary !py-2 !px-3 !text-[0.6rem]">
+                    APPROVE &amp; SEND <span className="arrow" />
                   </button>
-                  <button className="rounded-full border border-white/10 px-3.5 py-1.5 text-[11px] text-white/70">
-                    Edit
+                  <button className="btn !py-2 !px-3 !text-[0.6rem]">
+                    EDIT
                   </button>
-                  <button className="rounded-full border border-white/10 px-3.5 py-1.5 text-[11px] text-white/50">
-                    Reject
+                  <button className="btn !py-2 !px-3 !text-[0.6rem] opacity-70">
+                    REJECT
                   </button>
-                  <span className="ml-auto text-[10px] font-mono text-white/30">⌘↵ to approve</span>
+                  <span className="ml-auto f-mono text-[0.58rem] tracking-[0.16em] uppercase text-ink-3">⌘↵ APPROVE</span>
                 </div>
               </div>
 
-              <div className="relative mt-4 space-y-2">
-                {[
-                  { label: "Checked calendar", t: "0.2s" },
-                  { label: "Found 2 conflict-free windows", t: "0.4s" },
-                  { label: "Matched your tone (last 14 replies)", t: "0.7s" },
-                  { label: "Waiting for your approval", t: "now", active: true },
-                ].map((row) => (
+              <div className="mt-5 space-y-1">
+                {timeline.map((row) => (
                   <div
                     key={row.label}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2 text-[12px] ${row.active ? "bg-twin-cyan/10 text-twin-cyan" : "text-white/50"}`}
+                    className={`flex items-center justify-between px-3 py-2 text-[12.5px] border border-ink/10 ${row.active ? "bg-accent/[0.07] border-accent/40 text-ink" : "text-ink-2"}`}
                   >
                     <div className="flex items-center gap-2">
-                      <span className={`h-1.5 w-1.5 rounded-full ${row.active ? "bg-twin-cyan animate-pulse-soft" : "bg-white/30"}`} />
+                      <span
+                        className="w-[6px] h-[6px] rounded-full"
+                        style={{ background: row.active ? "hsl(var(--accent))" : row.done ? "hsl(var(--green))" : "hsl(var(--rule-hi))" }}
+                      />
                       {row.label}
                     </div>
-                    <span className="font-mono text-[10px] opacity-60">{row.t}</span>
+                    <span className="f-mono text-[0.58rem] tracking-[0.16em] uppercase text-ink-3">{row.t}</span>
                   </div>
                 ))}
               </div>

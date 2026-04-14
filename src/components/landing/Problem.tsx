@@ -1,75 +1,99 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 const fragments = [
-  { tag: "Inbox", body: "Re: Can we move Thursday? The 3pm slot no longer works for me…", tilt: -6, x: -6, y: 2 },
-  { tag: "Calendar", body: "Thu 3:00 PM — Sync with Lena (no link)", tilt: 4, x: 14, y: -8 },
-  { tag: "Tab", body: "amazon.com/returns/order-8234 — start return", tilt: -3, x: -14, y: 10 },
-  { tag: "Slack", body: "bump — still waiting on the vendor quote 👀", tilt: 5, x: 8, y: 14 },
-  { tag: "Notes", body: "don't forget: dentist, renew passport, birthday gift for M", tilt: -2, x: -18, y: -14 },
-  { tag: "Form", body: "Expense report · awaiting your approval · 3 items", tilt: 7, x: 18, y: 6 },
+  { tag: "INBOX", body: "Re: Can we move Thursday? 3pm no longer works…", tilt: -5, x: -8, y: -10 },
+  { tag: "CAL", body: "Thu 3:00 PM — Sync w/ Lena (no link)", tilt: 4, x: 16, y: -4 },
+  { tag: "TAB", body: "amazon.com/returns/order-8234 — start return", tilt: -3, x: -16, y: 8 },
+  { tag: "SLACK", body: "bump — still waiting on the vendor quote", tilt: 6, x: 10, y: 14 },
+  { tag: "NOTE", body: "dentist · passport · birthday gift for M", tilt: -2, x: -18, y: -18 },
+  { tag: "FORM", body: "Expense report · awaiting approval · 3 items", tilt: 5, x: 18, y: 2 },
 ];
 
 export default function Problem() {
   const reduced = useReducedMotion();
 
   return (
-    <section id="problem" className="relative py-32 md:py-48 overflow-hidden">
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-16 lg:gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-20%" }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
-              01 · The problem
-            </div>
-            <h2 className="mt-6 text-balance font-semibold tracking-[-0.03em] text-[clamp(2.25rem,5vw,4.5rem)] leading-[0.98]">
-              You don't want to{" "}
-              <span className="font-serif-accent text-twin-cyan">manage tools.</span>
+    <section id="problem" className="sec">
+      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+        <div className="sec-head">
+          <div className="sec-ident">
+            <span className="num">
+              01<span className="sl">/</span>
+            </span>
+            THE PROBLEM
+            <br />
+            <b>FRAGMENTATION</b>
+          </div>
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="sec-h2"
+            >
+              You don't want to manage <em className="tw-accent-word">tools.</em>
               <br />
-              You want things{" "}
-              <span className="font-serif-accent text-twin-violet">handled.</span>
-            </h2>
-            <p className="mt-6 max-w-[520px] text-[17px] leading-relaxed text-white/60">
-              Life runs across inboxes, calendars, open tabs, group chats, and half-finished
-              forms. Each one is a small tax on attention. Put together, it's a full-time job
-              no one signed up for.
-            </p>
+              You want things <em className="tw-accent-word">handled.</em>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="sec-lede"
+            >
+              Life runs across <b>inboxes, calendars, open tabs, group chats, and
+              half-finished forms</b>. Each one is a small tax on attention. Together, it's a
+              full-time job no one signed up for.
+            </motion.p>
+          </div>
+        </div>
 
-            <dl className="mt-10 grid grid-cols-3 gap-6 max-w-[480px]">
-              {[
-                { n: "2.5h", l: "per day lost to admin" },
-                { n: "74%", l: "of tasks are repetitive" },
-                { n: "11+", l: "apps to coordinate" },
-              ].map((s) => (
-                <div key={s.l} className="border-l border-white/10 pl-4">
-                  <dt className="font-serif-accent text-twin-cyan text-[28px] leading-none">{s.n}</dt>
-                  <dd className="mt-2 text-[11px] font-mono uppercase tracking-wider text-white/50">{s.l}</dd>
+        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 items-start">
+          {/* Stat strip */}
+          <div className="grid grid-cols-3 gap-0 border-y-[2px] border-ink">
+            {[
+              { n: "2.5", u: "H", l: "LOST / DAY" },
+              { n: "74", u: "%", l: "REPETITIVE" },
+              { n: "11+", u: "", l: "APPS / DAY" },
+            ].map((s, i) => (
+              <motion.div
+                key={s.l}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: i * 0.1 }}
+                className={`py-8 px-5 ${i < 2 ? "border-r border-ink" : ""}`}
+              >
+                <div
+                  className="font-black text-ink flex items-baseline gap-1"
+                  style={{ fontSize: "clamp(3rem,6vw,5rem)", letterSpacing: "-0.04em", lineHeight: 0.88, fontStretch: "75%" }}
+                >
+                  {s.n}
+                  <span className="text-accent font-medium" style={{ fontSize: "0.52em" }}>{s.u}</span>
                 </div>
-              ))}
-            </dl>
-          </motion.div>
+                <div className="mt-3 f-mono text-[0.6rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+                  {s.l}
+                </div>
+              </motion.div>
+            ))}
+          </div>
 
-          <div className="relative h-[520px] w-full">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-twin-cyan/10 via-transparent to-twin-violet/10 blur-3xl opacity-60" />
+          {/* Drifting fragments */}
+          <div className="relative h-[500px] w-full">
             {fragments.map((f, i) => (
               <motion.div
                 key={f.tag}
-                initial={{ opacity: 0, y: 30, rotate: f.tilt }}
+                initial={{ opacity: 0, y: 20, rotate: f.tilt }}
                 whileInView={{ opacity: 1, y: 0, rotate: f.tilt }}
                 viewport={{ once: true, margin: "-10%" }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.05 + i * 0.07,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                transition={{ duration: 0.8, delay: 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                 animate={
                   reduced
                     ? undefined
                     : {
-                        y: [0, -4, 0],
+                        y: [0, -5, 0],
                         transition: {
                           duration: 4 + i * 0.3,
                           repeat: Infinity,
@@ -78,18 +102,19 @@ export default function Problem() {
                         },
                       }
                 }
-                className="absolute glass rounded-2xl px-5 py-4 w-[min(86%,320px)] shadow-2xl shadow-black/60"
+                className="absolute bg-surface border-[1.5px] border-ink p-4 w-[min(86%,310px)]"
                 style={{
                   left: `calc(50% + ${f.x}%)`,
                   top: `calc(50% + ${f.y}%)`,
                   transform: `translate(-50%, -50%) rotate(${f.tilt}deg)`,
+                  boxShadow: "6px 6px 0 0 hsl(var(--ink))",
                 }}
               >
-                <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-white/50">
-                  <span>{f.tag}</span>
-                  <span className="h-1.5 w-1.5 rounded-full bg-twin-warm" />
+                <div className="flex items-center justify-between f-mono text-[0.58rem] font-bold tracking-[0.18em] uppercase text-ink-3">
+                  <span className="text-ink">{f.tag}</span>
+                  <span className="diamond" style={{ background: "hsl(var(--amber))" }} />
                 </div>
-                <p className="mt-2 text-[13.5px] leading-snug text-white/85 line-clamp-2">{f.body}</p>
+                <p className="mt-2 text-[13px] leading-snug text-ink font-medium">{f.body}</p>
               </motion.div>
             ))}
           </div>

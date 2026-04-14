@@ -1,66 +1,83 @@
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/5 pt-20 pb-10 overflow-hidden">
-      <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-twin-cyan/30 to-transparent" />
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 pb-16">
+    <footer className="relative border-t-[2px] border-ink bg-paper-2/60 pt-20 pb-8 overflow-hidden">
+      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+        <div className="grid md:grid-cols-[1.1fr_1fr_1fr_1fr] gap-10 md:gap-16 pb-16">
           <div>
-            <div className="flex items-center gap-2 mb-6">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                <defs>
-                  <linearGradient id="twinly-footer" x1="0" y1="0" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="hsl(170 90% 70%)" />
-                    <stop offset="1" stopColor="hsl(260 90% 78%)" />
-                  </linearGradient>
-                </defs>
-                <circle cx="11" cy="11" r="9" stroke="url(#twinly-footer)" strokeWidth="1.5" />
-                <circle cx="11" cy="7" r="2.5" fill="url(#twinly-footer)" />
-                <circle cx="11" cy="15" r="2.5" stroke="url(#twinly-footer)" strokeWidth="1.5" />
+            <div className="flex items-center gap-3 mb-6">
+              <svg viewBox="0 0 42 42" className="h-10 w-10 text-ink">
+                <circle cx="21" cy="21" r="20" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="21" cy="21" r="14" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="2 4" opacity="0.55" />
+                <rect x="11" y="11" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.35" />
+                <line x1="21" y1="21" x2="38" y2="21" stroke="hsl(var(--accent))" strokeWidth="1.5" />
+                <circle cx="21" cy="21" r="3" fill="hsl(var(--accent))" />
               </svg>
-              <span className="text-[16px] font-semibold tracking-tight">Twinly</span>
+              <div className="flex flex-col gap-1 leading-none">
+                <span
+                  className="text-[1.2rem] font-black tracking-[-0.015em] text-ink flex items-baseline"
+                  style={{ fontStretch: "75%" }}
+                >
+                  twinly
+                  <span className="text-accent font-medium mx-[0.08em]">/</span>
+                  <span className="text-ink-2 font-medium text-[0.9rem]">ai</span>
+                </span>
+                <span className="f-mono text-[0.56rem] tracking-[0.18em] uppercase text-ink-3">
+                  PERSONAL OPERATOR · REV 01
+                </span>
+              </div>
             </div>
-            <p className="max-w-[420px] text-[15px] text-white/55 leading-relaxed">
+            <p className="max-w-[40ch] text-[14px] text-ink-2 leading-relaxed font-medium">
               A personal AI operator that learns how you work, writes in your voice, and
               moves life-admin forward with your approval.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 md:gap-16 text-[13px]">
-            <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-white/35 mb-4">Site</div>
-              <ul className="space-y-3 text-white/65">
-                <li><a href="#product" className="hover:text-white transition-colors">Product</a></li>
-                <li><a href="#use-cases" className="hover:text-white transition-colors">Use cases</a></li>
-                <li><a href="#trust" className="hover:text-white transition-colors">Trust</a></li>
-                <li><a href="#waitlist" className="hover:text-white transition-colors">Request access</a></li>
+          {[
+            { h: "SITE", items: [["Product", "#product"], ["Demo", "#demo"], ["Trust", "#trust"], ["Access", "#waitlist"]] },
+            { h: "COMPANY", items: [["hello@twinly.tech", "mailto:hello@twinly.tech"], ["Careers", "#"], ["Press kit", "#"]] },
+            { h: "LEGAL", items: [["Privacy", "#"], ["Terms", "#"], ["Security", "#"]] },
+          ].map((col) => (
+            <div key={col.h}>
+              <div className="f-mono text-[0.58rem] font-bold tracking-[0.18em] uppercase text-accent mb-4 pb-2 border-b border-ink">
+                {col.h}
+              </div>
+              <ul className="space-y-3 text-[13px] text-ink-2">
+                {col.items.map(([label, href]) => (
+                  <li key={label}>
+                    <a href={href} className="hover:text-ink transition-colors inline-flex items-center gap-2">
+                      <span className="w-3 h-px bg-ink-3" />
+                      {label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
-            <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-white/35 mb-4">Company</div>
-              <ul className="space-y-3 text-white/65">
-                <li><a href="mailto:hello@twinly.tech" className="hover:text-white transition-colors">hello@twinly.tech</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Press kit</a></li>
-              </ul>
-            </div>
-            <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-white/35 mb-4">Legal</div>
-              <ul className="space-y-3 text-white/65">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
-              </ul>
-            </div>
-          </div>
+          ))}
         </div>
 
-        <div className="font-serif-accent text-[clamp(4rem,16vw,14rem)] leading-[0.82] tracking-[-0.04em] text-white/[0.04] select-none pointer-events-none whitespace-nowrap mask-fade-r">
-          twinly.tech
+        {/* Giant wordmark */}
+        <div
+          className="font-black leading-[0.82] text-ink/[0.06] select-none pointer-events-none whitespace-nowrap overflow-hidden"
+          style={{
+            fontSize: "clamp(5rem, 20vw, 20rem)",
+            letterSpacing: "-0.06em",
+            fontStretch: "75%",
+          }}
+          aria-hidden
+        >
+          TWINLY<span className="text-accent/20 font-medium">/</span>AI
         </div>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/5 text-[11px] font-mono uppercase tracking-wider text-white/35">
-          <span>© 2026 Twinly, Inc. All rights reserved.</span>
-          <span>Crafted with intent · Not a chatbot</span>
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 border-t border-ink f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+          <span>
+            © 2026 TWINLY INC.
+            <span className="text-rule-hi mx-2">/</span>
+            ALL RIGHTS RESERVED
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="live-dot" />
+            CRAFTED WITH INTENT · NOT A CHATBOT
+          </span>
         </div>
       </div>
     </footer>

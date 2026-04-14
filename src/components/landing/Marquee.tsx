@@ -1,27 +1,49 @@
-const words = [
-  "reply in your voice",
-  "reschedule Thursday",
-  "follow up with the vendor",
-  "compare flights for May",
-  "return the order",
-  "draft the email",
-  "organize my morning",
-  "remind me on Monday",
-  "find a window with Lena",
-  "handle it",
+const items = [
+  { dot: "a", text: "REPLY IN YOUR VOICE" },
+  { dot: "g", text: "RESCHEDULE THURSDAY" },
+  { dot: "", text: "FOLLOW UP WITH VENDOR" },
+  { dot: "a", text: "COMPARE FLIGHTS · MAY" },
+  { dot: "g", text: "RETURN THE ORDER" },
+  { dot: "", text: "DRAFT THE EMAIL" },
+  { dot: "r", text: "URGENT · APPROVAL REQ" },
+  { dot: "g", text: "ORGANIZE THE MORNING" },
+  { dot: "", text: "HANDLE IT" },
 ];
 
+const dotColor: Record<string, string> = {
+  a: "#fbbf24",
+  g: "#4ade80",
+  r: "#ff6b7a",
+  "": "hsl(var(--accent))",
+};
+
 export default function Marquee() {
-  const row = words.concat(words);
+  const row = items.concat(items);
   return (
-    <section aria-hidden className="relative py-8 border-y border-white/5 bg-white/[0.01] overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-background via-transparent to-background z-10" />
-      <div className="flex gap-12 animate-marquee whitespace-nowrap will-change-transform">
-        {row.map((w, i) => (
-          <div key={i} className="flex items-center gap-12 text-[clamp(1.75rem,3.4vw,2.6rem)] font-semibold tracking-[-0.02em]">
-            <span className="text-white/70">{w}</span>
-            <span className="font-serif-accent text-twin-cyan/70">·</span>
-          </div>
+    <section
+      aria-hidden
+      className="relative bg-ink text-paper overflow-hidden"
+      style={{
+        borderTop: "1.5px solid hsl(var(--ink))",
+        borderBottom: "1.5px solid hsl(var(--ink))",
+      }}
+    >
+      <div
+        className="inline-flex whitespace-nowrap animate-marq"
+        style={{ gap: 64, padding: "22px 0", willChange: "transform" }}
+      >
+        {row.map((it, i) => (
+          <span
+            key={i}
+            className="inline-flex items-center gap-[14px] f-mono text-[0.8rem] font-medium tracking-[0.08em] uppercase"
+          >
+            <i
+              className="inline-block w-[7px] h-[7px] rounded-full shrink-0"
+              style={{ background: dotColor[it.dot] }}
+            />
+            <b className="text-white font-bold">{it.text}</b>
+            <span className="text-ink-4">·</span>
+          </span>
         ))}
       </div>
     </section>

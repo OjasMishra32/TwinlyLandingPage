@@ -1,44 +1,46 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const words = [
-  { label: "memory", tone: "text-twin-cyan" },
-  { label: "voice", tone: "text-white" },
-  { label: "action", tone: "text-twin-violet" },
-  { label: "approval", tone: "text-twin-warm" },
-];
+const words = ["MEMORY", "VOICE", "ACTION", "APPROVAL"];
 
 export default function BigScroll() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const x = useTransform(scrollYProgress, [0, 1], ["8%", "-32%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.2]);
+  const x = useTransform(scrollYProgress, [0, 1], ["6%", "-30%"]);
 
   return (
-    <section ref={ref} className="relative py-28 md:py-40 overflow-hidden">
+    <section ref={ref} className="relative py-20 md:py-32 overflow-hidden border-t border-rule bg-paper-2/40">
       <motion.div
-        style={{ x, opacity }}
-        className="flex items-center gap-[0.12em] whitespace-nowrap font-serif-accent text-[clamp(6rem,18vw,18rem)] leading-[0.82] tracking-[-0.04em]"
+        style={{ x }}
+        className="flex items-center gap-[0.2em] whitespace-nowrap font-black text-ink"
+        aria-hidden
       >
         {words.map((w, i) => (
-          <span key={w.label} className="flex items-center gap-[0.2em]">
-            <span className={w.tone}>{w.label}</span>
+          <span key={w} className="flex items-center gap-[0.28em]">
+            <span
+              style={{
+                fontSize: "clamp(5rem,16vw,16rem)",
+                lineHeight: 0.82,
+                letterSpacing: "-0.06em",
+                fontStretch: "75%",
+              }}
+              className={i === 2 ? "text-accent italic font-black" : ""}
+            >
+              {w}
+            </span>
             {i < words.length - 1 && (
-              <svg className="h-[0.22em] w-[0.22em] text-white/30" viewBox="0 0 10 10" fill="none">
-                <circle cx="5" cy="5" r="4" fill="currentColor" />
-              </svg>
+              <span className="inline-block w-[0.22em] h-[0.22em] bg-accent rotate-45" />
             )}
           </span>
         ))}
       </motion.div>
-
-      <div className="mx-auto w-full max-w-[1200px] px-6 mt-12 md:mt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <p className="max-w-[420px] text-[15.5px] text-white/55 leading-relaxed">
+      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14 mt-12 md:mt-14 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <p className="max-w-[44ch] text-[15.5px] text-ink-2 leading-relaxed font-medium">
           Four words. One system. A twin that doesn't just talk — it remembers, writes,
           acts, and asks at exactly the right moments.
         </p>
-        <div className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/35">
-          system · v0.1 · preview
+        <div className="f-mono text-[0.6rem] tracking-[0.22em] uppercase text-ink-3">
+          SYSTEM · V0.1 · PREVIEW
         </div>
       </div>
     </section>

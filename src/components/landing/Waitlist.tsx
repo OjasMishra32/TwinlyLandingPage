@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const intents = [
-  "Reply in my voice",
-  "Schedule & reschedule",
-  "Compare & buy",
-  "Follow up for me",
-  "Returns & support",
-  "Organize my day",
+  "REPLY IN MY VOICE",
+  "SCHEDULE / RESCHEDULE",
+  "COMPARE & BUY",
+  "FOLLOW UP FOR ME",
+  "RETURNS & SUPPORT",
+  "ORGANIZE MY DAY",
 ];
 
 export default function Waitlist() {
@@ -28,27 +28,36 @@ export default function Waitlist() {
   }
 
   return (
-    <section id="waitlist" className="relative py-32 md:py-40 overflow-hidden">
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-twin-cyan/10 via-twin-violet/5 to-transparent blur-[140px]" />
-      </div>
-
-      <div className="mx-auto w-full max-w-[880px] px-6">
+    <section id="waitlist" className="sec border-t border-rule">
+      <div className="w-full max-w-[1200px] mx-auto px-6 md:px-14">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center"
+          transition={{ duration: 0.9 }}
+          className="max-w-[880px]"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-twin-cyan/30 bg-twin-cyan/[0.05] px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-twin-cyan">
-            Request access
+          <div className="eyebrow mb-6">
+            <span className="flex items-center gap-3 text-[0.62rem] font-medium tracking-[0.22em] text-ink-3 uppercase">
+              <span className="diamond" />
+              <b className="text-accent font-bold">REQUEST ACCESS</b>
+              <span className="text-rule-hi">/</span>
+              PRIVATE BETA · 2026
+            </span>
           </div>
-          <h2 className="mt-6 text-balance font-semibold tracking-[-0.035em] text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.94]">
-            Meet your{" "}
-            <span className="font-serif-accent text-gradient-twin">twin</span>.
+          <h2
+            className="font-black text-ink"
+            style={{
+              fontSize: "clamp(3rem, 9vw, 10rem)",
+              lineHeight: 0.84,
+              letterSpacing: "-0.055em",
+              maxWidth: "13ch",
+              fontStretch: "75%",
+            }}
+          >
+            Meet your <em className="tw-accent-word">twin.</em>
           </h2>
-          <p className="mt-6 max-w-[560px] mx-auto text-[17px] leading-relaxed text-white/60">
+          <p className="mt-6 max-w-[56ch] text-[17px] leading-relaxed text-ink-2 font-medium">
             Early access rolls out quietly. Tell us what you'd hand over first and we'll bring
             you in when your twin is ready.
           </p>
@@ -59,50 +68,50 @@ export default function Waitlist() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-12 glass-strong border-glow rounded-3xl p-6 md:p-8"
+          transition={{ duration: 0.9, delay: 0.15 }}
+          className="mt-12 hard-panel bg-surface p-6 md:p-8"
         >
-          <div className="flex flex-col md:flex-row gap-3">
-            <div className="relative flex-1">
-              <label htmlFor="email" className="sr-only">Email</label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle"); }}
-                placeholder="you@domain.com"
-                required
-                className="w-full h-14 rounded-2xl bg-black/40 border border-white/10 px-5 text-[15px] placeholder:text-white/30 focus:outline-none focus:border-twin-cyan/60 focus:ring-2 focus:ring-twin-cyan/20 transition"
-              />
-            </div>
+          <div className="flex flex-col md:flex-row gap-3 md:gap-0">
+            <label htmlFor="email" className="sr-only">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle"); }}
+              placeholder="you@domain.com"
+              required
+              className="flex-1 h-14 bg-paper border-[1.5px] border-ink px-5 text-[15px] placeholder:text-ink-3 focus:outline-none focus:bg-surface f-sans transition-colors"
+            />
             <button
               type="submit"
               disabled={status === "submitting" || status === "success"}
-              className="h-14 rounded-2xl bg-white text-black px-7 text-[14px] font-semibold hover:bg-twin-cyan transition-colors disabled:opacity-70 disabled:cursor-default inline-flex items-center justify-center gap-2 min-w-[180px]"
+              className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 md:-ml-[1.5px] md:border-l-0 disabled:opacity-80"
             >
-              {status === "submitting" && "Adding you…"}
+              {status === "submitting" && "ADDING YOU…"}
               {status === "success" && (
                 <>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  You're in
+                  YOU'RE IN
+                  <span className="arrow" />
                 </>
               )}
               {(status === "idle" || status === "error") && (
                 <>
-                  Request access
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  REQUEST ACCESS
+                  <span className="arrow" />
                 </>
               )}
             </button>
           </div>
 
           {status === "error" && (
-            <p className="mt-3 text-[12px] text-red-300/80 font-mono">Please enter a valid email.</p>
+            <p className="mt-3 f-mono text-[0.6rem] tracking-[0.16em] uppercase text-red-600">
+              ERROR · VALID EMAIL REQUIRED
+            </p>
           )}
 
-          <div className="mt-6">
-            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/40 mb-3">
-              What would you hand over first?
+          <div className="mt-8">
+            <div className="f-mono text-[0.6rem] font-bold tracking-[0.18em] uppercase text-ink-3 mb-3">
+              WHAT WOULD YOU HAND OVER FIRST?
             </div>
             <div className="flex flex-wrap gap-2">
               {intents.map((i) => (
@@ -110,10 +119,10 @@ export default function Waitlist() {
                   key={i}
                   type="button"
                   onClick={() => setIntent((cur) => (cur === i ? "" : i))}
-                  className={`rounded-full px-3.5 py-1.5 text-[12px] border transition-colors ${
+                  className={`f-mono text-[0.6rem] font-semibold tracking-[0.14em] px-3 py-2 border-[1.5px] transition-colors ${
                     intent === i
-                      ? "border-twin-cyan/60 bg-twin-cyan/10 text-twin-cyan"
-                      : "border-white/10 bg-white/[0.02] text-white/60 hover:text-white/80"
+                      ? "border-accent bg-accent text-white"
+                      : "border-ink text-ink hover:bg-ink hover:text-paper"
                   }`}
                 >
                   {i}
@@ -122,9 +131,16 @@ export default function Waitlist() {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-white/30">
-            <span>No spam. Ever.</span>
-            <span>Quiet rollout · 2026</span>
+          <div className="mt-8 pt-5 border-t border-rule flex items-center justify-between f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+            <span>
+              <b className="text-ink">NO SPAM · EVER</b>
+              <span className="text-rule-hi mx-2">/</span>
+              PRIVACY-FIRST
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="live-dot" />
+              QUIET ROLLOUT · 2026
+            </span>
           </div>
         </motion.form>
       </div>

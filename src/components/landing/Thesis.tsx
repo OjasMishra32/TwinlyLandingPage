@@ -1,83 +1,119 @@
 import { motion } from "framer-motion";
 
+const columns = [
+  {
+    era: "THEN",
+    title: "Chatbots & prompts",
+    copy: "Impressive demos. Useful for writing. Still left every decision, handoff, and click to you.",
+    muted: true,
+  },
+  {
+    era: "NOW",
+    title: "Models that can act",
+    copy: "Reasoning, tools, memory, structured action. Raw power — but most people don't want a dev kit.",
+    muted: true,
+  },
+  {
+    era: "WHAT'S MISSING",
+    title: "An operator who knows you",
+    copy: "The layer that turns that power into something consumer-safe: tone, permissions, approvals, taste.",
+    highlight: true,
+  },
+];
+
 export default function Thesis() {
   return (
-    <section id="thesis" className="relative py-32 md:py-40 overflow-hidden">
-      <div className="mx-auto w-full max-w-[1100px] px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-15%" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-[820px]"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
-            06 · Why now
+    <section id="thesis" className="sec border-t border-rule">
+      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+        <div className="sec-head">
+          <div className="sec-ident">
+            <span className="num">
+              06<span className="sl">/</span>
+            </span>
+            THESIS
+            <br />
+            <b>WHY NOW</b>
           </div>
-          <h2 className="mt-6 text-balance font-semibold tracking-[-0.03em] text-[clamp(2.25rem,5vw,4.5rem)] leading-[0.98]">
-            AI became useful when it stopped being a{" "}
-            <span className="font-serif-accent text-white/40 line-through decoration-twin-warm/50 decoration-2">toy</span>{" "}
-            and started{" "}
-            <span className="font-serif-accent text-gradient-twin">operating</span>.
-          </h2>
-        </motion.div>
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{ duration: 0.9 }}
+              className="sec-h2"
+            >
+              AI got useful when it stopped being a{" "}
+              <em className="tw-accent-word" style={{ textDecoration: "line-through", textDecorationColor: "hsl(var(--amber))" }}>
+                toy
+              </em>{" "}
+              and started <em className="tw-accent-word">operating.</em>
+            </motion.h2>
+          </div>
+        </div>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-5">
-          {[
-            {
-              era: "Then",
-              title: "Chatbots & prompts",
-              copy: "Impressive demos. Useful for writing. Still left every actual decision, handoff, and click to you.",
-              muted: true,
-            },
-            {
-              era: "Now",
-              title: "Models that can act",
-              copy: "Reasoning, tools, memory, structured action. Raw power — but most people don't want a dev kit.",
-              muted: true,
-            },
-            {
-              era: "What's missing",
-              title: "An operator who knows you",
-              copy: "The layer that turns that power into something consumer-safe: tone, permissions, approvals, taste.",
-              highlight: true,
-            },
-          ].map((col, i) => (
+        <div className="grid md:grid-cols-3 gap-0 border-y-[2px] border-ink">
+          {columns.map((col, i) => (
             <motion.div
-              key={col.title}
+              key={col.era}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 + i * 0.1 }}
-              className={`relative rounded-2xl p-6 border ${col.highlight ? "border-twin-cyan/30 bg-twin-cyan/[0.03]" : "border-white/[0.06] bg-white/[0.015]"}`}
+              className={`relative p-8 md:p-10 border-ink ${i < 2 ? "md:border-r" : ""} ${
+                col.highlight ? "bg-accent/[0.04]" : "bg-paper"
+              } ${i < 2 ? "max-md:border-b" : ""}`}
             >
-              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-white/40">
-                <span className={`h-1.5 w-1.5 rounded-full ${col.highlight ? "bg-twin-cyan" : "bg-white/20"}`} />
-                {col.era}
+              <div className="flex items-center gap-2 f-mono text-[0.6rem] font-bold tracking-[0.18em] uppercase">
+                <span
+                  className="w-[7px] h-[7px] rotate-45"
+                  style={{ background: col.highlight ? "hsl(var(--accent))" : "hsl(var(--ink-3))" }}
+                />
+                <span className={col.highlight ? "text-accent" : "text-ink-3"}>{col.era}</span>
               </div>
-              <h3 className={`mt-5 text-[19px] font-semibold tracking-tight ${col.highlight ? "text-white" : "text-white/70"}`}>
+              <h3
+                className={`mt-6 font-black ${col.highlight ? "text-ink" : "text-ink-2"}`}
+                style={{ fontSize: "1.55rem", letterSpacing: "-0.03em", lineHeight: 1, fontStretch: "75%" }}
+              >
                 {col.title}
               </h3>
-              <p className={`mt-3 text-[13.5px] leading-relaxed ${col.highlight ? "text-white/75" : "text-white/45"}`}>
+              <p className={`mt-3 text-[13.5px] leading-relaxed ${col.highlight ? "text-ink-2" : "text-ink-3"}`}>
                 {col.copy}
               </p>
               {col.highlight && (
-                <div className="absolute top-5 right-5 font-mono text-[10px] text-twin-cyan">twinly</div>
+                <div className="absolute top-5 right-5 f-mono text-[0.58rem] font-bold tracking-[0.16em] text-accent">
+                  TWINLY
+                </div>
               )}
             </motion.div>
           ))}
         </div>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.9, delay: 0.3 }}
-          className="mt-14 max-w-[720px] font-serif-accent text-[clamp(1.4rem,2.4vw,2rem)] leading-snug text-white/70"
+          className="mt-14 grid md:grid-cols-[auto_1fr] gap-8 items-start max-w-[900px]"
         >
-          "The killer app for agentic AI isn't a smarter chatbot. It's a twin that already
-          knows how you'd do it."
-        </motion.p>
+          <div className="f-mono text-[0.58rem] font-bold tracking-[0.18em] uppercase text-ink-3 md:pt-2">
+            <span className="text-accent">PULL QUOTE</span>
+            <br />
+            06 / 01
+          </div>
+          <p
+            className="text-ink"
+            style={{
+              fontSize: "clamp(1.3rem, 2.2vw, 1.85rem)",
+              lineHeight: 1.2,
+              letterSpacing: "-0.02em",
+              fontStyle: "italic",
+              fontWeight: 500,
+            }}
+          >
+            "The killer app for agentic AI isn't a smarter chatbot. It's a twin that already
+            knows how you'd do it."
+          </p>
+        </motion.div>
       </div>
     </section>
   );

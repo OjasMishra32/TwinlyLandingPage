@@ -1,23 +1,16 @@
-import { lazy, ReactNode, Suspense } from "react";
+import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import CursorSpotlight from "./CursorSpotlight";
+import SplineRobot from "./SplineRobot";
 
-const TwinObject = lazy(() => import("./TwinObject"));
+const BASE = 0.15;
 
-function useIntroBaseDelay() {
-  if (typeof window === "undefined") return 0;
-  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-  const already = sessionStorage.getItem("twinly-intro-shown") === "1";
-  return reduced || already ? 0 : 1.55;
-}
-
-function MaskLine({ children, delay = 0, base = 0 }: { children: ReactNode; delay?: number; base?: number }) {
+function Line({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
-    <span className="block overflow-hidden pb-[0.08em]">
+    <span className="block overflow-hidden" style={{ padding: "0.04em 0" }}>
       <motion.span
         initial={{ y: "110%" }}
         animate={{ y: "0%" }}
-        transition={{ duration: 1.1, delay: base + delay, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.05, delay: BASE + delay, ease: [0.22, 1, 0.36, 1] }}
         className="block"
       >
         {children}
@@ -26,12 +19,12 @@ function MaskLine({ children, delay = 0, base = 0 }: { children: ReactNode; dela
   );
 }
 
-function SoftFade({ children, delay = 0, base = 0 }: { children: ReactNode; delay?: number; base?: number }) {
+function Fade({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, delay: base + delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.9, delay: BASE + delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -39,92 +32,116 @@ function SoftFade({ children, delay = 0, base = 0 }: { children: ReactNode; dela
 }
 
 export default function Hero() {
-  const base = useIntroBaseDelay();
   return (
     <section
       id="top"
-      className="relative min-h-[100svh] w-full overflow-hidden pt-28 md:pt-36"
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
+      style={{ padding: "120px 0 48px" }}
     >
-      <CursorSpotlight />
-
-      <div className="absolute inset-0 -z-10 grid-noise mask-fade-b opacity-60" />
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute left-1/2 top-[20%] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-twin-cyan/15 blur-[120px]" />
-        <div className="absolute right-[10%] top-[10%] h-[320px] w-[320px] rounded-full bg-twin-violet/15 blur-[100px]" />
+      <div className="absolute top-[-40px] right-0 w-[68%] h-[calc(100%+80px)] z-[1] max-[980px]:w-full max-[980px]:opacity-40">
+        <SplineRobot />
       </div>
 
-      <Suspense fallback={null}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.82 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.8, delay: base + 0.05, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-none absolute inset-0 -z-10"
-        >
-          <div className="absolute left-1/2 top-1/2 h-[min(90vh,820px)] w-[min(90vh,820px)] -translate-x-1/2 -translate-y-1/2">
-            <TwinObject />
+      <div className="relative z-[4] w-full max-w-[1680px] mx-auto px-6 md:px-14">
+        <Fade delay={0}>
+          <div className="eyebrow mb-7">
+            <span className="flex items-center gap-3 text-[0.62rem] font-medium tracking-[0.22em] text-ink-3 whitespace-nowrap">
+              <span className="diamond" />
+              <span><b className="text-accent font-bold">TWN-001</b></span>
+              <span className="text-rule-hi">/</span>
+              <span>PERSONAL OPERATOR</span>
+              <span className="text-rule-hi">/</span>
+              <span className="text-ink-4">REV · 01</span>
+            </span>
+            <span className="flex items-center gap-3.5 text-[0.82rem] font-bold tracking-[0.14em] text-ink whitespace-nowrap">
+              <motion.span
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.9, delay: 0.9, ease: [0.7, 0, 0.3, 1] }}
+                className="inline-block w-[34px] h-[1.5px] bg-ink origin-left"
+              />
+              <span>PRIVATE BETA · 2026</span>
+              <span className="text-ink-2 font-medium">· NOT A CHATBOT</span>
+            </span>
           </div>
-        </motion.div>
-      </Suspense>
+        </Fade>
 
-      <div className="mx-auto w-full max-w-[1200px] px-6 relative">
-        <div className="flex flex-col items-center text-center">
-          <SoftFade base={base} delay={-0.1}>
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[11px] font-mono uppercase tracking-[0.14em] text-white/70">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-twin-cyan opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-twin-cyan" />
-              </span>
-              Personal AI operator · Private beta 2026
-            </div>
-          </SoftFade>
+        <h1
+          className="tw-display text-ink mb-6"
+          style={{
+            fontSize: "clamp(2.8rem, 7vw, 8rem)",
+            lineHeight: 0.86,
+            letterSpacing: "-0.055em",
+            maxWidth: "14ch",
+          }}
+        >
+          <Line delay={0}>Not a chatbot.</Line>
+          <Line delay={0.08}>
+            <span>
+              A <span className="tw-accent-word">twin</span> of you
+            </span>
+          </Line>
+          <Line delay={0.16}>
+            that gets things <span className="tw-accent-word">done.</span>
+          </Line>
+        </h1>
 
-          <h1 className="text-balance font-semibold tracking-[-0.035em] text-[clamp(3rem,9.2vw,8rem)] leading-[0.92]">
-            <MaskLine base={base} delay={0}>Not a chatbot.</MaskLine>
-            <MaskLine base={base} delay={0.08}>
-              <span>
-                A <span className="font-serif-accent text-gradient-twin">twin</span> of you
-              </span>
-            </MaskLine>
-            <MaskLine base={base} delay={0.16}>that gets things done.</MaskLine>
-          </h1>
+        <Fade delay={0.5}>
+          <p
+            className="text-ink-2 mb-7"
+            style={{
+              maxWidth: "40ch",
+              fontSize: "clamp(1rem, 1.15vw, 1.22rem)",
+              lineHeight: 1.4,
+              fontWeight: 500,
+            }}
+          >
+            Twinly learns how you <strong className="text-ink font-bold">write</strong>, what you
+            <strong className="text-ink font-bold"> prefer</strong>, and how you like things
+            handled — then it drafts, schedules, follows up, and moves life-admin forward with
+            your <strong className="text-ink font-bold">approval</strong>.
+          </p>
+        </Fade>
 
-          <SoftFade base={base} delay={0.4}>
-            <p className="mt-8 max-w-[640px] text-balance text-[17px] md:text-[19px] leading-relaxed text-white/65">
-              Twinly learns how you write, decide, and prefer things. Then it drafts, schedules,
-              follows up, and handles life-admin — with approvals whenever they matter.
-            </p>
-          </SoftFade>
+        <Fade delay={0.65}>
+          <div className="flex gap-3.5 flex-wrap mb-11">
+            <a href="#waitlist" className="btn primary">
+              <span className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.42) 50%, transparent 80%)", transform: "translateX(-150%)", transition: "transform 1.1s cubic-bezier(.22,1,.36,1)", mixBlendMode: "overlay" }} />
+              Request access
+              <span className="arrow" />
+            </a>
+            <a href="#demo" className="btn">
+              See the demo
+              <span className="arrow" />
+            </a>
+          </div>
+        </Fade>
 
-          <SoftFade base={base} delay={0.55}>
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-3">
-              <a
-                href="#waitlist"
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-[14px] font-semibold text-black hover:bg-twin-cyan transition-colors"
-              >
-                Join the waitlist
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                  <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-              <a
-                href="#product"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 text-[14px] font-medium text-white/90 hover:bg-white/[0.06] transition-colors"
-              >
-                See how it works
-              </a>
-            </div>
-          </SoftFade>
-
-          <SoftFade base={base} delay={0.75}>
-            <div className="mt-20 flex flex-col items-center gap-2 text-[11px] font-mono uppercase tracking-[0.18em] text-white/40">
-              <svg width="12" height="18" viewBox="0 0 12 18" fill="none">
-                <rect x="0.75" y="0.75" width="10.5" height="16.5" rx="5.25" stroke="currentColor" strokeWidth="1.2" />
-                <circle cx="6" cy="5" r="1.2" fill="currentColor" className="animate-pulse-soft" />
-              </svg>
-              Scroll to meet your twin
-            </div>
-          </SoftFade>
-        </div>
+        <Fade delay={0.8}>
+          <div
+            className="grid gap-9 pt-[22px] border-t-[2px] border-ink max-w-[620px]"
+            style={{ gridTemplateColumns: "repeat(3, auto)" }}
+          >
+            {[
+              { k: "TASKS / DAY", v: "12", em: "avg" },
+              { k: "MINUTES SAVED", v: "148", em: "median" },
+              { k: "APPROVED AUTO", v: "94", em: "%" },
+            ].map((kv) => (
+              <div key={kv.k} className="flex flex-col gap-1">
+                <span className="f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+                  {kv.k}
+                </span>
+                <span
+                  className="font-black text-ink"
+                  style={{ fontSize: "1.45rem", letterSpacing: "-0.03em", fontStretch: "75%" }}
+                >
+                  {kv.v}
+                  <em className="not-italic text-accent ml-1">{kv.em}</em>
+                </span>
+              </div>
+            ))}
+          </div>
+        </Fade>
       </div>
     </section>
   );

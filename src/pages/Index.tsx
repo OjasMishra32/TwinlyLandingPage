@@ -11,12 +11,14 @@ import Thesis from "@/components/landing/Thesis";
 import Waitlist from "@/components/landing/Waitlist";
 import Footer from "@/components/landing/Footer";
 import GrainOverlay from "@/components/landing/GrainOverlay";
-import IntroReveal from "@/components/landing/IntroReveal";
+import Loader from "@/components/landing/Loader";
+import Reticle from "@/components/landing/Reticle";
 
 const Index = () => {
   return (
-    <div className="relative bg-background text-foreground">
-      <IntroReveal />
+    <div className="relative bg-paper text-ink min-h-screen">
+      <Loader />
+      <Reticle />
       <GrainOverlay />
       <Nav />
       <main>
