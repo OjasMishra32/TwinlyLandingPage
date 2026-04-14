@@ -1,16 +1,16 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import SplineRobot from "./SplineRobot";
+import TwinOrb from "./TwinOrb";
 
-const BASE = 0.15;
+const BASE = 0.12;
 
 function Line({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
-    <span className="block overflow-hidden" style={{ padding: "0.04em 0" }}>
+    <span className="block overflow-hidden" style={{ padding: "0.05em 0" }}>
       <motion.span
-        initial={{ y: "110%" }}
+        initial={{ y: "108%" }}
         animate={{ y: "0%" }}
-        transition={{ duration: 1.05, delay: BASE + delay, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 1, delay: BASE + delay, ease: [0.22, 1, 0.36, 1] }}
         className="block"
       >
         {children}
@@ -22,9 +22,9 @@ function Line({ children, delay = 0 }: { children: ReactNode; delay?: number }) 
 function Fade({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, delay: BASE + delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.85, delay: BASE + delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -36,113 +36,135 @@ export default function Hero() {
     <section
       id="top"
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
-      style={{ padding: "120px 0 48px" }}
+      style={{ padding: "130px 0 64px" }}
     >
-      <div className="absolute top-[-40px] right-0 w-[68%] h-[calc(100%+80px)] z-[1] max-[980px]:w-full max-[980px]:opacity-40">
-        <SplineRobot />
+      {/* Ambient washes */}
+      <div className="absolute inset-0 hero-wash" aria-hidden />
+      <div className="absolute inset-0 grid-overlay opacity-80" aria-hidden />
+
+      {/* Orb — positioned right on desktop, centred behind on mobile */}
+      <div className="absolute inset-y-0 right-0 w-full md:w-[62%] z-[1] pointer-events-none">
+        <div className="relative h-full w-full">
+          <TwinOrb />
+        </div>
       </div>
+
+      {/* Left-edge gradient so text stays crisp over orb */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 left-0 w-[70%] z-[2] pointer-events-none hidden md:block"
+        style={{
+          background:
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 30%, hsl(var(--bg) / 0.85) 55%, hsl(var(--bg) / 0.4) 80%, transparent 100%)",
+        }}
+      />
 
       <div className="relative z-[4] w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <Fade delay={0}>
-          <div className="eyebrow mb-7">
-            <span className="flex items-center gap-3 text-[0.62rem] font-medium tracking-[0.22em] text-ink-3 whitespace-nowrap">
-              <span className="diamond" />
-              <span><b className="text-accent font-bold">TWN-001</b></span>
-              <span className="text-rule-hi">/</span>
-              <span>PERSONAL OPERATOR</span>
-              <span className="text-rule-hi">/</span>
-              <span className="text-ink-4">REV · 01</span>
+          <div className="inline-flex items-center gap-3 mb-8">
+            <span className="live-dot" />
+            <span className="f-mono text-[0.66rem] font-medium tracking-[0.22em] text-fg-2 uppercase">
+              In private beta
             </span>
-            <span className="flex items-center gap-3.5 text-[0.82rem] font-bold tracking-[0.14em] text-ink whitespace-nowrap">
-              <motion.span
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.9, delay: 0.9, ease: [0.7, 0, 0.3, 1] }}
-                className="inline-block w-[34px] h-[1.5px] bg-ink origin-left"
-              />
-              <span>PRIVATE BETA · 2026</span>
-              <span className="text-ink-2 font-medium">· NOT A CHATBOT</span>
+            <span className="text-fg-4 f-mono text-[0.66rem]">·</span>
+            <span className="f-mono text-[0.66rem] font-medium tracking-[0.22em] text-fg-3 uppercase">
+              Invite only
             </span>
           </div>
         </Fade>
 
         <h1
-          className="tw-display text-ink mb-6"
+          className="tw-display text-fg mb-8"
           style={{
-            fontSize: "clamp(2.8rem, 7vw, 8rem)",
-            lineHeight: 0.86,
-            letterSpacing: "-0.055em",
+            fontSize: "clamp(2.8rem, 7.6vw, 8.4rem)",
+            lineHeight: 0.88,
+            letterSpacing: "-0.045em",
             maxWidth: "14ch",
           }}
         >
-          <Line delay={0}>Not a chatbot.</Line>
-          <Line delay={0.08}>
+          <Line delay={0}>
             <span>
-              A <span className="tw-accent-word">twin</span> of you
+              Stop <span className="tw-italic text-accent">managing</span>
             </span>
           </Line>
+          <Line delay={0.08}>
+            your life.
+          </Line>
           <Line delay={0.16}>
-            that gets things <span className="tw-accent-word">done.</span>
+            <span>
+              Meet your <span className="tw-italic text-accent">twin</span>.
+            </span>
           </Line>
         </h1>
 
         <Fade delay={0.5}>
           <p
-            className="text-ink-2 mb-7"
+            className="text-fg-2 mb-9"
             style={{
-              maxWidth: "40ch",
-              fontSize: "clamp(1rem, 1.15vw, 1.22rem)",
-              lineHeight: 1.4,
-              fontWeight: 500,
+              maxWidth: "46ch",
+              fontSize: "clamp(1.02rem, 1.2vw, 1.22rem)",
+              lineHeight: 1.5,
+              fontWeight: 400,
             }}
           >
-            Twinly learns how you <strong className="text-ink font-bold">write</strong>, what you
-            <strong className="text-ink font-bold"> prefer</strong>, and how you like things
-            handled — then it drafts, schedules, follows up, and moves life-admin forward with
-            your <strong className="text-ink font-bold">approval</strong>.
+            Twinly learns how you <b className="text-fg font-semibold">write</b>, what you
+            <b className="text-fg font-semibold"> prefer</b>, and how you handle things —
+            then it drafts, schedules, follows up, and moves life-admin forward while you
+            <b className="text-fg font-semibold"> stay in control</b>.
           </p>
         </Fade>
 
-        <Fade delay={0.65}>
-          <div className="flex gap-3.5 flex-wrap mb-11">
+        <Fade delay={0.62}>
+          <div className="flex gap-3 flex-wrap mb-14">
             <a href="#waitlist" className="btn primary">
-              <span className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.42) 50%, transparent 80%)", transform: "translateX(-150%)", transition: "transform 1.1s cubic-bezier(.22,1,.36,1)", mixBlendMode: "overlay" }} />
               Request access
               <span className="arrow" />
             </a>
             <a href="#demo" className="btn">
-              See the demo
+              Watch it work
               <span className="arrow" />
             </a>
           </div>
         </Fade>
 
-        <Fade delay={0.8}>
+        <Fade delay={0.78}>
           <div
-            className="grid gap-9 pt-[22px] border-t-[2px] border-ink max-w-[620px]"
+            className="grid gap-10 pt-6 border-t border-rule max-w-[640px]"
             style={{ gridTemplateColumns: "repeat(3, auto)" }}
           >
             {[
-              { k: "TASKS / DAY", v: "12", em: "avg" },
-              { k: "MINUTES SAVED", v: "148", em: "median" },
-              { k: "APPROVED AUTO", v: "94", em: "%" },
+              { k: "Tasks / day", v: "12", em: "avg" },
+              { k: "Hours saved / wk", v: "8.5", em: "median" },
+              { k: "Approved auto", v: "94", em: "%" },
             ].map((kv) => (
-              <div key={kv.k} className="flex flex-col gap-1">
-                <span className="f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+              <div key={kv.k} className="flex flex-col gap-1.5">
+                <span className="f-mono text-[0.6rem] font-medium tracking-[0.18em] uppercase text-fg-3">
                   {kv.k}
                 </span>
                 <span
-                  className="font-black text-ink"
-                  style={{ fontSize: "1.45rem", letterSpacing: "-0.03em", fontStretch: "75%" }}
+                  className="font-semibold text-fg flex items-baseline gap-1"
+                  style={{ fontSize: "1.75rem", letterSpacing: "-0.025em" }}
                 >
                   {kv.v}
-                  <em className="not-italic text-accent ml-1">{kv.em}</em>
+                  <em className="not-italic text-accent f-mono text-[0.72rem] font-normal">
+                    {kv.em}
+                  </em>
                 </span>
               </div>
             ))}
           </div>
         </Fade>
       </div>
+
+      {/* Scroll indicator */}
+      <Fade delay={1}>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[4] flex flex-col items-center gap-2">
+          <span className="f-mono text-[0.58rem] tracking-[0.22em] uppercase text-fg-3">
+            Scroll
+          </span>
+          <div className="h-8 w-px bg-gradient-to-b from-fg-3 to-transparent" />
+        </div>
+      </Fade>
     </section>
   );
 }

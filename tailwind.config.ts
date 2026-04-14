@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         sans: ['"Hanken Grotesk"', "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+        serif: ['"Instrument Serif"', '"Times New Roman"', "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,12 +51,31 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          hi: "hsl(var(--accent-hi))",
+          dim: "hsl(var(--accent-dim))",
         },
+        ember: {
+          DEFAULT: "hsl(var(--ember))",
+          hi: "hsl(var(--ember-hi))",
+        },
+        fg: {
+          DEFAULT: "hsl(var(--fg))",
+          2: "hsl(var(--fg-2))",
+          3: "hsl(var(--fg-3))",
+          4: "hsl(var(--fg-4))",
+        },
+        bg: {
+          DEFAULT: "hsl(var(--bg))",
+          2: "hsl(var(--bg-2))",
+          3: "hsl(var(--bg-3))",
+        },
+        surface: "hsl(var(--surface))",
+        /* Legacy aliases mapped to new tokens so existing classes keep working */
         ink: {
-          DEFAULT: "hsl(var(--ink))",
-          2: "hsl(var(--ink-2))",
-          3: "hsl(var(--ink-3))",
-          4: "hsl(var(--ink-4))",
+          DEFAULT: "hsl(var(--fg))",
+          2: "hsl(var(--fg-2))",
+          3: "hsl(var(--fg-3))",
+          4: "hsl(var(--fg-4))",
         },
         paper: {
           DEFAULT: "hsl(var(--bg))",
@@ -89,7 +109,7 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "marq": "marq 48s linear infinite",
+        "marq": "marq 55s linear infinite",
       },
     },
   },

@@ -1,78 +1,121 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Reticle() {
-  const ref = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLCanvasElement>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    const canvas = trailRef.current;
-    if (!el || !canvas) return;
-
-    if (window.matchMedia("(max-width: 900px)").matches || window.matchMedia("(hover: none)").matches) {
+    if (typeof window === "undefined") return;
+    if (
+      window.matchMedia("(max-width: 900px)").matches ||
+      window.matchMedia("(hover: none)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return;
     }
 
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const canvas = trailRef.current;
+    if (!dot || !ring || !canvas) return;
+
     document.body.classList.add("cursor-on");
-    el.classList.add("ready");
 
     const ctx = canvas.getContext("2d");
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
-      ctx?.scale(dpr, dpr);
+      if (ctx) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+      }
     };
     resize();
     window.addEventListener("resize", resize);
 
-    let rx = -999;
-    let ry = -999;
-    let tx = -999;
-    let ty = -999;
+    // Start cursor off-screen but have ring lerp toward real position once mouse moves
+    let tx = window.innerWidth / 2;
+    let ty = window.innerHeight / 2;
+    let dx = tx;
+    let dy = ty;
+    let rx = tx;
+    let ry = ty;
+    let hasMoved = false;
+
     const points: { x: number; y: number; life: number }[] = [];
+    const MAX_POINTS = 22;
 
     const onMove = (e: PointerEvent) => {
       tx = e.clientX;
       ty = e.clientY;
+      if (!hasMoved) {
+        dx = tx;
+        dy = ty;
+        rx = tx;
+        ry = ty;
+        hasMoved = true;
+        setReady(true);
+      }
       points.push({ x: tx, y: ty, life: 1 });
-      if (points.length > 40) points.shift();
+      if (points.length > MAX_POINTS) points.shift();
 
       const target = e.target as Element | null;
-      const isInteractive = !!target?.closest("a, button, input, label, [role='button']");
-      el.classList.toggle("hover", isInteractive);
+      const interactive = !!target?.closest(
+        "a, button, input, textarea, select, label, [role='button'], [data-magnetic]"
+      );
+      ring.classList.toggle("hover", interactive);
+      dot.classList.toggle("hover", interactive);
     };
 
-    const onDown = () => el.classList.add("click");
-    const onUp = () => el.classList.remove("click");
+    const onDown = () => {
+      ring.classList.add("click");
+      dot.classList.add("click");
+    };
+    const onUp = () => {
+      ring.classList.remove("click");
+      dot.classList.remove("click");
+    };
+    const onEnter = () => {
+      if (hasMoved) setReady(true);
+    };
     const onLeave = () => {
-      tx = -999;
-      ty = -999;
+      setReady(false);
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointerleave", onLeave);
+    document.documentElement.addEventListener("pointerenter", onEnter);
+    document.documentElement.addEventListener("pointerleave", onLeave);
 
     let raf = 0;
     const tick = () => {
-      rx += (tx - rx) * 0.32;
-      ry += (ty - ry) * 0.32;
-      el.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+      // Dot tracks fast (near instant)
+      dx += (tx - dx) * 0.55;
+      dy += (ty - dy) * 0.55;
+      // Ring lags behind with soft lerp
+      rx += (tx - rx) * 0.16;
+      ry += (ty - ry) * 0.16;
+
+      dot.style.transform = `translate3d(${dx}px, ${dy}px, 0) translate(-50%, -50%)`;
+      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
 
       if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         for (let i = 1; i < points.length; i++) {
           const p = points[i];
           const prev = points[i - 1];
-          p.life *= 0.9;
-          if (p.life < 0.02) continue;
-          ctx.strokeStyle = `rgba(0, 71, 255, ${p.life * 0.55})`;
-          ctx.lineWidth = p.life * 1.6;
+          p.life *= 0.88;
+          if (p.life < 0.03) continue;
+          ctx.strokeStyle = `hsla(72, 100%, 62%, ${p.life * 0.55})`;
+          ctx.lineWidth = p.life * 2.2;
           ctx.beginPath();
           ctx.moveTo(prev.x, prev.y);
           ctx.lineTo(p.x, p.y);
@@ -81,7 +124,7 @@ export default function Reticle() {
       }
       raf = requestAnimationFrame(tick);
     };
-    tick();
+    raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -89,7 +132,8 @@ export default function Reticle() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointerleave", onLeave);
+      document.documentElement.removeEventListener("pointerenter", onEnter);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
       document.body.classList.remove("cursor-on");
     };
   }, []);
@@ -97,15 +141,16 @@ export default function Reticle() {
   return (
     <>
       <canvas ref={trailRef} className="trail-canvas" aria-hidden />
-      <div ref={ref} className="reticle" aria-hidden>
-        <span className="br tl" />
-        <span className="br tr" />
-        <span className="br bl" />
-        <span className="br br2" />
-        <span className="cross h" />
-        <span className="cross v" />
-        <span className="center-dot" />
-      </div>
+      <div
+        ref={ringRef}
+        className={`reticle-ring${ready ? " ready" : ""}`}
+        aria-hidden
+      />
+      <div
+        ref={dotRef}
+        className={`reticle-dot${ready ? " ready" : ""}`}
+        aria-hidden
+      />
       <style>{`
         .trail-canvas {
           position: fixed;
@@ -114,71 +159,77 @@ export default function Reticle() {
           height: 100vh;
           pointer-events: none;
           z-index: 9998;
-          mix-blend-mode: multiply;
+          mix-blend-mode: screen;
         }
-        @media (max-width: 900px), (hover: none) { .trail-canvas { display: none !important; } }
+        @media (max-width: 900px), (hover: none) {
+          .trail-canvas { display: none !important; }
+        }
 
-        .reticle {
+        .reticle-ring,
+        .reticle-dot {
           position: fixed;
-          top: 0; left: 0;
-          width: 34px; height: 34px;
+          top: 0;
+          left: 0;
           pointer-events: none;
           z-index: 10000;
-          transform: translate3d(-999px, -999px, 0) translate(-50%, -50%);
           opacity: 0;
           will-change: transform;
-          transition: opacity 0.4s ease,
-                      width 0.42s cubic-bezier(.22,1,.36,1),
-                      height 0.42s cubic-bezier(.22,1,.36,1);
+          transform: translate3d(-200px, -200px, 0) translate(-50%, -50%);
+          transition: opacity 0.35s ease,
+                      width 0.4s cubic-bezier(.22,1,.36,1),
+                      height 0.4s cubic-bezier(.22,1,.36,1),
+                      background 0.3s ease,
+                      border-color 0.3s ease,
+                      box-shadow 0.3s ease;
         }
-        .reticle.ready { opacity: 1; }
 
-        .reticle .br {
-          position: absolute;
-          width: 11px; height: 11px;
-          border: 1.5px solid hsl(var(--accent));
-          transition: transform 0.42s cubic-bezier(.22,1,.36,1), border-color 0.3s ease;
-          box-shadow: 0 0 12px hsl(var(--accent) / 0.25);
+        .reticle-ring {
+          width: 36px;
+          height: 36px;
+          border: 1.5px solid hsl(var(--accent) / 0.85);
+          border-radius: 999px;
+          box-shadow: 0 0 0 0 hsl(var(--accent) / 0), 0 0 24px 0 hsl(var(--accent) / 0.25);
         }
-        .reticle .br.tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
-        .reticle .br.tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
-        .reticle .br.bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
-        .reticle .br.br2 { bottom: 0; right: 0; border-left: 0; border-top: 0; }
-
-        .reticle.hover { width: 62px; height: 62px; }
-        .reticle.hover .br.tl { transform: translate(-4px, -4px); }
-        .reticle.hover .br.tr { transform: translate(4px, -4px); }
-        .reticle.hover .br.bl { transform: translate(-4px, 4px); }
-        .reticle.hover .br.br2 { transform: translate(4px, 4px); }
-
-        .reticle.click { width: 22px; height: 22px; }
-        .reticle.click .br { border-color: hsl(var(--ink)); }
-
-        .reticle .center-dot {
-          position: absolute;
-          top: 50%; left: 50%;
-          width: 4px; height: 4px;
+        .reticle-dot {
+          width: 6px;
+          height: 6px;
           background: hsl(var(--accent));
           border-radius: 999px;
-          transform: translate(-50%, -50%);
-          box-shadow: 0 0 10px hsl(var(--accent) / 0.7);
+          box-shadow: 0 0 18px 4px hsl(var(--accent) / 0.55);
         }
 
-        .reticle .cross {
-          position: absolute;
-          top: 50%; left: 50%;
-          background: hsl(var(--accent));
-          opacity: 0;
-          transition: opacity 0.35s cubic-bezier(.22,1,.36,1);
+        .reticle-ring.ready,
+        .reticle-dot.ready { opacity: 1; }
+
+        .reticle-ring.hover {
+          width: 64px;
+          height: 64px;
+          border-color: hsl(var(--accent));
+          background: hsl(var(--accent) / 0.08);
+          box-shadow: 0 0 0 1px hsl(var(--accent) / 0.5), 0 0 50px 0 hsl(var(--accent) / 0.35);
         }
-        .reticle .cross.h { width: 14px; height: 1px; transform: translate(-50%, -50%); }
-        .reticle .cross.v { width: 1px; height: 14px; transform: translate(-50%, -50%); }
-        .reticle.hover .cross { opacity: 0.7; }
+        .reticle-dot.hover {
+          width: 4px;
+          height: 4px;
+          opacity: 0.9;
+        }
+
+        .reticle-ring.click {
+          width: 22px;
+          height: 22px;
+          background: hsl(var(--accent) / 0.2);
+        }
+        .reticle-dot.click {
+          width: 10px;
+          height: 10px;
+        }
 
         body.cursor-on,
         body.cursor-on a,
         body.cursor-on button,
-        body.cursor-on input { cursor: none; }
+        body.cursor-on input,
+        body.cursor-on textarea,
+        body.cursor-on label { cursor: none; }
         @media (max-width: 900px), (hover: none) {
           body.cursor-on, body.cursor-on * { cursor: auto !important; }
         }

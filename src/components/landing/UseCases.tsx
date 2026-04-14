@@ -2,42 +2,42 @@ import { motion } from "framer-motion";
 
 const cases = [
   {
-    code: "C-01",
+    code: "01",
     title: "Reply in your voice.",
     summary: "Drafts responses that sound like you — across email, DMs, and work threads.",
     input: "You forward the thread.",
     approval: "Approve before sending.",
   },
   {
-    code: "C-02",
+    code: "02",
     title: "Schedule & reschedule.",
     summary: "Finds conflict-free windows, holds slots, and negotiates the shuffle for you.",
     input: "You say who and when-ish.",
     approval: "Final confirm before it lands.",
   },
   {
-    code: "C-03",
+    code: "03",
     title: "Compare & buy.",
     summary: "Researches options to your taste, shortlists, and lines up checkout with the best pick.",
     input: "You describe what you need.",
     approval: "Never charges without you.",
   },
   {
-    code: "C-04",
+    code: "04",
     title: "Follow up for me.",
     summary: "Tracks who owes you what, and nudges politely — on your schedule.",
     input: "You point at the thread.",
     approval: "Preview the nudge before it goes.",
   },
   {
-    code: "C-05",
+    code: "05",
     title: "Returns & support.",
     summary: "Handles returns, claims, and support loops without the copy-paste runaround.",
     input: "You share the order.",
     approval: "You approve each step.",
   },
   {
-    code: "C-06",
+    code: "06",
     title: "Organize my day.",
     summary: "Clears the noise, surfaces what matters, and sets you up for a clean morning.",
     input: "Twinly runs overnight.",
@@ -54,9 +54,9 @@ export default function UseCases() {
             <span className="num">
               04<span className="sl">/</span>
             </span>
-            HAND-OVER
+            Hand-over
             <br />
-            <b>SIX CASES</b>
+            <b>Six things to let go of</b>
           </div>
           <div>
             <motion.h2
@@ -66,7 +66,7 @@ export default function UseCases() {
               transition={{ duration: 0.9 }}
               className="sec-h2"
             >
-              Six things you'll <em className="tw-accent-word">never</em> do again.
+              Six things you'll <span className="tw-italic text-accent">never</span> do again.
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -81,7 +81,7 @@ export default function UseCases() {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border-y-[2px] border-ink">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 border-y border-rule">
           {cases.map((c, i) => (
             <motion.article
               key={c.code}
@@ -89,7 +89,7 @@ export default function UseCases() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
               transition={{ duration: 0.7, delay: 0.06 * i }}
-              className={`group relative p-6 md:p-7 bg-paper hover:bg-paper-2 transition-colors border-ink
+              className={`group relative p-6 md:p-8 bg-bg hover:bg-bg-2 transition-colors border-rule
                 lg:[&:nth-child(3n+1)]:border-r lg:[&:nth-child(3n+2)]:border-r
                 lg:[&:nth-child(-n+3)]:border-b
                 sm:max-lg:[&:nth-child(odd)]:border-r
@@ -97,28 +97,28 @@ export default function UseCases() {
                 max-sm:[&:not(:last-child)]:border-b`}
             >
               <div className="flex items-center justify-between">
-                <span className="f-mono text-[0.6rem] font-bold tracking-[0.18em] text-accent">
+                <span className="f-mono text-[0.62rem] font-semibold tracking-[0.18em] text-accent">
                   {c.code}
                 </span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-ink-3 group-hover:text-accent group-hover:translate-x-0.5 transition-all">
-                  <path d="M2 8h12M10 2l4 6-4 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-fg-3 group-hover:text-accent group-hover:translate-x-1 transition-all">
+                  <path d="M2 8h12M10 2l4 6-4 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
                 </svg>
               </div>
               <h3
-                className="mt-14 font-black text-ink"
-                style={{ fontSize: "1.65rem", letterSpacing: "-0.03em", lineHeight: 0.96, fontStretch: "75%" }}
+                className="mt-14 font-semibold text-fg"
+                style={{ fontSize: "1.7rem", letterSpacing: "-0.025em", lineHeight: 0.98 }}
               >
                 {c.title}
               </h3>
-              <p className="mt-3 text-[13.5px] leading-relaxed text-ink-2 font-medium">{c.summary}</p>
+              <p className="mt-3 text-[14px] leading-relaxed text-fg-2">{c.summary}</p>
               <div className="mt-6 grid grid-cols-2 gap-3 pt-4 border-t border-rule">
                 <div>
-                  <div className="f-mono text-[0.56rem] font-bold tracking-[0.16em] uppercase text-ink-3">INPUT</div>
-                  <div className="mt-1 text-[12.5px] text-ink">{c.input}</div>
+                  <div className="f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-fg-3">Input</div>
+                  <div className="mt-1 text-[12.5px] text-fg">{c.input}</div>
                 </div>
                 <div>
-                  <div className="f-mono text-[0.56rem] font-bold tracking-[0.16em] uppercase text-ink-3">APPROVAL</div>
-                  <div className="mt-1 text-[12.5px] text-ink">{c.approval}</div>
+                  <div className="f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-fg-3">Approval</div>
+                  <div className="mt-1 text-[12.5px] text-fg">{c.approval}</div>
                 </div>
               </div>
             </motion.article>

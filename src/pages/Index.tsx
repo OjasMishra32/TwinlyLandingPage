@@ -16,7 +16,7 @@ import Reticle from "@/components/landing/Reticle";
 
 const Index = () => {
   return (
-    <div className="relative bg-paper text-ink min-h-screen">
+    <div className="relative bg-bg text-fg min-h-screen">
       <Loader />
       <Reticle />
       <GrainOverlay />

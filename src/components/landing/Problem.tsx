@@ -1,12 +1,12 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 const fragments = [
-  { tag: "INBOX", body: "Re: Can we move Thursday? 3pm no longer works…", tilt: -5, x: -8, y: -10 },
-  { tag: "CAL", body: "Thu 3:00 PM — Sync w/ Lena (no link)", tilt: 4, x: 16, y: -4 },
-  { tag: "TAB", body: "amazon.com/returns/order-8234 — start return", tilt: -3, x: -16, y: 8 },
-  { tag: "SLACK", body: "bump — still waiting on the vendor quote", tilt: 6, x: 10, y: 14 },
-  { tag: "NOTE", body: "dentist · passport · birthday gift for M", tilt: -2, x: -18, y: -18 },
-  { tag: "FORM", body: "Expense report · awaiting approval · 3 items", tilt: 5, x: 18, y: 2 },
+  { tag: "INBOX", body: "Re: Can we move Thursday? 3pm no longer works…", tilt: -4, x: -14, y: -22 },
+  { tag: "CAL", body: "Thu 3:00 PM — Sync w/ Lena (no link)", tilt: 3, x: 14, y: -12 },
+  { tag: "TAB", body: "amazon.com/returns/order-8234 — start return", tilt: -3, x: -20, y: 6 },
+  { tag: "SLACK", body: "bump — still waiting on the vendor quote", tilt: 5, x: 12, y: 16 },
+  { tag: "NOTE", body: "dentist · passport · birthday gift for M", tilt: -2, x: -10, y: -34 },
+  { tag: "FORM", body: "Expense report · awaiting approval · 3 items", tilt: 4, x: 20, y: -2 },
 ];
 
 export default function Problem() {
@@ -20,9 +20,9 @@ export default function Problem() {
             <span className="num">
               01<span className="sl">/</span>
             </span>
-            THE PROBLEM
+            The problem
             <br />
-            <b>FRAGMENTATION</b>
+            <b>Everything is on you</b>
           </div>
           <div>
             <motion.h2
@@ -32,9 +32,9 @@ export default function Problem() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="sec-h2"
             >
-              You don't want to manage <em className="tw-accent-word">tools.</em>
+              You don't want to manage <span className="tw-italic text-accent">tools.</span>
               <br />
-              You want things <em className="tw-accent-word">handled.</em>
+              You want things <span className="tw-italic text-accent">handled.</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -50,13 +50,13 @@ export default function Problem() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 items-start">
+        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-12 items-start">
           {/* Stat strip */}
-          <div className="grid grid-cols-3 gap-0 border-y-[2px] border-ink">
+          <div className="grid grid-cols-3 border-y border-rule">
             {[
-              { n: "2.5", u: "H", l: "LOST / DAY" },
-              { n: "74", u: "%", l: "REPETITIVE" },
-              { n: "11+", u: "", l: "APPS / DAY" },
+              { n: "2.5", u: "h", l: "Lost / day" },
+              { n: "74", u: "%", l: "Repetitive" },
+              { n: "11+", u: "", l: "Apps / day" },
             ].map((s, i) => (
               <motion.div
                 key={s.l}
@@ -64,16 +64,16 @@ export default function Problem() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: i * 0.1 }}
-                className={`py-8 px-5 ${i < 2 ? "border-r border-ink" : ""}`}
+                className={`py-10 px-5 ${i < 2 ? "border-r border-rule" : ""}`}
               >
                 <div
-                  className="font-black text-ink flex items-baseline gap-1"
-                  style={{ fontSize: "clamp(3rem,6vw,5rem)", letterSpacing: "-0.04em", lineHeight: 0.88, fontStretch: "75%" }}
+                  className="font-semibold text-fg flex items-baseline gap-1 glow-accent"
+                  style={{ fontSize: "clamp(3rem,6vw,5rem)", letterSpacing: "-0.035em", lineHeight: 0.88 }}
                 >
                   {s.n}
-                  <span className="text-accent font-medium" style={{ fontSize: "0.52em" }}>{s.u}</span>
+                  <span className="text-accent font-serif italic font-normal" style={{ fontSize: "0.55em" }}>{s.u}</span>
                 </div>
-                <div className="mt-3 f-mono text-[0.6rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+                <div className="mt-3 f-mono text-[0.6rem] font-medium tracking-[0.16em] uppercase text-fg-3">
                   {s.l}
                 </div>
               </motion.div>
@@ -81,7 +81,7 @@ export default function Problem() {
           </div>
 
           {/* Drifting fragments */}
-          <div className="relative h-[500px] w-full">
+          <div className="relative h-[520px] w-full">
             {fragments.map((f, i) => (
               <motion.div
                 key={f.tag}
@@ -93,28 +93,28 @@ export default function Problem() {
                   reduced
                     ? undefined
                     : {
-                        y: [0, -5, 0],
+                        y: [0, -6, 0],
                         transition: {
-                          duration: 4 + i * 0.3,
+                          duration: 3.4 + i * 0.25,
                           repeat: Infinity,
                           ease: "easeInOut",
                           delay: i * 0.2,
                         },
                       }
                 }
-                className="absolute bg-surface border-[1.5px] border-ink p-4 w-[min(86%,310px)]"
+                className="absolute bg-bg-2 border border-rule p-4 w-[min(86%,310px)]"
                 style={{
                   left: `calc(50% + ${f.x}%)`,
                   top: `calc(50% + ${f.y}%)`,
                   transform: `translate(-50%, -50%) rotate(${f.tilt}deg)`,
-                  boxShadow: "6px 6px 0 0 hsl(var(--ink))",
+                  boxShadow: "0 20px 50px -18px rgba(0,0,0,0.6), 0 0 0 1px hsl(var(--rule-hi) / 0.4)",
                 }}
               >
-                <div className="flex items-center justify-between f-mono text-[0.58rem] font-bold tracking-[0.18em] uppercase text-ink-3">
-                  <span className="text-ink">{f.tag}</span>
-                  <span className="diamond" style={{ background: "hsl(var(--amber))" }} />
+                <div className="flex items-center justify-between f-mono text-[0.58rem] font-medium tracking-[0.18em] uppercase">
+                  <span className="text-fg">{f.tag}</span>
+                  <span className="w-[6px] h-[6px] rounded-full bg-ember" />
                 </div>
-                <p className="mt-2 text-[13px] leading-snug text-ink font-medium">{f.body}</p>
+                <p className="mt-2 text-[13px] leading-snug text-fg-2 font-medium">{f.body}</p>
               </motion.div>
             ))}
           </div>

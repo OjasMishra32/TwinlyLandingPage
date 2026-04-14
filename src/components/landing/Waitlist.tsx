@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const intents = [
-  "REPLY IN MY VOICE",
-  "SCHEDULE / RESCHEDULE",
-  "COMPARE & BUY",
-  "FOLLOW UP FOR ME",
-  "RETURNS & SUPPORT",
-  "ORGANIZE MY DAY",
+  "Reply in my voice",
+  "Schedule / reschedule",
+  "Compare & buy",
+  "Follow up for me",
+  "Returns & support",
+  "Organize my day",
 ];
 
 export default function Waitlist() {
@@ -37,29 +37,26 @@ export default function Waitlist() {
           transition={{ duration: 0.9 }}
           className="max-w-[880px]"
         >
-          <div className="eyebrow mb-6">
-            <span className="flex items-center gap-3 text-[0.62rem] font-medium tracking-[0.22em] text-ink-3 uppercase">
-              <span className="diamond" />
-              <b className="text-accent font-bold">REQUEST ACCESS</b>
-              <span className="text-rule-hi">/</span>
-              PRIVATE BETA · 2026
+          <div className="inline-flex items-center gap-3 mb-7">
+            <span className="live-dot" />
+            <span className="f-mono text-[0.64rem] font-medium tracking-[0.22em] text-fg-2 uppercase">
+              Request access
             </span>
           </div>
           <h2
-            className="font-black text-ink"
+            className="font-semibold text-fg"
             style={{
               fontSize: "clamp(3rem, 9vw, 10rem)",
-              lineHeight: 0.84,
-              letterSpacing: "-0.055em",
-              maxWidth: "13ch",
-              fontStretch: "75%",
+              lineHeight: 0.9,
+              letterSpacing: "-0.045em",
+              maxWidth: "14ch",
             }}
           >
-            Meet your <em className="tw-accent-word">twin.</em>
+            Meet your <span className="tw-italic text-accent">twin.</span>
           </h2>
-          <p className="mt-6 max-w-[56ch] text-[17px] leading-relaxed text-ink-2 font-medium">
-            Early access rolls out quietly. Tell us what you'd hand over first and we'll bring
-            you in when your twin is ready.
+          <p className="mt-6 max-w-[58ch] text-[17px] leading-relaxed text-fg-2 font-normal">
+            We're letting people in a few at a time. Tell us what you'd hand over first —
+            we'll bring you in when your twin is ready.
           </p>
         </motion.div>
 
@@ -69,7 +66,7 @@ export default function Waitlist() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
           transition={{ duration: 0.9, delay: 0.15 }}
-          className="mt-12 hard-panel bg-surface p-6 md:p-8"
+          className="mt-12 panel p-6 md:p-8"
         >
           <div className="flex flex-col md:flex-row gap-3 md:gap-0">
             <label htmlFor="email" className="sr-only">Email</label>
@@ -80,23 +77,23 @@ export default function Waitlist() {
               onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle"); }}
               placeholder="you@domain.com"
               required
-              className="flex-1 h-14 bg-paper border-[1.5px] border-ink px-5 text-[15px] placeholder:text-ink-3 focus:outline-none focus:bg-surface f-sans transition-colors"
+              className="flex-1 h-14 bg-bg border border-rule-hi px-5 text-[15px] text-fg placeholder:text-fg-3 focus:outline-none focus:border-accent focus:bg-bg-2 f-sans transition-colors"
             />
             <button
               type="submit"
               disabled={status === "submitting" || status === "success"}
-              className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 md:-ml-[1.5px] md:border-l-0 disabled:opacity-80"
+              className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 md:-ml-[1px] disabled:opacity-80"
             >
-              {status === "submitting" && "ADDING YOU…"}
+              {status === "submitting" && "Adding you…"}
               {status === "success" && (
                 <>
-                  YOU'RE IN
+                  You're in
                   <span className="arrow" />
                 </>
               )}
               {(status === "idle" || status === "error") && (
                 <>
-                  REQUEST ACCESS
+                  Request access
                   <span className="arrow" />
                 </>
               )}
@@ -104,14 +101,14 @@ export default function Waitlist() {
           </div>
 
           {status === "error" && (
-            <p className="mt-3 f-mono text-[0.6rem] tracking-[0.16em] uppercase text-red-600">
-              ERROR · VALID EMAIL REQUIRED
+            <p className="mt-3 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-ember">
+              Please enter a valid email
             </p>
           )}
 
           <div className="mt-8">
-            <div className="f-mono text-[0.6rem] font-bold tracking-[0.18em] uppercase text-ink-3 mb-3">
-              WHAT WOULD YOU HAND OVER FIRST?
+            <div className="f-mono text-[0.62rem] font-medium tracking-[0.18em] uppercase text-fg-3 mb-3">
+              What would you hand over first?
             </div>
             <div className="flex flex-wrap gap-2">
               {intents.map((i) => (
@@ -119,10 +116,10 @@ export default function Waitlist() {
                   key={i}
                   type="button"
                   onClick={() => setIntent((cur) => (cur === i ? "" : i))}
-                  className={`f-mono text-[0.6rem] font-semibold tracking-[0.14em] px-3 py-2 border-[1.5px] transition-colors ${
+                  className={`f-mono text-[0.64rem] font-medium tracking-[0.08em] px-3 py-2 border transition-colors uppercase ${
                     intent === i
-                      ? "border-accent bg-accent text-white"
-                      : "border-ink text-ink hover:bg-ink hover:text-paper"
+                      ? "border-accent bg-accent text-bg"
+                      : "border-rule-hi text-fg-2 hover:border-accent hover:text-accent"
                   }`}
                 >
                   {i}
@@ -131,15 +128,15 @@ export default function Waitlist() {
             </div>
           </div>
 
-          <div className="mt-8 pt-5 border-t border-rule flex items-center justify-between f-mono text-[0.58rem] font-medium tracking-[0.16em] uppercase text-ink-3">
+          <div className="mt-8 pt-5 border-t border-rule flex items-center justify-between f-mono text-[0.6rem] font-medium tracking-[0.14em] uppercase text-fg-3">
             <span>
-              <b className="text-ink">NO SPAM · EVER</b>
-              <span className="text-rule-hi mx-2">/</span>
-              PRIVACY-FIRST
+              <b className="text-fg font-medium">No spam, ever.</b>
+              <span className="text-fg-4 mx-2">/</span>
+              Privacy-first
             </span>
             <span className="flex items-center gap-2">
               <span className="live-dot" />
-              QUIET ROLLOUT · 2026
+              Rolling access
             </span>
           </div>
         </motion.form>
