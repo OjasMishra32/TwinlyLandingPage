@@ -35,12 +35,12 @@ export default function TwinReveal() {
 
   const captionOpacity = useTransform(
     scrollYProgress,
-    [0.32, 0.52, 0.82, 0.94],
+    [0.34, 0.46, 0.84, 0.94],
     [0, 1, 1, 0]
   );
   const metaOpacity = useTransform(
     scrollYProgress,
-    [0, 0.08, 0.92, 1],
+    [0, 0.06, 0.94, 1],
     [0, 1, 1, 0]
   );
 
@@ -168,7 +168,7 @@ export default function TwinReveal() {
       ref={sectionRef}
       id="reveal"
       className="relative border-t border-rule bg-bg"
-      style={{ height: "260vh" }}
+      style={{ height: "420vh" }}
     >
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden flex items-center justify-center">
         {/* Full-bleed canvas, JS-sized for cover-fit */}
