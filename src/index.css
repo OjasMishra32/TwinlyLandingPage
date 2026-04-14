@@ -1,53 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Dirtyline36Daysoftype2022';
-  src: url('/fonts/Dirtyline36Daysoftype2022.woff2') format('woff2'),
-       url('/fonts/Dirtyline36Daysoftype2022.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 @layer base {
   :root {
-    --background: 0 0% 2%;
+    --background: 240 22% 3%;
     --foreground: 0 0% 100%;
 
-    --card: 0 0% 4%;
+    --card: 240 18% 5%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 4%;
+    --popover: 240 18% 5%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 2%;
+    --primary: 170 80% 65%;
+    --primary-foreground: 240 22% 3%;
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 255 80% 78%;
+    --secondary-foreground: 240 22% 3%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 240 10% 12%;
+    --muted-foreground: 240 5% 65%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 170 80% 65%;
+    --accent-foreground: 240 22% 3%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 0 0% 100%;
+    --border: 240 10% 14%;
+    --input: 240 10% 14%;
+    --ring: 170 80% 65%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --brand-black: 0 0% 2%;
-    --glass-bg: 0 0% 100% / 0.03;
-    --glass-border: 0 0% 100% / 0.08;
+    --twin-cyan: 170 90% 70%;
+    --twin-violet: 260 90% 78%;
+    --twin-warm: 38 95% 68%;
   }
 }
 
@@ -56,27 +47,118 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Manrope', sans-serif;
+    font-feature-settings: "ss01", "cv11";
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsla(170, 90%, 40%, 0.12), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 10%, hsla(260, 90%, 50%, 0.08), transparent 60%),
+      hsl(var(--background));
+  }
+
+  ::selection {
+    background: hsla(var(--twin-cyan), 0.3);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsla(0, 0%, 100%, 0.08);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsla(170, 90%, 70%, 0.3);
   }
 }
 
 @layer components {
-  .glass-blur {
-    background: hsla(var(--glass-bg));
-    backdrop-filter: blur(100px);
-    border: 1px solid hsla(var(--glass-border));
+  .glass {
+    background: hsla(240, 20%, 8%, 0.5);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid hsla(0, 0%, 100%, 0.06);
   }
 
-  .font-dirtyline {
-    font-family: 'Dirtyline36Daysoftype2022', sans-serif;
+  .glass-strong {
+    background: hsla(240, 20%, 6%, 0.7);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    border: 1px solid hsla(0, 0%, 100%, 0.08);
   }
 
   .font-serif-accent {
     font-family: 'Instrument Serif', serif;
     font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .font-mono-ui {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-feature-settings: "ss01";
+  }
+
+  .text-gradient-twin {
+    background: linear-gradient(135deg, hsl(var(--twin-cyan)) 0%, hsl(0 0% 100%) 45%, hsl(var(--twin-violet)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .border-glow {
+    position: relative;
+  }
+  .border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, hsla(170, 90%, 70%, 0.4), hsla(260, 90%, 78%, 0.3), transparent);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .grid-noise {
+    background-image:
+      linear-gradient(hsla(0, 0%, 100%, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, hsla(0, 0%, 100%, 0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+}
+
+@layer utilities {
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+  .mask-fade-r {
+    mask-image: linear-gradient(to right, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

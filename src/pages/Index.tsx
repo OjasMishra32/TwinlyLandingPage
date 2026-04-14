@@ -1,21 +1,29 @@
-import ScrollVideo from "@/components/ScrollVideo";
-import ScrollFloat from "@/components/ScrollFloat";
-import GlassPanel from "@/components/GlassPanel";
-import PillNav from "@/components/PillNav";
-
-const VIDEO_SRC =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260402_143803_f635b644-d959-4f16-9d29-cedaeb5c6de0.mp4";
+import Nav from "@/components/landing/Nav";
+import Hero from "@/components/landing/Hero";
+import Problem from "@/components/landing/Problem";
+import Pillars from "@/components/landing/Pillars";
+import Demo from "@/components/landing/Demo";
+import UseCases from "@/components/landing/UseCases";
+import Trust from "@/components/landing/Trust";
+import Thesis from "@/components/landing/Thesis";
+import Waitlist from "@/components/landing/Waitlist";
+import Footer from "@/components/landing/Footer";
 
 const Index = () => {
   return (
-    <div className="bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-      <ScrollVideo src={VIDEO_SRC} />
-      <PillNav />
-
-      <div className="relative h-[500vh]">
-        <ScrollFloat>{"Your Digital\nTwin Awaits"}</ScrollFloat>
-        <GlassPanel />
-      </div>
+    <div className="relative bg-background text-foreground">
+      <Nav />
+      <main>
+        <Hero />
+        <Problem />
+        <Pillars />
+        <Demo />
+        <UseCases />
+        <Trust />
+        <Thesis />
+        <Waitlist />
+      </main>
+      <Footer />
     </div>
   );
 };
