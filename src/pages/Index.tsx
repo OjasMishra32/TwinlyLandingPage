@@ -1,6 +1,5 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
-import SlideTransition from "@/components/landing/SlideTransition";
 import SlideVoice from "@/components/landing/SlideVoice";
 import SlideParallel from "@/components/landing/SlideParallel";
 import SlideApproval from "@/components/landing/SlideApproval";
@@ -18,7 +17,7 @@ import Reticle from "@/components/landing/Reticle";
 
 const Index = () => {
   return (
-    <div className="relative bg-bg text-fg min-h-screen">
+    <div className="relative bg-bg text-fg min-h-screen overflow-x-clip">
       <Loader />
       <Reticle />
       <AmbientMesh />
@@ -26,21 +25,13 @@ const Index = () => {
       <Nav />
       <main className="relative z-[2]">
         <Hero />
-        <SlideTransition />
         <SlideVoice />
-        <SlideTransition />
         <SlideParallel />
-        <SlideTransition />
         <SlideApproval />
-        <SlideTransition />
         <SlideCode />
-        <SlideTransition />
         <SlideHomework />
-        <SlideTransition />
         <SlideTax />
-        <SlideTransition />
         <SlideTrip />
-        <SlideTransition />
         <SlideNumbers />
         <Waitlist />
       </main>

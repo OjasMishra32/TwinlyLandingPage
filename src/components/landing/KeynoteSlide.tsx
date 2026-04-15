@@ -93,7 +93,7 @@ export default function KeynoteSlide({
       className={`relative w-full flex flex-col justify-center overflow-hidden border-t border-rule/60 ${
         fullHeight ? "min-h-[100svh]" : ""
       } ${className}`}
-      style={{ padding: "clamp(120px, 14vh, 180px) 0" }}
+      style={{ padding: "clamp(96px, 13vh, 170px) 0" }}
     >
       {particles && <FloatingParticles count={24} />}
 
@@ -110,7 +110,7 @@ export default function KeynoteSlide({
       )}
 
       <div
-        className={`relative w-full max-w-[1280px] mx-auto px-6 md:px-14 flex flex-col ${itemsAlign} ${textAlign}`}
+        className={`relative w-full max-w-[1280px] mx-auto px-5 sm:px-8 md:px-14 flex flex-col ${itemsAlign} ${textAlign}`}
       >
         {visualAbove && visual && (
           <motion.div
@@ -147,11 +147,14 @@ export default function KeynoteSlide({
             fontOpticalSizing: "auto",
             fontVariationSettings: "'SOFT' 40, 'WONK' 0",
             fontWeight: 400,
-            fontSize: "clamp(3.2rem, 9.2vw, 10.5rem)",
-            lineHeight: 0.94,
-            letterSpacing: "-0.035em",
+            fontSize: "clamp(2.6rem, 7.6vw, 9rem)",
+            lineHeight: 0.98,
+            letterSpacing: "-0.028em",
             maxWidth: align === "center" ? "18ch" : "16ch",
             margin: align === "center" ? "0 auto" : undefined,
+            paddingBottom: "0.08em",
+            overflowWrap: "break-word",
+            hyphens: "none",
           }}
           initial={{ filter: "blur(14px)" }}
           animate={inView ? { filter: "blur(0px)" } : {}}
