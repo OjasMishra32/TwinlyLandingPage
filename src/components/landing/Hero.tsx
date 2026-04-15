@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import SplineRobot from "./SplineRobot";
+import FloatingOps from "./FloatingOps";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
 const BASE = 0.1;
@@ -81,6 +82,11 @@ export default function Hero() {
         <div className="relative h-full w-full">
           <SplineRobot />
         </div>
+      </div>
+
+      {/* Floating ops tiles drifting on the right side */}
+      <div className="hidden xl:block absolute inset-y-0 right-0 w-[32%] z-[3] pointer-events-none">
+        <FloatingOps />
       </div>
 
       {/* Left-edge gradient so text stays readable */}

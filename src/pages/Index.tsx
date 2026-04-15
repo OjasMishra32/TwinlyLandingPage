@@ -1,5 +1,6 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
+import Marquee from "@/components/landing/Marquee";
 import Problem from "@/components/landing/Problem";
 import UseCases from "@/components/landing/UseCases";
 import TwinEdge from "@/components/landing/TwinEdge";
@@ -8,6 +9,7 @@ import Trust from "@/components/landing/Trust";
 import Waitlist from "@/components/landing/Waitlist";
 import Footer from "@/components/landing/Footer";
 import GrainOverlay from "@/components/landing/GrainOverlay";
+import AmbientMesh from "@/components/landing/AmbientMesh";
 import Loader from "@/components/landing/Loader";
 import Reticle from "@/components/landing/Reticle";
 
@@ -16,10 +18,12 @@ const Index = () => {
     <div className="relative bg-bg text-fg min-h-screen">
       <Loader />
       <Reticle />
+      <AmbientMesh />
       <GrainOverlay />
       <Nav />
-      <main>
+      <main className="relative z-[2]">
         <Hero />
+        <Marquee />
         <TwinReveal />
         <Problem />
         <UseCases />

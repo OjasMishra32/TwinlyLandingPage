@@ -85,8 +85,20 @@ function ClaimRow({ c }: { c: Claim }) {
 
 export default function TwinEdge() {
   return (
-    <section id="edge" className="sec border-t border-rule">
-      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+    <section id="edge" className="sec border-t border-rule relative overflow-hidden">
+      {/* Ghost wordmark sitting behind content for weight */}
+      <span
+        aria-hidden
+        className="ghost-wordmark"
+        style={{
+          fontSize: "clamp(18rem, 42vw, 44rem)",
+          bottom: "-8%",
+          left: "-4%",
+        }}
+      >
+        edge.
+      </span>
+      <div className="relative w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <div className="sec-head">
           <div className="sec-ident">
             <span className="num">

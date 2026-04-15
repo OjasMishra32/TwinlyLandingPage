@@ -338,6 +338,28 @@
     -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 68%);
   }
 
+  /* Marquee animation — used by Marquee.tsx */
+  .animate-marq { animation: marq 55s linear infinite; }
+  @keyframes marq {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Ghost wordmark — enormous italic serif sitting behind sections */
+  .ghost-wordmark {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: hsl(var(--fg));
+    opacity: 0.035;
+    letter-spacing: -0.04em;
+    line-height: 0.82;
+    white-space: nowrap;
+    user-select: none;
+  }
+
   /* Chip / tag */
   .chip {
     display: inline-flex;

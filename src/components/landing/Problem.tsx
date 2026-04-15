@@ -3,8 +3,20 @@ import RevealH2 from "./RevealH2";
 
 export default function Problem() {
   return (
-    <section id="problem" className="sec">
-      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+    <section id="problem" className="sec relative overflow-hidden">
+      {/* Ghost wordmark sitting behind content */}
+      <span
+        aria-hidden
+        className="ghost-wordmark"
+        style={{
+          fontSize: "clamp(16rem, 36vw, 38rem)",
+          top: "6%",
+          right: "-5%",
+        }}
+      >
+        handled.
+      </span>
+      <div className="relative w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <div className="sec-head">
           <div className="sec-ident">
             <span className="num">
