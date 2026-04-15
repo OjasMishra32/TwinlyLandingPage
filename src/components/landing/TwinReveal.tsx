@@ -1,40 +1,71 @@
 import { useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 /**
- * TwinReveal — full-bleed autoplay looping video. Plays immediately on
- * mount (muted + playsInline satisfies the autoplay policy), loops
- * forever, and the section pins for enough scroll distance to watch
- * a full loop. No IntersectionObserver gate, no scroll-scrub, no
- * frame preload — just a <video> that plays on its own.
+ * TwinReveal — scroll-scrubbed video. The source is encoded with
+ * every-frame keyframes (-g 1) so video.currentTime seeks are
+ * near-instant. Scroll drives the frame position directly via a
+ * spring-smoothed progress value. No image sequence, no frame
+ * preload, just a 12MB MP4 that seeks as fast as you scroll.
  */
 
 export default function TwinReveal() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const inView = useInView(sectionRef, { once: true, margin: "-10%" });
 
-  // Start playback as soon as the video is ready. Autoplay is kicked
-  // twice — once on mount and once on loadedmetadata — to cover both
-  // the cold-load and warm-navigation cases.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Spring smooths the scroll-to-frame mapping so the scrub feels
+  // weighted instead of jittery
+  const smoothProgress = useSpring(scrollYProgress, {
+    damping: 38,
+    stiffness: 180,
+    mass: 0.35,
+  });
+
+  const captionOpacity = useTransform(
+    scrollYProgress,
+    [0.36, 0.48, 0.84, 0.94],
+    [0, 1, 1, 0]
+  );
+  const metaOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.06, 0.94, 1],
+    [0, 1, 1, 0]
+  );
+
+  useMotionValueEvent(smoothProgress, "change", (p) => {
+    const v = videoRef.current;
+    if (!v || !v.duration) return;
+    const target = Math.max(0, Math.min(v.duration - 0.04, p * v.duration));
+    if (Math.abs(v.currentTime - target) > 0.015) {
+      v.currentTime = target;
+    }
+  });
+
+  // Make sure the video is loaded enough to seek before first scroll
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    const kick = () => {
-      v.play().catch(() => {
-        // If autoplay is rejected for any reason, retry on first user gesture
-        const onGesture = () => {
-          v.play().catch(() => {});
-          window.removeEventListener("pointerdown", onGesture);
-          window.removeEventListener("scroll", onGesture);
-        };
-        window.addEventListener("pointerdown", onGesture, { once: true });
-        window.addEventListener("scroll", onGesture, { once: true });
-      });
+    v.pause();
+    const onReady = () => {
+      if (v.readyState >= 2) {
+        // Paint the first frame
+        v.currentTime = 0;
+      }
     };
-    kick();
-    v.addEventListener("loadedmetadata", kick);
-    return () => v.removeEventListener("loadedmetadata", kick);
+    v.addEventListener("loadedmetadata", onReady);
+    if (v.readyState >= 2) onReady();
+    return () => v.removeEventListener("loadedmetadata", onReady);
   }, []);
 
   return (
@@ -42,22 +73,19 @@ export default function TwinReveal() {
       ref={sectionRef}
       id="reveal"
       className="relative border-t border-rule bg-bg"
-      style={{ height: "180vh" }}
+      style={{ height: "320vh" }}
     >
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
-        {/* Full-bleed looping video */}
         <video
           ref={videoRef}
           src="/hero-reveal.mp4"
-          autoPlay
           muted
-          loop
           playsInline
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        {/* Top fade into site bg */}
+        {/* Edge fades so the video blends into site bg */}
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 h-[28%] pointer-events-none z-[1]"
@@ -66,7 +94,6 @@ export default function TwinReveal() {
               "linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0.65) 50%, transparent 100%)",
           }}
         />
-        {/* Bottom fade into site bg */}
         <div
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-[36%] pointer-events-none z-[1]"
@@ -75,7 +102,6 @@ export default function TwinReveal() {
               "linear-gradient(0deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0.7) 45%, transparent 100%)",
           }}
         />
-        {/* Side fades */}
         <div
           aria-hidden
           className="absolute inset-y-0 left-0 w-[10%] pointer-events-none z-[1]"
@@ -93,11 +119,8 @@ export default function TwinReveal() {
           }}
         />
 
-        {/* Top-left meta */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          style={{ opacity: metaOpacity }}
           className="absolute top-10 left-6 md:top-16 md:left-14 z-[3] flex items-center gap-3"
         >
           <span className="live-dot" />
@@ -106,40 +129,35 @@ export default function TwinReveal() {
           </span>
         </motion.div>
 
-        {/* Top-right spec */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{ opacity: metaOpacity }}
           className="absolute top-10 right-6 md:top-16 md:right-14 z-[3] flex items-center gap-3 f-mono text-[0.54rem] tracking-[0.2em] uppercase text-fg-3"
         >
-          <span>1920 × 1080</span>
+          <span>scroll-scrubbed</span>
           <span className="text-fg-4">·</span>
-          <span className="text-accent">8s loop</span>
+          <span className="text-accent">1920 × 1080</span>
         </motion.div>
 
-        {/* Bottom caption */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute bottom-14 md:bottom-24 left-0 right-0 z-[3] text-center px-6"
+          style={{ opacity: captionOpacity }}
+          className="absolute bottom-16 md:bottom-24 left-0 right-0 z-[3] text-center px-6"
         >
           <div className="inline-flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-accent" />
+            <span className="h-px w-10 bg-accent" />
             <span className="f-mono text-[0.56rem] font-medium tracking-[0.28em] uppercase text-fg-2">
               The moment a twin is born
             </span>
-            <span className="h-px w-8 bg-accent" />
+            <span className="h-px w-10 bg-accent" />
           </div>
           <p
-            className="text-fg font-serif italic mx-auto"
+            className="text-fg mx-auto"
             style={{
-              fontSize: "clamp(1.3rem, 2.4vw, 2.3rem)",
-              lineHeight: 1.22,
+              fontFamily: "'Instrument Serif', serif",
+              fontStyle: "italic",
+              fontSize: "clamp(1.4rem, 2.6vw, 2.4rem)",
+              lineHeight: 1.24,
               letterSpacing: "-0.01em",
               maxWidth: "34ch",
-              fontFamily: "'Instrument Serif', serif",
             }}
           >
             One self. Split in two. One of them stays here. The other runs your

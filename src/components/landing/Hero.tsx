@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import SplineRobot from "./SplineRobot";
-import FloatingOps from "./FloatingOps";
 import CharGrid from "./CharGrid";
 import ScrambleText from "./ScrambleText";
 import { useMagnetic } from "@/hooks/useMagnetic";
@@ -86,10 +85,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Floating ops tiles drifting on the right side */}
-      <div className="hidden xl:block absolute inset-y-0 right-0 w-[32%] z-[3] pointer-events-none">
-        <FloatingOps />
-      </div>
 
       {/* Left-edge gradient so text stays readable */}
       <div
