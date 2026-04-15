@@ -93,7 +93,16 @@ export default function KeynoteSlide({
       className={`relative w-full flex flex-col justify-center overflow-hidden border-t border-rule/60 ${
         fullHeight ? "min-h-[82svh]" : ""
       } ${className}`}
-      style={{ padding: "clamp(64px, 8vh, 120px) 0" }}
+      style={{
+        padding: "clamp(64px, 8vh, 120px) 0",
+        // Off-screen slides skip layout + paint entirely. Huge win on a
+        // long keynote page with 10+ animated sections — the browser
+        // short-circuits everything below the fold until it scrolls
+        // close. contentIntrinsicSize is the placeholder footprint so
+        // scroll anchoring / section offsets still compute correctly.
+        contentVisibility: "auto",
+        containIntrinsicSize: "auto 100svh",
+      }}
     >
       {particles && <FloatingParticles count={24} />}
 

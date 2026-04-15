@@ -44,22 +44,56 @@ export default function SplineRobot() {
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
+
+    // Cache the bounding rect instead of measuring on every pointermove.
+    // getBoundingClientRect triggers a synchronous layout read, and this
+    // handler was firing on every single window mouse event — death for
+    // any page with the robot mounted. Re-measure only when layout can
+    // actually change (scroll, resize).
+    let rect = wrap.getBoundingClientRect();
+    const remeasure = () => {
+      rect = wrap.getBoundingClientRect();
+    };
+
+    // rAF-throttle the motion-value writes so we hit at most one update
+    // per frame regardless of how fast the mouse is moving.
+    let latestX = 0;
+    let latestY = 0;
+    let queued = false;
+    const flush = () => {
+      queued = false;
+      mx.set(latestX);
+      my.set(latestY);
+    };
+
     const onMove = (e: PointerEvent) => {
-      const rect = wrap.getBoundingClientRect();
       const nx = (e.clientX - rect.left) / rect.width - 0.5;
       const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      mx.set(Math.max(-0.5, Math.min(0.5, nx)));
-      my.set(Math.max(-0.5, Math.min(0.5, ny)));
+      latestX = Math.max(-0.5, Math.min(0.5, nx));
+      latestY = Math.max(-0.5, Math.min(0.5, ny));
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(flush);
+      }
     };
     const onLeave = () => {
-      mx.set(0);
-      my.set(0);
+      latestX = 0;
+      latestY = 0;
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(flush);
+      }
     };
+
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerleave", onLeave);
+    window.addEventListener("scroll", remeasure, { passive: true });
+    window.addEventListener("resize", remeasure);
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("scroll", remeasure);
+      window.removeEventListener("resize", remeasure);
     };
   }, [mx, my]);
 
