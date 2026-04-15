@@ -1,23 +1,34 @@
+import { Fragment } from "react";
 import { motion } from "framer-motion";
 import KeynoteSlide from "./KeynoteSlide";
 import { Check } from "./icons";
 
 /**
- * SlideHomework — "Do my homework." Three-panel flow: sources read,
- * paper drafts itself in the center, Canvas submit card on the right
- * fires an animated click at the end. Passes GPTZero because it's
- * trained on exactly how the student writes.
+ * SlideHomework — "Do my homework." A top workflow stepper lights
+ * up 5 phases (READ → OUTLINE → DRAFT → REVIEW → SUBMIT) as Twinly
+ * runs. Below: sources absorbed on the left, the paper types itself
+ * in the center, integrity check + Canvas submit on the right with
+ * a cursor-tap on the Submit button. Passes GPTZero because it was
+ * trained on exactly how this student writes.
  */
 
 const sources = [
-  { tag: "01", title: "Chap 4 — Supply curves", kind: "PDF · 22p" },
-  { tag: "02", title: "Lecture — Elasticity", kind: "SLIDES · 48" },
-  { tag: "03", title: "Case — Apple Q3 pricing", kind: "PDF · 14p" },
+  { tag: "01", title: "Chap 4 · Supply curves", kind: "PDF · 22p" },
+  { tag: "02", title: "Lecture · Elasticity", kind: "SLIDES · 48" },
+  { tag: "03", title: "Case · Apple Q3 pricing", kind: "PDF · 14p" },
   { tag: "04", title: "Prof. Kim · office hours", kind: "NOTES · 6p" },
 ];
 
+const phases = [
+  { num: "01", label: "Read", detail: "4 sources", activeAt: 0.3 },
+  { num: "02", label: "Outline", detail: "12 bullets", activeAt: 1.0 },
+  { num: "03", label: "Draft", detail: "2,847 words", activeAt: 1.7 },
+  { num: "04", label: "Review", detail: "0.2% AI", activeAt: 5.3 },
+  { num: "05", label: "Submit", detail: "Canvas", activeAt: 6.7 },
+];
+
 const paragraphs = [
-  "Price elasticity of demand is almost never the headline number — it's the ratio that hides underneath every pricing decision Apple has made since the App Store opened.",
+  "Price elasticity of demand is almost never the headline number. It's the ratio that hides underneath every pricing decision Apple has made since the App Store opened.",
   "Consider the 2023 Services hike. A 20% bump on Apple Music, Arcade, and News+ looks aggressive on paper, but Apple's historical elasticity coefficient sits near -0.4, meaning quantity demanded barely moved when prices rose.",
   "The reason has nothing to do with the product. It has to do with switching costs, ecosystem lock-in, and the fact that once you have four apps, a rating history, and three family-plan slots, you don't leave over $3.",
 ];
@@ -44,6 +55,103 @@ export default function SlideHomework() {
       spotlight
       visual={
         <div className="max-w-[1280px] mx-auto">
+          {/* Workflow stepper — lights up phase-by-phase as Twinly runs */}
+          <div className="mb-10 md:mb-14 px-2">
+            <div className="flex items-start justify-between max-w-[940px] mx-auto">
+              {phases.map((p, i) => (
+                <Fragment key={p.num}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{
+                      duration: 0.55,
+                      delay: 0.1 + i * 0.08,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="flex flex-col items-center text-center shrink-0 relative"
+                    style={{ width: "92px" }}
+                  >
+                    <motion.div
+                      initial={{
+                        backgroundColor: "hsl(36 10% 11%)",
+                        borderColor: "hsl(var(--rule))",
+                      }}
+                      whileInView={{
+                        backgroundColor: [
+                          "hsl(36 10% 11%)",
+                          "hsl(var(--accent) / 0.2)",
+                          "hsl(var(--accent) / 0.15)",
+                        ],
+                        borderColor: [
+                          "hsl(var(--rule))",
+                          "hsl(var(--accent))",
+                          "hsl(var(--accent))",
+                        ],
+                        scale: [1, 1.18, 1],
+                      }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 0.9,
+                        delay: p.activeAt,
+                        times: [0, 0.3, 1],
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="relative w-10 h-10 flex items-center justify-center border"
+                      style={{ borderRadius: "999px" }}
+                    >
+                      <span
+                        className="f-mono text-[0.58rem] font-bold tabular-nums"
+                        style={{ color: "hsl(var(--accent))" }}
+                      >
+                        {p.num}
+                      </span>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: [0, 1, 0.6] }}
+                        viewport={{ once: true, margin: "-8%" }}
+                        transition={{
+                          duration: 1.2,
+                          delay: p.activeAt,
+                          times: [0, 0.4, 1],
+                        }}
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          boxShadow: "0 0 20px hsl(var(--accent) / 0.6)",
+                        }}
+                      />
+                    </motion.div>
+                    <div className="f-mono text-[0.5rem] tracking-[0.18em] uppercase text-fg font-semibold mt-2.5">
+                      {p.label}
+                    </div>
+                    <div className="f-mono text-[0.44rem] tracking-[0.1em] uppercase text-fg-4 mt-1 leading-tight">
+                      {p.detail}
+                    </div>
+                  </motion.div>
+                  {i < phases.length - 1 && (
+                    <div className="flex-1 mt-5 mx-1 md:mx-2 relative h-[2px]">
+                      <div className="absolute inset-0 bg-rule/60" />
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true, margin: "-8%" }}
+                        transition={{
+                          duration: 0.7,
+                          delay: phases[i + 1].activeAt - 0.35,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="absolute inset-0 bg-accent origin-left"
+                        style={{
+                          boxShadow: "0 0 10px hsl(var(--accent) / 0.5)",
+                        }}
+                      />
+                    </div>
+                  )}
+                </Fragment>
+              ))}
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-[0.8fr_1.35fr_0.85fr] gap-5 md:gap-6 items-start">
             {/* LEFT: sources being read */}
             <div className="flex flex-col gap-3">
@@ -113,11 +221,36 @@ export default function SlideHomework() {
               }}
             >
               <div className="px-5 py-3 border-b border-black/10 flex items-center justify-between bg-black/5">
-                <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
-                  ECON 201 · Case brief
+                <div className="flex items-center gap-3">
+                  <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
+                    ECON 201 · Case brief
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.5, delay: 1.6 }}
+                    className="flex items-center gap-1.5 f-mono text-[0.44rem] tracking-[0.1em] uppercase text-black/45"
+                  >
+                    <motion.span
+                      className="w-[5px] h-[5px] rounded-full bg-black/40"
+                      animate={{ opacity: [0.3, 1, 0.3] }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                    Drafting
+                  </motion.div>
                 </div>
-                <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
-                  Page 1 of 12
+                <div className="flex items-center gap-4">
+                  <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
+                    2,847 words
+                  </div>
+                  <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
+                    Page 1 of 12
+                  </div>
                 </div>
               </div>
               <div className="px-6 md:px-8 py-7 md:py-8 min-h-[360px] text-black/85">

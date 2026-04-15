@@ -3,12 +3,12 @@ import KeynoteSlide from "./KeynoteSlide";
 import { Check } from "./icons";
 
 /**
- * SlidePocket — "just text it". A big iPhone mockup with a full
- * chat thread in the native Twinly iOS app. Messages stagger in, a
- * live working indicator pulses, a rich action card appears mid-
- * conversation, the approval lands, and Twinly replies with a
- * surprise insight. Full device chrome: titanium bezel, Dynamic
- * Island, status bar.
+ * SlidePocket — "just text it". The phone is the hero, dead center.
+ * A full conversation plays out inside the native Twinly iOS app:
+ * user sends a request, twin scans flights, a rich flight card
+ * animates in, a cursor taps Approve, twin confirms, then surfaces
+ * a surprise insight about the user's passport. Metrics row sits
+ * directly below the phone. No floating side columns, no gaps.
  */
 
 type BubbleProps = {
@@ -22,11 +22,11 @@ function Bubble({ side, delay, children, tiny }: BubbleProps) {
   const isMe = side === "me";
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18, scale: 0.92 }}
+      initial={{ opacity: 0, y: 16, scale: 0.94 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-8%" }}
       transition={{
-        duration: 0.55,
+        duration: 0.5,
         delay,
         type: "spring",
         damping: 22,
@@ -40,9 +40,7 @@ function Bubble({ side, delay, children, tiny }: BubbleProps) {
           isMe ? "text-bg" : "text-fg"
         }`}
         style={{
-          background: isMe
-            ? "hsl(var(--accent))"
-            : "hsl(36 10% 14%)",
+          background: isMe ? "hsl(var(--accent))" : "hsl(36 10% 14%)",
           borderRadius: isMe
             ? "16px 16px 4px 16px"
             : "16px 16px 16px 4px",
@@ -94,7 +92,7 @@ function TypingDots({ delay }: { delay: number }) {
 function FlightCard({ delay }: { delay: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24, scale: 0.94 }}
+      initial={{ opacity: 0, y: 22, scale: 0.94 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-8%" }}
       transition={{
@@ -107,7 +105,7 @@ function FlightCard({ delay }: { delay: number }) {
       className="flex justify-start"
     >
       <div
-        className="relative w-[82%] overflow-hidden"
+        className="relative w-[84%] overflow-hidden"
         style={{
           background:
             "linear-gradient(180deg, hsl(36 10% 15%) 0%, hsl(36 10% 10%) 100%)",
@@ -155,15 +153,27 @@ function FlightCard({ delay }: { delay: number }) {
           <div className="f-mono text-[7.5px] tracking-[0.08em] text-fg-3 uppercase mb-2.5">
             Fri · dep 11:30pm · held 20m
           </div>
-          <div className="flex items-center gap-1.5">
-            <button
+          <div className="relative flex items-center gap-1.5">
+            {/* Approve button (stays visible but gets pulsed / "pressed" by cursor) */}
+            <motion.button
               type="button"
+              initial={{ scale: 1 }}
+              whileInView={{ scale: [1, 0.94, 1] }}
+              viewport={{ once: true, margin: "-8%" }}
+              transition={{
+                duration: 0.4,
+                delay: delay + 2.1,
+                times: [0, 0.5, 1],
+              }}
               className="flex-1 flex items-center justify-center gap-1 py-1.5 bg-accent text-bg f-mono text-[8px] font-semibold tracking-[0.14em] uppercase"
-              style={{ borderRadius: "6px" }}
+              style={{
+                borderRadius: "6px",
+                boxShadow: "0 0 0 0 hsl(var(--accent) / 0.6)",
+              }}
             >
               <Check size={9} strokeWidth={3} />
               Approve
-            </button>
+            </motion.button>
             <button
               type="button"
               className="px-2.5 py-1.5 border border-rule text-fg-3 f-mono text-[8px] font-medium tracking-[0.12em] uppercase"
@@ -171,6 +181,36 @@ function FlightCard({ delay }: { delay: number }) {
             >
               Edit
             </button>
+
+            {/* Cursor/finger tap indicator flying in to click Approve */}
+            <motion.div
+              aria-hidden
+              initial={{ opacity: 0, x: 70, y: -40 }}
+              whileInView={{
+                opacity: [0, 1, 1, 1, 0],
+                x: [70, 40, 10, -6, -6],
+                y: [-40, -20, -4, 4, 4],
+                scale: [1, 1, 1, 0.8, 0.8],
+              }}
+              viewport={{ once: true, margin: "-8%" }}
+              transition={{
+                duration: 1.9,
+                delay: delay + 0.7,
+                times: [0, 0.3, 0.65, 0.9, 1],
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="absolute left-[22%] top-[6px] z-[5]"
+            >
+              <svg width="14" height="17" viewBox="0 0 18 22" fill="none">
+                <path
+                  d="M2 2 L2 18 L6 14 L9 20 L11 19 L8 13 L14 13 Z"
+                  fill="hsl(var(--fg))"
+                  stroke="hsl(var(--bg))"
+                  strokeWidth="1"
+                  strokeLinejoin="miter"
+                />
+              </svg>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -193,285 +233,223 @@ export default function SlidePocket() {
         <>
           Download the native Twinly app from the App Store. One-tap install,
           ready in 60 seconds. Text a request, watch it work, tap to approve.
-          No browser extension, no agent window, no prompts. Just you texting.
+          No browser extension, no agent window. Just you texting.
         </>
       }
       align="center"
       spotlight
       visual={
-        <div className="max-w-[1180px] mx-auto">
-          <div className="grid md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
-            {/* Left: prompt context */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.95, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col items-start text-left order-2 md:order-1"
+        <div className="w-full flex flex-col items-center">
+          {/* Context strip above the phone */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 0.8, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center gap-3 mb-8 md:mb-10 f-mono text-[0.54rem] tracking-[0.24em] uppercase text-fg-3"
+          >
+            <span className="h-px w-8 bg-accent/60" />
+            Thread · Twinly · just now
+            <span className="h-px w-8 bg-accent/60" />
+          </motion.div>
+
+          {/* iPhone — centered hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 60, rotateY: -6 }}
+            whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            style={{ perspective: "2400px", transformStyle: "preserve-3d" }}
+          >
+            <div
+              className="relative"
+              style={{
+                width: "min(86vw, 360px)",
+                aspectRatio: "9 / 19.5",
+                borderRadius: "54px",
+                padding: "13px",
+                background:
+                  "linear-gradient(150deg, #2d2d33 0%, #0e0e10 45%, #1a1a1e 100%)",
+                boxShadow:
+                  "0 0 0 1px hsl(var(--rule-hi) / 0.6), inset 0 0 0 1px hsl(var(--fg) / 0.05), 0 100px 220px -50px rgba(0,0,0,0.95), 0 0 120px -30px hsl(var(--accent) / 0.22)",
+              }}
             >
-              <div className="f-mono text-[0.54rem] tracking-[0.24em] uppercase text-fg-4 mb-5">
-                Thread · Twinly
-              </div>
-              <h4
-                className="text-fg mb-7"
+              <div
+                className="relative w-full h-full overflow-hidden"
                 style={{
-                  fontFamily: "'Fraunces', serif",
-                  fontVariationSettings: "'SOFT' 40, 'WONK' 0",
-                  fontSize: "clamp(1.65rem, 2.6vw, 2.4rem)",
-                  letterSpacing: "-0.025em",
-                  lineHeight: 1.08,
+                  borderRadius: "42px",
+                  background:
+                    "linear-gradient(180deg, hsl(36 10% 5%) 0%, hsl(36 10% 8%) 100%)",
                 }}
               >
-                "Book me a one-way
-                <br />
-                to Tokyo for Friday
-                <br />
-                under $800."
-              </h4>
-              <div className="h-px w-14 bg-accent/60 my-4" />
-              <div className="space-y-5 w-full max-w-[380px]">
-                {[
-                  { k: "Average reply", v: "47 seconds" },
-                  { k: "Context retained", v: "Forever" },
-                  { k: "Works over", v: "iMessage · SMS · Web" },
-                ].map((m, i) => (
-                  <motion.div
-                    key={m.k}
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-8%" }}
-                    transition={{ duration: 0.7, delay: 0.3 + i * 0.08 }}
-                    className="flex items-baseline justify-between gap-6 py-3 border-b border-rule/60"
+                {/* Dynamic Island */}
+                <div
+                  className="absolute top-2 left-1/2 -translate-x-1/2 z-[10]"
+                  style={{
+                    width: "104px",
+                    height: "30px",
+                    borderRadius: "999px",
+                    background: "#000",
+                  }}
+                />
+
+                {/* Status bar */}
+                <div
+                  className="absolute top-[15px] left-7 z-[6] text-[11px] text-fg font-semibold tabular-nums"
+                  style={{ fontFamily: "'Hanken Grotesk', system-ui" }}
+                >
+                  9:41
+                </div>
+                <div className="absolute top-[16px] right-7 z-[6] flex items-center gap-1.5">
+                  <div className="flex items-end gap-[2px]">
+                    {[3, 5, 7, 9].map((h) => (
+                      <span
+                        key={h}
+                        className="bg-fg"
+                        style={{ width: "3.5px", height: `${h}px`, borderRadius: "0.5px" }}
+                      />
+                    ))}
+                  </div>
+                  <span
+                    className="text-[9.5px] text-fg font-semibold ml-0.5"
+                    style={{ fontFamily: "'Hanken Grotesk', system-ui", letterSpacing: "-0.02em" }}
                   >
-                    <div className="f-mono text-[0.54rem] tracking-[0.22em] uppercase text-fg-4">
-                      {m.k}
-                    </div>
+                    5G
+                  </span>
+                  <div className="ml-1.5 relative" style={{ width: "25px", height: "11px" }}>
+                    <div className="absolute inset-0 border border-fg/85" style={{ borderRadius: "3px" }} />
+                    <div className="absolute left-[1.5px] top-[1.5px] bottom-[1.5px] bg-fg" style={{ width: "18px", borderRadius: "1.5px" }} />
+                    <div className="absolute right-[-3px] top-[3px] w-[1.5px] h-[5px] bg-fg/85" />
+                  </div>
+                </div>
+
+                {/* Conversation header */}
+                <div className="relative z-[2] pt-[52px] pb-3 px-5 border-b border-rule/40 flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 flex items-center justify-center shrink-0"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(var(--accent) / 0.22) 0%, hsl(var(--accent) / 0.04) 100%)",
+                      border: "1px solid hsl(var(--accent) / 0.4)",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <svg viewBox="0 0 34 34" className="w-5 h-5">
+                      <rect x="6" y="6" width="16" height="16" fill="none" stroke="hsl(var(--accent))" strokeWidth="1.6" />
+                      <rect x="12" y="12" width="16" height="16" fill="none" stroke="hsl(var(--accent))" strokeWidth="1.6" />
+                      <rect x="12" y="12" width="10" height="10" fill="hsl(var(--accent))" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
                     <div
-                      className="text-fg"
+                      className="text-fg font-semibold"
                       style={{
                         fontFamily: "'Fraunces', serif",
-                        fontVariationSettings: "'SOFT' 40",
-                        fontSize: "1.1rem",
-                        letterSpacing: "-0.02em",
+                        fontSize: "14px",
+                        letterSpacing: "-0.015em",
                         lineHeight: 1,
                       }}
                     >
-                      {m.v}
+                      Twinly
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span
+                        className="w-[5px] h-[5px] rounded-full bg-accent"
+                        style={{ boxShadow: "0 0 6px hsl(var(--accent) / 0.7)" }}
+                      />
+                      <span className="f-mono text-[8px] tracking-[0.1em] uppercase text-fg-3">
+                        Online · in your voice
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
-            {/* Right: iPhone mockup with chat */}
-            <motion.div
-              initial={{ opacity: 0, y: 60, rotateY: -10 }}
-              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="order-1 md:order-2 mx-auto"
-              style={{ perspective: "2000px", transformStyle: "preserve-3d" }}
-            >
-              <div
-                className="relative"
-                style={{
-                  width: "min(86vw, 340px)",
-                  aspectRatio: "9 / 19.5",
-                  borderRadius: "48px",
-                  padding: "12px",
-                  background:
-                    "linear-gradient(145deg, #2a2a2f 0%, #0c0c0e 50%, #1a1a1e 100%)",
-                  boxShadow:
-                    "0 0 0 1.5px hsl(var(--rule-hi) / 0.5), 0 90px 200px -40px rgba(0,0,0,0.95), 0 0 100px -30px hsl(var(--accent) / 0.22)",
-                }}
-              >
-                <div
-                  className="relative w-full h-full overflow-hidden"
-                  style={{
-                    borderRadius: "36px",
-                    background:
-                      "linear-gradient(180deg, hsl(36 10% 5%) 0%, hsl(36 10% 8%) 100%)",
-                  }}
-                >
-                  {/* Dynamic Island */}
+                {/* Chat body */}
+                <div className="absolute top-[108px] bottom-[68px] left-0 right-0 overflow-hidden">
+                  <div className="flex flex-col gap-2 px-4 pt-3">
+                    <Bubble side="me" delay={0.35}>
+                      Book me a one-way to Tokyo Friday under $800
+                    </Bubble>
+                    <Bubble side="twin" delay={0.75} tiny>
+                      Scanning 47 flights
+                    </Bubble>
+                    <TypingDots delay={1.05} />
+                    <FlightCard delay={1.55} />
+                    <Bubble side="twin" delay={4.0}>
+                      Booked. Confirmation just landed in your inbox.
+                    </Bubble>
+                    <Bubble side="twin" delay={4.5}>
+                      Heads up, your passport expires in 9 months. Want me to
+                      start the renewal now?
+                    </Bubble>
+                  </div>
+                </div>
+
+                {/* Input bar — native Twinly app */}
+                <div className="absolute bottom-0 left-0 right-0 pt-2 pb-6 px-4 border-t border-rule/40 bg-bg/50 backdrop-blur-sm">
                   <div
-                    className="absolute top-2 left-1/2 -translate-x-1/2 z-[10]"
+                    className="flex items-center gap-2 px-3 py-2 border border-rule/60"
                     style={{
-                      width: "96px",
-                      height: "28px",
+                      background: "hsl(36 10% 11%)",
                       borderRadius: "999px",
-                      background: "#000",
                     }}
-                  />
-
-                  {/* Status bar */}
-                  <div className="absolute top-[14px] left-6 z-[6] text-[10px] text-fg f-sans font-semibold tabular-nums">
-                    9:41
-                  </div>
-                  <div className="absolute top-[14px] right-6 z-[6] flex items-center gap-1">
-                    <div className="flex items-end gap-[1px]">
-                      {[2, 3, 4, 5].map((h) => (
-                        <span
-                          key={h}
-                          className="bg-fg"
-                          style={{ width: "3px", height: `${h}px` }}
-                        />
-                      ))}
-                    </div>
-                    <span
-                      className="text-[9px] text-fg f-sans font-semibold ml-0.5"
-                      style={{ letterSpacing: "-0.02em" }}
-                    >
-                      5G
-                    </span>
-                    <div
-                      className="ml-1 border border-fg/80 relative"
-                      style={{
-                        width: "22px",
-                        height: "10px",
-                        borderRadius: "3px",
-                      }}
-                    >
-                      <div
-                        className="absolute left-[1px] top-[1px] bottom-[1px] bg-fg"
-                        style={{ width: "16px", borderRadius: "2px" }}
-                      />
-                      <div
-                        className="absolute right-[-3px] top-[3px] w-[1.5px] h-[4px] bg-fg/80"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Conversation header */}
-                  <div className="relative z-[2] pt-[50px] pb-3 px-5 border-b border-rule/40 flex items-center gap-3">
-                    <div
-                      className="w-9 h-9 flex items-center justify-center shrink-0"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, hsl(var(--accent) / 0.2) 0%, hsl(var(--accent) / 0.04) 100%)",
-                        border: "1px solid hsl(var(--accent) / 0.4)",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <svg viewBox="0 0 34 34" className="w-5 h-5">
-                        <rect
-                          x="6"
-                          y="6"
-                          width="16"
-                          height="16"
-                          fill="none"
-                          stroke="hsl(var(--accent))"
-                          strokeWidth="1.6"
-                        />
-                        <rect
-                          x="12"
-                          y="12"
-                          width="16"
-                          height="16"
-                          fill="none"
-                          stroke="hsl(var(--accent))"
-                          strokeWidth="1.6"
-                        />
-                        <rect
-                          x="12"
-                          y="12"
-                          width="10"
-                          height="10"
-                          fill="hsl(var(--accent))"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div
-                        className="text-fg font-semibold"
-                        style={{
-                          fontFamily: "'Fraunces', serif",
-                          fontSize: "14px",
-                          letterSpacing: "-0.015em",
-                          lineHeight: 1,
-                        }}
-                      >
-                        Twinly
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <span
-                          className="w-[5px] h-[5px] rounded-full bg-accent"
-                          style={{
-                            boxShadow: "0 0 6px hsl(var(--accent) / 0.7)",
-                          }}
-                        />
-                        <span className="f-mono text-[8px] tracking-[0.1em] uppercase text-fg-3">
-                          Online · in your voice
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Chat body */}
-                  <div
-                    className="absolute top-[104px] bottom-[68px] left-0 right-0 overflow-hidden"
                   >
-                    <div className="flex flex-col gap-2 px-4 pt-3">
-                      <Bubble side="me" delay={0.15}>
-                        Book me a one-way to Tokyo Friday under $800
-                      </Bubble>
-                      <Bubble side="twin" delay={0.55} tiny>
-                        Scanning 47 flights
-                      </Bubble>
-                      <TypingDots delay={0.9} />
-                      <FlightCard delay={1.4} />
-                      <Bubble side="me" delay={2.2}>
-                        Book it
-                      </Bubble>
-                      <Bubble side="twin" delay={2.6}>
-                        Booked. Confirmation just landed in your inbox.
-                      </Bubble>
-                      <Bubble side="twin" delay={3.0}>
-                        Heads up — your passport expires in 9 months. Want me
-                        to start the renewal now?
-                      </Bubble>
+                    <div className="flex-1 text-[10px] text-fg-4">
+                      Message Twinly
                     </div>
-                  </div>
-
-                  {/* iMessage input bar */}
-                  <div className="absolute bottom-0 left-0 right-0 pt-2 pb-6 px-4 border-t border-rule/40 bg-bg/50 backdrop-blur-sm">
                     <div
-                      className="flex items-center gap-2 px-3 py-2 border border-rule/60"
+                      className="w-6 h-6 flex items-center justify-center"
                       style={{
-                        background: "hsl(36 10% 11%)",
+                        background: "hsl(var(--accent))",
                         borderRadius: "999px",
                       }}
                     >
-                      <div className="flex-1 text-[10px] text-fg-4">
-                        iMessage
-                      </div>
-                      <div
-                        className="w-6 h-6 flex items-center justify-center"
-                        style={{
-                          background: "hsl(var(--accent))",
-                          borderRadius: "999px",
-                        }}
-                      >
-                        <svg
-                          viewBox="0 0 16 16"
-                          className="w-3 h-3"
-                          fill="none"
-                          stroke="hsl(var(--bg))"
-                          strokeWidth="2.5"
-                        >
-                          <path d="M8 13V3 M3 8l5-5 5 5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
+                      <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="hsl(var(--bg))" strokeWidth="2.5">
+                        <path d="M8 13V3 M3 8l5-5 5 5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </div>
-                    <div
-                      className="mx-auto mt-2 w-[96px] h-[4px] rounded-full"
-                      style={{ background: "hsl(var(--fg) / 0.3)" }}
-                    />
                   </div>
+                  <div
+                    className="mx-auto mt-2 rounded-full"
+                    style={{ width: "108px", height: "5px", background: "hsl(var(--fg) / 0.35)" }}
+                  />
                 </div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
+
+          {/* Metrics row directly under the phone */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 mt-12 md:mt-16 max-w-[780px]"
+          >
+            {[
+              { k: "Average reply", v: "47 sec" },
+              { k: "Context retained", v: "Forever" },
+              { k: "Runs on", v: "iOS native" },
+            ].map((m) => (
+              <div key={m.k} className="text-center">
+                <div className="f-mono text-[0.5rem] tracking-[0.22em] uppercase text-fg-4 mb-1.5">
+                  {m.k}
+                </div>
+                <div
+                  className="text-fg"
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+                    fontSize: "clamp(1.45rem, 2.1vw, 1.95rem)",
+                    letterSpacing: "-0.028em",
+                    lineHeight: 1,
+                  }}
+                >
+                  {m.v}
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       }
     />
