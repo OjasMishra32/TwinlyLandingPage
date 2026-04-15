@@ -29,7 +29,7 @@ const FOUNDER_EMAIL = "founders@twinly.tech";
  * Until the env var is set the form falls back to the mailto: flow
  * so nothing breaks in preview.
  */
-const ENDPOINT = import.meta.env.VITE_WAITLIST_ENDPOINT as string | undefined;
+const ENDPOINT = (import.meta.env.VITE_WAITLIST_ENDPOINT as string | undefined) || "https://formspree.io/f/mdayazgv";
 const LOCAL_BACKUP_KEY = "twinly.waitlist.submissions";
 
 export default function Waitlist() {
@@ -68,17 +68,11 @@ export default function Waitlist() {
     }
 
     if (!ENDPOINT) {
-      // Fallback: open the user's mail client with a pre-filled message.
-      const subject = encodeURIComponent(`Waitlist · ${email}`);
-      const body = encodeURIComponent(
-        [
-          `Email: ${email}`,
-          `Would hand over first: ${intent || "(not specified)"}`,
-          "",
-          "Sent from twinly.tech waitlist",
-        ].join("\n")
+      // Simulate a network request
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      console.warn(
+        "⚠️ No VITE_WAITLIST_ENDPOINT found. Submission was saved locally but not sent anywhere. Set up Formspree (or similar) to collect emails in production."
       );
-      window.location.href = `mailto:${FOUNDER_EMAIL}?subject=${subject}&body=${body}`;
       setStatus("success");
       return;
     }
@@ -128,7 +122,7 @@ export default function Waitlist() {
             transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="h-px w-8 bg-accent origin-left"
           />
-          07 · Request access
+          07 · Join the waitlist
         </motion.div>
 
         {/* Headline */}
@@ -211,7 +205,7 @@ export default function Waitlist() {
               )}
               {(status === "idle" || status === "error") && (
                 <>
-                  Request access
+                  Join the waitlist
                   <span className="arrow" />
                 </>
               )}
@@ -227,7 +221,7 @@ export default function Waitlist() {
             <p className="mt-3 f-mono text-[0.6rem] tracking-[0.18em] uppercase text-accent text-left">
               {ENDPOINT
                 ? "We got it. Founders will reach out when your slot opens."
-                : "Your mail client opened. Hit send and you're on the list."}
+                : "You're on the local waitlist. (Set up Formspree for production)"}
             </p>
           )}
 

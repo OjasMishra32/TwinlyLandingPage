@@ -77,8 +77,8 @@ export default function Nav() {
           className="inline-flex items-center gap-2 md:gap-3 px-3 md:px-5 py-2 md:py-3 text-[0.58rem] md:text-[0.68rem] bg-accent text-bg border border-accent relative overflow-hidden font-medium whitespace-nowrap
             before:content-[''] before:absolute before:inset-0 before:bg-fg before:translate-y-full before:transition-transform before:duration-500 before:-z-10 hover:before:translate-y-0"
         >
-          <span className="hidden sm:inline">Request access</span>
-          <span className="sm:hidden">Access</span>
+          <span className="hidden sm:inline">Join the waitlist</span>
+          <span className="sm:hidden">Waitlist</span>
           <svg width="12" height="9" viewBox="0 0 14 10" fill="none" className="shrink-0 md:w-[14px] md:h-[10px]">
             <path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
           </svg>

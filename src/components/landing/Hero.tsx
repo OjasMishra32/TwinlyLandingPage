@@ -213,7 +213,7 @@ export default function Hero() {
               href="#waitlist"
               className="btn primary will-change-transform"
             >
-              Request access
+              Join the waitlist
               <span className="arrow" />
             </a>
             <a
