@@ -83,21 +83,27 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-x-clip"
       style={{ paddingTop: "140px", paddingBottom: "80px" }}
     >
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
 
-      {/* Spline robot. Wrapper has NO overflow-hidden so the wave arm
-          doesn't get clipped. Instead, the text column is protected by
-          a hard left wash that fully covers the left 58% (see below). */}
+      {/* Spline robot. The section uses overflow-x-clip (not overflow-hidden)
+          so vertical overflow is allowed — that lets the robot's arm/legs
+          extend past the section's bottom boundary without being clipped.
+          The wrapper is intentionally taller than the section (top-0 down
+          to -bottom-[240px]) so the 3D canvas has room for the full pose.
+          z-[30] keeps the overflow visually above the next section
+          (TwinReveal has bg-bg, which would otherwise paint over the arm
+          and make it look faded). */}
       <div
-        className="absolute inset-y-0 right-[-10%] md:left-[52%] md:right-[-10%]
-                   w-full md:w-auto z-[1]
-                   opacity-40 md:opacity-100"
+        className="absolute top-0 -bottom-[240px] right-[-10%] md:left-[52%] md:right-[-10%]
+                   w-full md:w-auto z-[30]
+                   opacity-40 md:opacity-100
+                   pointer-events-none"
       >
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full pointer-events-auto">
           <SplineRobot />
         </div>
       </div>

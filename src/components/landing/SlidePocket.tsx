@@ -583,7 +583,7 @@ export default function SlidePocket() {
                         { k: "Last name", v: "Mishra" },
                         { k: "Date of birth", v: "03 / 12 / 2004" },
                         { k: "Passport #", v: "P1234567" },
-                        { k: "Email", v: "ojas@twinly.tech" },
+                        { k: "Email", v: "founders@twinly.tech" },
                         { k: "Phone", v: "+1 (415) 555-0182" },
                       ].map((f, i) => (
                         <motion.div
@@ -659,7 +659,7 @@ export default function SlidePocket() {
                         Inbox · 1 new
                       </div>
                       <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
-                        ojas@twinly.tech
+                        founders@twinly.tech
                       </div>
                     </div>
 

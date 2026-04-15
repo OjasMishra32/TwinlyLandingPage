@@ -9,8 +9,8 @@ export const Root: React.FC = () => {
         component={HeroReveal}
         durationInFrames={192}
         fps={24}
-        width={1280}
-        height={720}
+        width={3840}
+        height={2160}
       />
     </>
   );

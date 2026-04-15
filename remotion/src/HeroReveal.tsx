@@ -37,7 +37,7 @@ export const HeroReveal: React.FC = () => {
   const containerY = interpolate(
     frame,
     [68, 96, 144, 190],
-    [28, 0, 0, -18],
+    [84, 0, 0, -54],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
@@ -55,7 +55,7 @@ export const HeroReveal: React.FC = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const kickerY = interpolate(frame, [120, 140], [8, 0], {
+  const kickerY = interpolate(frame, [120, 140], [24, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -69,8 +69,11 @@ export const HeroReveal: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: SITE_BG }}>
-      {/* The Veo-generated source video */}
-      <OffthreadVideo src={staticFile("source.mp4")} />
+      {/* The Veo-generated source video, lanczos-upscaled to 3840×2160
+          with a subtle unsharp mask. The source footage is still 720p
+          underneath, but every Remotion-drawn element (wordmark, vignette,
+          gradients) renders natively at 4K on top. */}
+      <OffthreadVideo src={staticFile("source-4k.mp4")} />
 
       {/* Warm color grade — pulls the video's cold blue-black toward the
           site's warm obsidian. Multiply blend darkens + warms */}
@@ -169,13 +172,13 @@ export const HeroReveal: React.FC = () => {
               frame: frame - letterDelay,
               fps,
               config: { damping: 20, stiffness: 90, mass: 0.6 },
-              from: 80,
+              from: 240,
               to: 0,
             });
             const blur = interpolate(
               frame - letterDelay,
               [0, 14],
-              [14, 0],
+              [42, 0],
               { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
             );
             const opacity = interpolate(
@@ -192,12 +195,12 @@ export const HeroReveal: React.FC = () => {
                   fontFamily,
                   fontStyle: "italic",
                   fontWeight: 400,
-                  fontSize: 232,
+                  fontSize: 696,
                   lineHeight: 0.88,
                   letterSpacing: "-0.04em",
                   color,
                   transform: `translateY(${y}px)`,
-                  filter: `blur(${blur}px) drop-shadow(0 20px 50px hsl(72 80% 58% / 0.28))`,
+                  filter: `blur(${blur}px) drop-shadow(0 60px 150px hsl(72 80% 58% / 0.28))`,
                   opacity,
                   willChange: "transform",
                 }}
@@ -210,18 +213,18 @@ export const HeroReveal: React.FC = () => {
 
         <div
           style={{
-            marginTop: 30,
+            marginTop: 90,
             opacity: kickerOpacity,
             transform: `translateY(${kickerY}px)`,
             display: "flex",
             alignItems: "center",
-            gap: 18,
+            gap: 54,
           }}
         >
           <span
             style={{
-              width: 44,
-              height: 1,
+              width: 132,
+              height: 3,
               background: "hsl(72 78% 62%)",
               display: "inline-block",
             }}
@@ -229,7 +232,7 @@ export const HeroReveal: React.FC = () => {
           <span
             style={{
               fontFamily: "JetBrains Mono, monospace",
-              fontSize: 17,
+              fontSize: 51,
               fontWeight: 500,
               letterSpacing: "0.32em",
               color: "hsl(44 28% 94%)",
@@ -240,8 +243,8 @@ export const HeroReveal: React.FC = () => {
           </span>
           <span
             style={{
-              width: 44,
-              height: 1,
+              width: 132,
+              height: 3,
               background: "hsl(72 78% 62%)",
               display: "inline-block",
             }}
