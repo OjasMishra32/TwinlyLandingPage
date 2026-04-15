@@ -1,5 +1,6 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
+import TwinReveal from "@/components/landing/TwinReveal";
 import SlideVoice from "@/components/landing/SlideVoice";
 import SlideParallel from "@/components/landing/SlideParallel";
 import SlideApproval from "@/components/landing/SlideApproval";
@@ -25,6 +26,7 @@ const Index = () => {
       <Nav />
       <main className="relative z-[2]">
         <Hero />
+        <TwinReveal />
         <SlideVoice />
         <SlideParallel />
         <SlideApproval />
