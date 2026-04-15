@@ -154,23 +154,24 @@ export default function Hero() {
           </Line>
         </h1>
 
-        {/* Promise line */}
+        {/* Promise line, clear its own breathing room above and below */}
         <Fade delay={0.42}>
-          <p
-            className="text-fg-2 mb-6 md:mb-8"
-            style={{
-              fontFamily: "'Instrument Serif', serif",
-              fontStyle: "italic",
-              fontSize: "clamp(1.5rem, 2.4vw, 2.2rem)",
-              lineHeight: 1.18,
-              letterSpacing: "-0.015em",
-              maxWidth: "22ch",
-              color: "hsl(var(--fg))",
-            }}
-          >
-            Anything you can do,{" "}
-            <span className="text-accent">twinly can.</span>
-          </p>
+          <div className="flex items-center gap-4 mb-8 md:mb-10">
+            <span className="h-px w-10 bg-accent/60 hidden sm:block" />
+            <p
+              className="text-fg"
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: "italic",
+                fontSize: "clamp(1.4rem, 2.2vw, 2rem)",
+                lineHeight: 1.12,
+                letterSpacing: "-0.015em",
+              }}
+            >
+              Anything you can do,{" "}
+              <span className="text-accent">twinly can.</span>
+            </p>
+          </div>
         </Fade>
 
         {/* Body */}
