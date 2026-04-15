@@ -1,11 +1,10 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
-import Marquee from "@/components/landing/Marquee";
-import Problem from "@/components/landing/Problem";
+import SlideVoice from "@/components/landing/SlideVoice";
+import SlideParallel from "@/components/landing/SlideParallel";
+import SlideApproval from "@/components/landing/SlideApproval";
 import UseCases from "@/components/landing/UseCases";
-import TwinEdge from "@/components/landing/TwinEdge";
-import TwinReveal from "@/components/landing/TwinReveal";
-import Trust from "@/components/landing/Trust";
+import SlideNumbers from "@/components/landing/SlideNumbers";
 import Waitlist from "@/components/landing/Waitlist";
 import Footer from "@/components/landing/Footer";
 import GrainOverlay from "@/components/landing/GrainOverlay";
@@ -23,12 +22,11 @@ const Index = () => {
       <Nav />
       <main className="relative z-[2]">
         <Hero />
-        <Marquee />
-        <TwinReveal />
-        <Problem />
+        <SlideVoice />
+        <SlideParallel />
+        <SlideApproval />
         <UseCases />
-        <TwinEdge />
-        <Trust />
+        <SlideNumbers />
         <Waitlist />
       </main>
       <Footer />
