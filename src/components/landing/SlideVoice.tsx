@@ -58,40 +58,40 @@ export default function SlideVoice() {
                 delay: 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative border border-rule p-5 md:p-6 text-left bg-bg/45"
+              className="relative border border-rule p-6 md:p-8 text-left bg-bg/45"
               style={{
                 transformStyle: "preserve-3d",
                 boxShadow: "0 30px 80px -40px rgba(0,0,0,0.6)",
               }}
             >
-              <div className="flex items-center justify-between mb-4 f-mono text-[0.52rem] font-medium tracking-[0.22em] uppercase">
+              <div className="flex items-center justify-between mb-5 f-mono text-[0.62rem] font-medium tracking-[0.22em] uppercase">
                 <span className="text-fg-4">Generic agent</span>
                 <span className="text-ember">Not you</span>
               </div>
-              <div className="text-[12.5px] md:text-[13px] leading-[1.68] text-fg-3">
-                <p className="mb-2.5">
+              <div className="text-[15px] md:text-[16px] leading-[1.7] text-fg-3">
+                <p className="mb-3">
                   Dear Comcast Customer Service Representative,
                 </p>
-                <p className="mb-2.5">
+                <p className="mb-3">
                   I hope this message finds you well. I am writing to formally
                   dispute a late payment fee in the amount of $80.00 that has
                   been applied to my account during the most recent billing cycle.
                 </p>
-                <p className="mb-2.5">
+                <p className="mb-3">
                   I would greatly appreciate it if you could kindly review the
                   circumstances surrounding this charge and consider waiving
                   the aforementioned fee at your earliest convenience.
                 </p>
-                <p className="mb-2.5">
+                <p className="mb-3">
                   Please let me know if you require any additional documentation
                   to support my request. I look forward to your favorable response.
                 </p>
                 <p className="text-fg-4">Respectfully yours,</p>
               </div>
               <div
-                className="absolute right-4 top-4 f-mono text-[0.44rem] tracking-[0.14em] uppercase text-ember/70"
+                className="absolute right-4 top-4 f-mono text-[0.54rem] tracking-[0.14em] uppercase text-ember/70"
                 style={{
-                  padding: "2px 6px",
+                  padding: "3px 8px",
                   border: "1px solid hsl(var(--ember) / 0.4)",
                 }}
               >
@@ -120,53 +120,53 @@ export default function SlideVoice() {
             >
               {/* Gmail compose header */}
               <div
-                className="flex items-center justify-between px-4 py-2.5"
+                className="flex items-center justify-between px-5 py-3"
                 style={{ background: "hsl(36 10% 11%)" }}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <span
-                    className="w-4 h-4 flex items-center justify-center"
+                    className="w-5 h-5 flex items-center justify-center"
                     style={{
                       background: "#ea4335",
                       borderRadius: "3px",
-                      fontSize: "9px",
+                      fontSize: "11px",
                       fontWeight: 800,
                       color: "#fff",
                     }}
                   >
                     M
                   </span>
-                  <span className="text-[11px] text-fg font-medium">New message</span>
+                  <span className="text-[13px] text-fg font-medium">New message</span>
                 </div>
-                <div className="flex items-center gap-2 text-fg-4">
-                  <span style={{ fontSize: "11px" }}>–</span>
-                  <span style={{ fontSize: "11px" }}>□</span>
-                  <span style={{ fontSize: "11px" }}>×</span>
+                <div className="flex items-center gap-2.5 text-fg-4">
+                  <span style={{ fontSize: "13px" }}>–</span>
+                  <span style={{ fontSize: "13px" }}>□</span>
+                  <span style={{ fontSize: "13px" }}>×</span>
                 </div>
               </div>
 
               {/* To / Subject */}
-              <div className="px-5 py-2.5 border-b border-rule/40">
-                <div className="flex items-center gap-3 py-1">
-                  <span className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4 w-[60px]">
+              <div className="px-6 py-3 border-b border-rule/40">
+                <div className="flex items-center gap-3 py-1.5">
+                  <span className="f-mono text-[0.58rem] tracking-[0.14em] uppercase text-fg-4 w-[72px]">
                     To
                   </span>
-                  <span className="text-[11.5px] text-fg-2">
+                  <span className="text-[14px] text-fg-2">
                     billing@comcast.com
                   </span>
                 </div>
-                <div className="flex items-center gap-3 py-1">
-                  <span className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4 w-[60px]">
+                <div className="flex items-center gap-3 py-1.5">
+                  <span className="f-mono text-[0.58rem] tracking-[0.14em] uppercase text-fg-4 w-[72px]">
                     Subject
                   </span>
-                  <span className="text-[11.5px] text-fg font-medium">
+                  <span className="text-[14px] text-fg font-medium">
                     $80 late fee · acct 8234192
                   </span>
                 </div>
               </div>
 
               {/* Compose body — typewriter drafts the real voice */}
-              <div className="px-5 py-4 min-h-[260px] text-[13px] md:text-[13.5px] leading-[1.65] text-fg">
+              <div className="px-6 py-5 min-h-[280px] text-[15.5px] md:text-[16px] leading-[1.65] text-fg">
                 <TypewriterText
                   as="div"
                   text="Hey,"
@@ -204,10 +204,10 @@ export default function SlideVoice() {
 
               {/* Gmail footer with Send button + cursor click */}
               <div
-                className="relative flex items-center justify-between px-4 py-3 border-t border-rule/40"
+                className="relative flex items-center justify-between px-5 py-4 border-t border-rule/40"
                 style={{ background: "hsl(36 10% 9%)" }}
               >
-                <div className="relative h-[32px] w-[118px]">
+                <div className="relative h-[40px] w-[140px]">
                   <motion.button
                     type="button"
                     initial={{ opacity: 0 }}
@@ -221,7 +221,7 @@ export default function SlideVoice() {
                       delay: 12.2,
                       times: [0, 0.15, 0.7, 1],
                     }}
-                    className="absolute inset-0 w-full bg-accent text-bg flex items-center justify-center gap-2 f-mono text-[0.58rem] font-semibold tracking-[0.16em] uppercase"
+                    className="absolute inset-0 w-full bg-accent text-bg flex items-center justify-center gap-2 f-mono text-[0.68rem] font-semibold tracking-[0.16em] uppercase"
                     style={{
                       borderRadius: "3px",
                       boxShadow:
@@ -267,8 +267,8 @@ export default function SlideVoice() {
                     className="absolute inset-0 w-full flex items-center justify-center gap-2 border border-accent/60 bg-accent/10"
                     style={{ borderRadius: "3px" }}
                   >
-                    <Check size={12} strokeWidth={3} className="text-accent" />
-                    <span className="f-mono text-[0.56rem] font-semibold tracking-[0.16em] uppercase text-accent">
+                    <Check size={14} strokeWidth={3} className="text-accent" />
+                    <span className="f-mono text-[0.66rem] font-semibold tracking-[0.16em] uppercase text-accent">
                       Sent · 0s
                     </span>
                   </motion.div>
@@ -303,10 +303,10 @@ export default function SlideVoice() {
                     </svg>
                   </motion.div>
                 </div>
-                <div className="flex items-center gap-3 text-fg-4">
-                  <span style={{ fontSize: "12px" }}>A̲</span>
-                  <span style={{ fontSize: "12px" }}>📎</span>
-                  <span style={{ fontSize: "12px" }}>🔗</span>
+                <div className="flex items-center gap-4 text-fg-4">
+                  <span style={{ fontSize: "15px" }}>A̲</span>
+                  <span style={{ fontSize: "15px" }}>📎</span>
+                  <span style={{ fontSize: "15px" }}>🔗</span>
                 </div>
               </div>
             </motion.div>

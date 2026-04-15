@@ -116,8 +116,8 @@ export default function SlidePocket() {
       align="center"
       spotlight
       visual={
-        <div className="w-full max-w-[1240px] mx-auto">
-          <div className="grid md:grid-cols-[240px_1fr] gap-6 md:gap-8 items-start">
+        <div className="w-full max-w-[1340px] mx-auto">
+          <div className="grid md:grid-cols-[260px_1fr] gap-6 md:gap-8 items-start">
             {/* LEFT: small phone with the text thread */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -282,26 +282,26 @@ export default function SlidePocket() {
               >
                 {/* Title bar */}
                 <div
-                  className="flex items-center gap-3 px-4 py-2.5 border-b border-rule/70"
+                  className="flex items-center gap-3 px-5 py-3 border-b border-rule/70"
                   style={{ background: "hsl(36 10% 11%)" }}
                 >
                   <div className="flex gap-1.5">
-                    <span className="w-[11px] h-[11px] rounded-full bg-ember/70" />
-                    <span className="w-[11px] h-[11px] rounded-full bg-fg-4" />
-                    <span className="w-[11px] h-[11px] rounded-full bg-accent/60" />
+                    <span className="w-[12px] h-[12px] rounded-full bg-ember/70" />
+                    <span className="w-[12px] h-[12px] rounded-full bg-fg-4" />
+                    <span className="w-[12px] h-[12px] rounded-full bg-accent/60" />
                   </div>
-                  <div className="flex-1 text-center f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4">
+                  <div className="flex-1 text-center f-mono text-[0.58rem] tracking-[0.14em] uppercase text-fg-4">
                     Twinly Operator · macOS
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span
-                      className="w-[5px] h-[5px] rounded-full bg-accent"
+                      className="w-[6px] h-[6px] rounded-full bg-accent"
                       style={{
                         animation: "approval-blink 1.4s ease-in-out infinite",
                         boxShadow: "0 0 6px hsl(var(--accent) / 0.7)",
                       }}
                     />
-                    <span className="f-mono text-[0.46rem] tracking-[0.14em] uppercase text-accent">
+                    <span className="f-mono text-[0.54rem] tracking-[0.14em] uppercase text-accent">
                       Working
                     </span>
                   </div>
@@ -312,7 +312,7 @@ export default function SlidePocket() {
                   {browserTabs.map((tab, i) => (
                     <motion.div
                       key={tab.label}
-                      className="relative flex-1 max-w-[180px] px-3 py-2 flex items-center gap-2 overflow-hidden"
+                      className="relative flex-1 max-w-[220px] px-3 py-2.5 flex items-center gap-2 overflow-hidden"
                       initial={{
                         background: "hsl(36 10% 8%)",
                         opacity: 0.5,
@@ -341,34 +341,34 @@ export default function SlidePocket() {
                       }}
                     >
                       <div
-                        className="w-[7px] h-[7px] rounded-full shrink-0"
+                        className="w-[8px] h-[8px] rounded-full shrink-0"
                         style={{ background: "hsl(var(--accent) / 0.7)" }}
                       />
-                      <span className="flex-1 f-mono text-[0.46rem] tracking-[0.08em] text-fg-2 truncate">
+                      <span className="flex-1 f-mono text-[0.56rem] tracking-[0.08em] text-fg-2 truncate">
                         {tab.label}
                       </span>
-                      <span className="text-fg-4 text-[10px] shrink-0">×</span>
+                      <span className="text-fg-4 text-[12px] shrink-0">×</span>
                     </motion.div>
                   ))}
-                  <div className="flex-none px-2 py-2 text-fg-4 text-[12px]">+</div>
+                  <div className="flex-none px-2.5 py-2.5 text-fg-4 text-[14px]">+</div>
                 </div>
 
                 {/* URL bar */}
                 <div
-                  className="flex items-center gap-3 px-3 py-2 border-b border-rule/60"
+                  className="flex items-center gap-3 px-4 py-2.5 border-b border-rule/60"
                   style={{ background: "hsl(36 10% 10%)" }}
                 >
-                  <div className="flex items-center gap-1.5 text-fg-4">
-                    <span style={{ fontSize: "13px" }}>‹</span>
-                    <span style={{ fontSize: "13px" }}>›</span>
-                    <span style={{ fontSize: "12px" }}>↻</span>
+                  <div className="flex items-center gap-2 text-fg-4">
+                    <span style={{ fontSize: "16px" }}>‹</span>
+                    <span style={{ fontSize: "16px" }}>›</span>
+                    <span style={{ fontSize: "14px" }}>↻</span>
                   </div>
                   <div
-                    className="flex-1 flex items-center gap-2 px-3 py-1 border border-rule/60"
+                    className="flex-1 flex items-center gap-2 px-3 py-1.5 border border-rule/60"
                     style={{ background: "hsl(36 10% 7%)", borderRadius: "999px" }}
                   >
-                    <span className="text-accent text-[8px]">🔒</span>
-                    <div className="relative h-[12px] flex-1 overflow-hidden">
+                    <span className="text-accent text-[11px]">🔒</span>
+                    <div className="relative h-[14px] flex-1 overflow-hidden">
                       {browserTabs.map((tab) => (
                         <motion.div
                           key={tab.url}
@@ -380,7 +380,7 @@ export default function SlidePocket() {
                             delay: tab.activeAt - 0.1,
                             times: [0, 0.15, 0.25, 0.9, 1],
                           }}
-                          className="absolute inset-0 f-mono text-[0.5rem] tracking-[0.04em] text-fg-3 leading-[12px]"
+                          className="absolute inset-0 f-mono text-[0.58rem] tracking-[0.04em] text-fg-3 leading-[14px]"
                         >
                           {tab.url}
                         </motion.div>
@@ -393,7 +393,7 @@ export default function SlidePocket() {
                 <div
                   className="relative"
                   style={{
-                    minHeight: "360px",
+                    minHeight: "460px",
                     background:
                       "linear-gradient(180deg, hsl(36 10% 4%) 0%, hsl(36 10% 3%) 100%)",
                   }}
@@ -408,40 +408,40 @@ export default function SlidePocket() {
                       delay: 0.55,
                       times: [0, 0.12, 0.82, 1],
                     }}
-                    className="absolute inset-0 p-5"
+                    className="absolute inset-0 p-6"
                   >
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
                         <div
-                          className="w-6 h-6 flex items-center justify-center"
+                          className="w-8 h-8 flex items-center justify-center"
                           style={{
                             background: "hsl(195 80% 55%)",
-                            borderRadius: "6px",
+                            borderRadius: "7px",
                           }}
                         >
                           <span
                             className="text-white"
-                            style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "-0.05em" }}
+                            style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "-0.05em" }}
                           >
                             K
                           </span>
                         </div>
                         <div
                           className="text-fg font-semibold"
-                          style={{ fontSize: "13px", letterSpacing: "-0.015em" }}
+                          style={{ fontSize: "16px", letterSpacing: "-0.015em" }}
                         >
                           SFO → NRT
                         </div>
-                        <div className="f-mono text-[0.5rem] tracking-[0.12em] uppercase text-fg-4">
+                        <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
                           Fri · 1 adult · 1 way
                         </div>
                       </div>
-                      <div className="f-mono text-[0.5rem] tracking-[0.12em] uppercase text-fg-4">
+                      <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
                         47 results
                       </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       {[
                         { air: "UA 837", time: "06:15 · stop", price: "$1,034" },
                         { air: "ANA 7", time: "14:10 · direct", price: "$926" },
@@ -458,7 +458,7 @@ export default function SlidePocket() {
                             delay: 0.95 + i * 0.18,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className={`relative flex items-center gap-4 px-3 py-2.5 border ${
+                          className={`relative flex items-center gap-4 px-4 py-3 border ${
                             r.hit ? "border-accent/70" : "border-rule/50"
                           }`}
                           style={{
@@ -472,18 +472,18 @@ export default function SlidePocket() {
                           }}
                         >
                           <div
-                            className="w-10 text-center f-mono text-[0.52rem] tracking-[0.12em] uppercase"
+                            className="w-14 text-center f-mono text-[0.62rem] tracking-[0.12em] uppercase"
                             style={{ color: r.hit ? "hsl(var(--accent))" : "hsl(var(--fg-3))" }}
                           >
                             {r.air}
                           </div>
-                          <div className="flex-1 text-[11px] text-fg-2">{r.time}</div>
+                          <div className="flex-1 text-[13px] text-fg-2">{r.time}</div>
                           <div
                             className={`tabular-nums ${r.hit ? "text-accent" : "text-fg"}`}
                             style={{
                               fontFamily: "'Fraunces', serif",
                               fontVariationSettings: "'SOFT' 40",
-                              fontSize: "14px",
+                              fontSize: "17px",
                               letterSpacing: "-0.02em",
                             }}
                           >
@@ -501,10 +501,10 @@ export default function SlidePocket() {
                                 damping: 14,
                                 stiffness: 300,
                               }}
-                              className="absolute right-[-8px] top-[-8px] w-5 h-5 flex items-center justify-center bg-accent text-bg"
+                              className="absolute right-[-8px] top-[-8px] w-6 h-6 flex items-center justify-center bg-accent text-bg"
                               style={{ borderRadius: "999px" }}
                             >
-                              <Check size={10} strokeWidth={3.5} />
+                              <Check size={12} strokeWidth={3.5} />
                             </motion.div>
                           )}
                         </motion.div>
@@ -552,32 +552,32 @@ export default function SlidePocket() {
                       delay: 3.85,
                       times: [0, 0.15, 0.8, 1],
                     }}
-                    className="absolute inset-0 p-5"
+                    className="absolute inset-0 p-6"
                   >
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-5">
                       <div
-                        className="w-6 h-6 flex items-center justify-center"
-                        style={{ background: "hsl(2 70% 55%)", borderRadius: "6px" }}
+                        className="w-8 h-8 flex items-center justify-center"
+                        style={{ background: "hsl(2 70% 55%)", borderRadius: "7px" }}
                       >
                         <span
                           className="text-white"
-                          style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "-0.05em" }}
+                          style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "-0.05em" }}
                         >
                           A
                         </span>
                       </div>
                       <div
                         className="text-fg font-semibold"
-                        style={{ fontSize: "13px", letterSpacing: "-0.015em" }}
+                        style={{ fontSize: "16px", letterSpacing: "-0.015em" }}
                       >
                         Passenger information
                       </div>
-                      <div className="f-mono text-[0.5rem] tracking-[0.12em] uppercase text-fg-4">
+                      <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
                         JAL 002 · Fri 11:30pm
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2.5 mb-4">
+                    <div className="grid grid-cols-2 gap-3 mb-5">
                       {[
                         { k: "First name", v: "Ojasva" },
                         { k: "Last name", v: "Mishra" },
@@ -596,16 +596,16 @@ export default function SlidePocket() {
                             delay: 4.1 + i * 0.13,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className="px-2.5 py-1.5 border border-rule/50"
+                          className="px-3.5 py-2.5 border border-rule/50"
                           style={{
                             background: "hsl(36 10% 6%)",
                             borderRadius: "3px",
                           }}
                         >
-                          <div className="f-mono text-[0.4rem] tracking-[0.14em] uppercase text-fg-4 mb-0.5">
+                          <div className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4 mb-1">
                             {f.k}
                           </div>
-                          <div className="text-[11px] text-fg font-medium">{f.v}</div>
+                          <div className="text-[13.5px] text-fg font-medium">{f.v}</div>
                         </motion.div>
                       ))}
                     </div>
@@ -615,19 +615,19 @@ export default function SlidePocket() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: "-10%" }}
                       transition={{ duration: 0.5, delay: 5.2 }}
-                      className="flex items-center justify-between px-3 py-2.5 border border-accent/60"
+                      className="flex items-center justify-between px-4 py-3 border border-accent/60"
                       style={{
                         background: "linear-gradient(90deg, hsl(var(--accent) / 0.08) 0%, hsl(var(--bg) / 0.3) 100%)",
                         borderRadius: "3px",
                       }}
                     >
-                      <div className="text-[11px] text-fg-2">Total · round trip tax included</div>
+                      <div className="text-[13px] text-fg-2">Total · round trip tax included</div>
                       <div
                         className="text-accent tabular-nums"
                         style={{
                           fontFamily: "'Fraunces', serif",
                           fontVariationSettings: "'SOFT' 40",
-                          fontSize: "18px",
+                          fontSize: "22px",
                           letterSpacing: "-0.025em",
                         }}
                       >
@@ -646,24 +646,24 @@ export default function SlidePocket() {
                       delay: 6.35,
                       times: [0, 0.15, 1],
                     }}
-                    className="absolute inset-0 p-5"
+                    className="absolute inset-0 p-6"
                   >
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-5">
                       <div className="flex items-center gap-1">
-                        <span style={{ fontSize: "13px", color: "#ea4335" }}>M</span>
+                        <span style={{ fontSize: "17px", color: "#ea4335", fontWeight: 800 }}>M</span>
                       </div>
                       <div
                         className="text-fg font-semibold"
-                        style={{ fontSize: "13px", letterSpacing: "-0.015em" }}
+                        style={{ fontSize: "16px", letterSpacing: "-0.015em" }}
                       >
                         Inbox · 1 new
                       </div>
-                      <div className="f-mono text-[0.5rem] tracking-[0.12em] uppercase text-fg-4">
+                      <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
                         ojas@twinly.tech
                       </div>
                     </div>
 
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       {[
                         { from: "Japan Airlines", subj: "Booking confirmation · JAL 002 · SFO→NRT", time: "now", hit: true },
                         { from: "Stripe", subj: "Your weekly payout summary", time: "2h" },
@@ -680,7 +680,7 @@ export default function SlidePocket() {
                             delay: 6.55 + i * 0.1,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className={`flex items-center gap-3 px-3 py-2 border ${
+                          className={`flex items-center gap-3 px-4 py-2.5 border ${
                             e.hit ? "border-accent/70" : "border-rule/40"
                           }`}
                           style={{
@@ -692,26 +692,26 @@ export default function SlidePocket() {
                           }}
                         >
                           <div
-                            className={`w-[6px] h-[6px] rounded-full shrink-0 ${
+                            className={`w-[7px] h-[7px] rounded-full shrink-0 ${
                               e.hit ? "bg-accent" : "bg-transparent"
                             }`}
                             style={e.hit ? { boxShadow: "0 0 8px hsl(var(--accent) / 0.7)" } : {}}
                           />
                           <div
-                            className={`w-[80px] text-[10.5px] truncate ${
+                            className={`w-[110px] text-[12.5px] truncate ${
                               e.hit ? "text-fg font-semibold" : "text-fg-3"
                             }`}
                           >
                             {e.from}
                           </div>
                           <div
-                            className={`flex-1 text-[10.5px] truncate ${
+                            className={`flex-1 text-[12.5px] truncate ${
                               e.hit ? "text-fg font-medium" : "text-fg-3"
                             }`}
                           >
                             {e.subj}
                           </div>
-                          <div className="f-mono text-[0.44rem] tracking-[0.1em] uppercase text-fg-4 shrink-0">
+                          <div className="f-mono text-[0.54rem] tracking-[0.1em] uppercase text-fg-4 shrink-0">
                             {e.time}
                           </div>
                         </motion.div>
@@ -722,23 +722,23 @@ export default function SlidePocket() {
 
                 {/* Action log — streams under the tab content */}
                 <div
-                  className="relative border-t border-rule/60 px-4 py-3"
+                  className="relative border-t border-rule/60 px-5 py-4"
                   style={{ background: "hsl(36 10% 7%)" }}
                 >
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-3">
                     <span
-                      className="w-[5px] h-[5px] rounded-full bg-accent"
+                      className="w-[6px] h-[6px] rounded-full bg-accent"
                       style={{
                         animation: "approval-blink 1.4s ease-in-out infinite",
                         boxShadow: "0 0 6px hsl(var(--accent) / 0.7)",
                       }}
                     />
-                    <span className="f-mono text-[0.46rem] tracking-[0.2em] uppercase text-accent">
+                    <span className="f-mono text-[0.56rem] tracking-[0.2em] uppercase text-accent">
                       Action log
                     </span>
                   </div>
                   <div
-                    className="grid gap-x-3 gap-y-0.5"
+                    className="grid gap-x-5 gap-y-1"
                     style={{
                       gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
                     }}
@@ -756,13 +756,13 @@ export default function SlidePocket() {
                         }}
                         className="flex items-center gap-2 py-0.5"
                       >
-                        <span className="f-mono text-[0.44rem] tracking-[0.06em] text-fg-4 tabular-nums shrink-0">
+                        <span className="f-mono text-[0.54rem] tracking-[0.06em] text-fg-4 tabular-nums shrink-0">
                           {entry.t}
                         </span>
                         <span className="text-accent shrink-0 flex items-center">
-                          <Check size={8} strokeWidth={3.5} />
+                          <Check size={10} strokeWidth={3.5} />
                         </span>
-                        <span className="text-[10px] text-fg-2 truncate">{entry.text}</span>
+                        <span className="text-[12px] text-fg-2 truncate">{entry.text}</span>
                       </motion.div>
                     ))}
                   </div>
