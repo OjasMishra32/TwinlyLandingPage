@@ -423,7 +423,7 @@ function PhaseReview() {
           <AiPercent from={99} to={0.2} delay={0.3} duration={2.3} />
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-10">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-10">
           {[
             { k: "GPTZero", v: "0.2%" },
             { k: "Turnitin", v: "0.1%" },
@@ -434,9 +434,9 @@ function PhaseReview() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 2.4 + i * 0.15 }}
-              className="relative border border-accent/40 bg-accent/[0.06] p-3 text-left"
+              className="relative border border-accent/40 bg-accent/[0.06] p-2.5 sm:p-3 text-left"
             >
-              <div className="f-mono text-[0.42rem] tracking-[0.2em] uppercase text-fg-4 mb-1">
+              <div className="f-mono text-[0.38rem] sm:text-[0.42rem] tracking-[0.16em] sm:tracking-[0.2em] uppercase text-fg-4 mb-1 truncate">
                 {d.k}
               </div>
               <div
@@ -444,7 +444,7 @@ function PhaseReview() {
                 style={{
                   fontFamily: "'Fraunces', serif",
                   fontVariationSettings: "'SOFT' 40",
-                  fontSize: "1.2rem",
+                  fontSize: "clamp(0.95rem, 3.4vw, 1.2rem)",
                   lineHeight: 1,
                   letterSpacing: "-0.02em",
                 }}
@@ -643,12 +643,12 @@ function PhaseSubmit() {
           damping: 14,
           stiffness: 200,
         }}
-        className="relative mt-6 border border-accent/60 bg-accent/10 px-5 py-3 flex items-center gap-4"
+        className="relative mt-6 border border-accent/60 bg-accent/10 px-4 sm:px-5 py-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 max-w-[90vw]"
         style={{
           boxShadow: "0 20px 60px -20px hsl(var(--accent) / 0.55)",
         }}
       >
-        <div className="f-mono text-[0.42rem] tracking-[0.18em] uppercase text-fg-4">
+        <div className="f-mono text-[0.4rem] sm:text-[0.42rem] tracking-[0.16em] sm:tracking-[0.18em] uppercase text-fg-4">
           Returned · 3 days later
         </div>
         <div
@@ -656,14 +656,14 @@ function PhaseSubmit() {
           style={{
             fontFamily: "'Fraunces', serif",
             fontVariationSettings: "'SOFT' 40",
-            fontSize: "2.2rem",
+            fontSize: "clamp(1.65rem, 5vw, 2.2rem)",
             letterSpacing: "-0.03em",
             lineHeight: 1,
           }}
         >
           A
         </div>
-        <div className="f-mono text-[0.42rem] tracking-[0.14em] uppercase text-accent">
+        <div className="f-mono text-[0.4rem] sm:text-[0.42rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-accent">
           "Exceptional voice"
         </div>
       </motion.div>
@@ -709,14 +709,14 @@ export default function SlideHomework() {
         <div className="max-w-[1100px] mx-auto">
           {/* Workflow stepper — lights up phase-by-phase with the active
               stage below */}
-          <div className="mb-8 md:mb-10 px-2">
-            <div className="flex items-start justify-between max-w-[940px] mx-auto gap-1">
+          <div className="mb-8 md:mb-10 px-1 sm:px-2">
+            <div className="flex items-start justify-between max-w-[940px] mx-auto gap-0.5 sm:gap-1">
               {phases.map((p, i) => {
                 const isActive = i === activeIndex && phase >= 0;
                 const isDone = i < activeIndex;
                 return (
                   <Fragment key={p.num}>
-                    <div className="flex flex-col items-center text-center shrink-0 relative w-[58px] sm:w-[92px]">
+                    <div className="flex flex-col items-center text-center shrink-0 relative w-[50px] sm:w-[92px]">
                       <motion.div
                         className="relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border"
                         style={{ borderRadius: "999px" }}
@@ -782,7 +782,7 @@ export default function SlideHomework() {
                       </div>
                     </div>
                     {i < phases.length - 1 && (
-                      <div className="flex-1 mt-4 sm:mt-5 mx-1 md:mx-2 relative h-[2px]">
+                      <div className="flex-1 mt-4 sm:mt-5 mx-0 sm:mx-1 md:mx-2 relative h-[2px] min-w-[8px]">
                         <div className="absolute inset-0 bg-rule/60" />
                         <motion.div
                           className="absolute inset-0 bg-accent origin-left"

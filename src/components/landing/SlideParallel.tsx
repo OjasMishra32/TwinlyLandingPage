@@ -160,16 +160,16 @@ export default function SlideParallel() {
                     }}
                   />
                   {/* Content */}
-                  <div className="relative p-7 md:p-8 flex flex-col h-full">
+                  <div className="relative p-5 sm:p-7 md:p-8 flex flex-col h-full">
                     {/* Top row: big number + state */}
-                    <div className="flex items-start justify-between mb-6 md:mb-7">
+                    <div className="flex items-start justify-between mb-5 md:mb-7">
                       <div
                         className="text-fg-4"
                         style={{
                           fontFamily: "'Fraunces', serif",
                           fontStyle: "italic",
                           fontVariationSettings: "'SOFT' 30",
-                          fontSize: "2.6rem",
+                          fontSize: "clamp(2rem, 5vw, 2.6rem)",
                           letterSpacing: "-0.04em",
                           lineHeight: 0.85,
                         }}
@@ -213,7 +213,7 @@ export default function SlideParallel() {
                       style={{
                         fontFamily: "'Fraunces', serif",
                         fontVariationSettings: "'SOFT' 40, 'WONK' 0",
-                        fontSize: "1.55rem",
+                        fontSize: "clamp(1.25rem, 3.4vw, 1.55rem)",
                         letterSpacing: "-0.028em",
                         lineHeight: 1.05,
                         fontWeight: 400,
@@ -262,7 +262,7 @@ export default function SlideParallel() {
                           style={{
                             fontFamily: "'Fraunces', serif",
                             fontVariationSettings: "'SOFT' 40, 'WONK' 0",
-                            fontSize: "1.4rem",
+                            fontSize: "clamp(1.15rem, 3vw, 1.4rem)",
                             letterSpacing: "-0.025em",
                             lineHeight: 1,
                             color: j.state === "approve" ? color : undefined,

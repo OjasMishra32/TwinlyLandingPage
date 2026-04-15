@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="relative border-t border-rule bg-bg-2/40 pt-20 pb-8 overflow-hidden">
-      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
-        <div className="grid md:grid-cols-[1.2fr_1fr_1fr_1fr] gap-10 md:gap-16 pb-16">
+    <footer className="relative border-t border-rule bg-bg-2/40 pt-14 md:pt-20 pb-8 overflow-hidden">
+      <div className="w-full max-w-[1680px] mx-auto px-5 sm:px-6 md:px-14">
+        <div className="grid md:grid-cols-[1.2fr_1fr_1fr_1fr] gap-8 sm:gap-10 md:gap-16 pb-12 md:pb-16">
           <div>
             <div className="flex items-center gap-3 mb-6">
               <svg viewBox="0 0 34 34" className="h-10 w-10">

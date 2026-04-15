@@ -55,7 +55,7 @@ export default function SlideNumbers() {
       visual={
         <div
           ref={ref}
-          className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-14 max-w-[1120px] mx-auto text-left"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 md:gap-14 max-w-[1120px] mx-auto text-left"
         >
           {stats.map((s, i) => (
             <motion.div
@@ -69,15 +69,15 @@ export default function SlideNumbers() {
               }}
               className="flex flex-col gap-3"
             >
-              <div className="f-mono text-[0.52rem] font-medium tracking-[0.22em] uppercase text-fg-4">
+              <div className="f-mono text-[0.46rem] sm:text-[0.52rem] font-medium tracking-[0.18em] sm:tracking-[0.22em] uppercase text-fg-4">
                 {s.k}
               </div>
               <div
-                className="text-fg flex items-baseline gap-2"
+                className="text-fg flex items-baseline gap-1.5 sm:gap-2"
                 style={{
                   fontFamily: "'Fraunces', serif",
                   fontVariationSettings: "'SOFT' 30, 'WONK' 0",
-                  fontSize: "clamp(3.4rem, 6.5vw, 7rem)",
+                  fontSize: "clamp(2.4rem, 10vw, 7rem)",
                   letterSpacing: "-0.035em",
                   lineHeight: 0.92,
                   fontWeight: 400,
