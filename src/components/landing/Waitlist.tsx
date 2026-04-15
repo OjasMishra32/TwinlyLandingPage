@@ -14,34 +14,96 @@ const intents = [
 
 const FOUNDER_EMAIL = "founders@twinly.tech";
 
+/**
+ * Waitlist backend endpoint. Set VITE_WAITLIST_ENDPOINT in your
+ * hosting env (Vercel/Netlify project settings → environment
+ * variables) to a Formspree form URL (https://formspree.io/f/XXXXX)
+ * or any JSON-POST-accepting endpoint.
+ *
+ * Formspree setup (≈ 2 minutes, 50 free submissions / month):
+ *   1. sign up at https://formspree.io
+ *   2. create a new form, copy the endpoint URL
+ *   3. set VITE_WAITLIST_ENDPOINT=https://formspree.io/f/XXXXX in Vercel
+ *   4. redeploy — submissions appear in your Formspree dashboard
+ *
+ * Until the env var is set the form falls back to the mailto: flow
+ * so nothing breaks in preview.
+ */
+const ENDPOINT = import.meta.env.VITE_WAITLIST_ENDPOINT as string | undefined;
+const LOCAL_BACKUP_KEY = "twinly.waitlist.submissions";
+
 export default function Waitlist() {
   const [email, setEmail] = useState("");
   const [intent, setIntent] = useState<string>("");
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !/.+@.+\..+/.test(email)) {
       setStatus("error");
+      setErrorMsg("Please enter a valid email");
       return;
     }
     setStatus("submitting");
+    setErrorMsg("");
 
-    const subject = encodeURIComponent(`Waitlist · ${email}`);
-    const body = encodeURIComponent(
-      [
-        `Email: ${email}`,
-        `Would hand over first: ${intent || "(not specified)"}`,
-        "",
-        "Sent from twinly.tech waitlist",
-      ].join("\n")
-    );
-    const mailto = `mailto:${FOUNDER_EMAIL}?subject=${subject}&body=${body}`;
+    const payload = {
+      email,
+      intent: intent || "(not specified)",
+      source: "twinly.tech waitlist",
+      submittedAt: new Date().toISOString(),
+    };
 
-    window.setTimeout(() => {
-      window.location.href = mailto;
+    // Local backup — always store in localStorage so submissions
+    // aren't lost if the backend is down or the env var is missing.
+    try {
+      const existing = JSON.parse(
+        localStorage.getItem(LOCAL_BACKUP_KEY) || "[]"
+      ) as unknown[];
+      existing.push(payload);
+      localStorage.setItem(LOCAL_BACKUP_KEY, JSON.stringify(existing));
+    } catch {
+      /* ignore storage failures (private mode, quota) */
+    }
+
+    if (!ENDPOINT) {
+      // Fallback: open the user's mail client with a pre-filled message.
+      const subject = encodeURIComponent(`Waitlist · ${email}`);
+      const body = encodeURIComponent(
+        [
+          `Email: ${email}`,
+          `Would hand over first: ${intent || "(not specified)"}`,
+          "",
+          "Sent from twinly.tech waitlist",
+        ].join("\n")
+      );
+      window.location.href = `mailto:${FOUNDER_EMAIL}?subject=${subject}&body=${body}`;
       setStatus("success");
-    }, 400);
+      return;
+    }
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(
+        err instanceof Error
+          ? `Submission failed (${err.message}). Try again or email us directly.`
+          : "Submission failed. Try again or email us directly."
+      );
+    }
   }
 
   return (
@@ -140,10 +202,10 @@ export default function Waitlist() {
               disabled={status === "submitting" || status === "success"}
               className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 disabled:opacity-80"
             >
-              {status === "submitting" && "Opening mail…"}
+              {status === "submitting" && "Submitting…"}
               {status === "success" && (
                 <>
-                  Hit send
+                  You're on the list
                   <span className="arrow" />
                 </>
               )}
@@ -156,14 +218,16 @@ export default function Waitlist() {
             </button>
           </div>
 
-          {status === "error" && (
+          {status === "error" && errorMsg && (
             <p className="mt-3 f-mono text-[0.6rem] tracking-[0.18em] uppercase text-ember text-left">
-              Please enter a valid email
+              {errorMsg}
             </p>
           )}
           {status === "success" && (
             <p className="mt-3 f-mono text-[0.6rem] tracking-[0.18em] uppercase text-accent text-left">
-              Your mail client opened. Hit send and you're on the list.
+              {ENDPOINT
+                ? "We got it. Founders will reach out when your slot opens."
+                : "Your mail client opened. Hit send and you're on the list."}
             </p>
           )}
 
