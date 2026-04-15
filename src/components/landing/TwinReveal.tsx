@@ -118,7 +118,7 @@ export default function TwinReveal() {
       ref={sectionRef}
       id="reveal"
       className="relative bg-bg border-t border-rule/60"
-      style={{ height: "300vh" }}
+      style={{ height: "400vh" }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <video
@@ -190,6 +190,23 @@ export default function TwinReveal() {
             buffering
           </div>
         )}
+
+        {/* Scroll progress rail on the right edge — visual proof the
+            scrub is working. As the user scrolls through the pinned
+            section, the lime fill rises from bottom to top. */}
+        <motion.div
+          style={{ opacity: metaOpacity }}
+          className="absolute top-24 bottom-24 right-6 md:right-12 z-[3] w-[2px]"
+        >
+          <div className="absolute inset-0 bg-rule/60" />
+          <motion.div
+            className="absolute inset-x-0 bottom-0 origin-bottom bg-accent"
+            style={{
+              scaleY: scrollYProgress,
+              boxShadow: "0 0 10px hsl(var(--accent) / 0.6)",
+            }}
+          />
+        </motion.div>
 
         <motion.div
           style={{ opacity: captionOpacity }}
