@@ -16,7 +16,7 @@ const stateColor: Record<string, string> = {
   Done: "hsl(var(--accent))",
 };
 
-/** "Runs in parallel" slide — grid of 6 live jobs */
+/** "Runs in parallel" — grid of 6 jobs with independent orbit drift */
 export default function SlideParallel() {
   return (
     <KeynoteSlide
@@ -41,50 +41,97 @@ export default function SlideParallel() {
           {jobs.map((j, i) => (
             <motion.div
               key={j.tag}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 40, rotateX: -8 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true, margin: "-8%" }}
               transition={{
-                duration: 0.75,
-                delay: 0.05 + i * 0.06,
+                duration: 0.85,
+                delay: 0.08 + i * 0.08,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative border border-rule p-5 text-left bg-bg/40"
+              className="relative text-left"
+              style={{
+                perspective: "1000px",
+                transformStyle: "preserve-3d",
+              }}
             >
-              <div className="flex items-center justify-between mb-3">
+              <motion.div
+                animate={{
+                  y: [0, i % 2 === 0 ? -6 : 6, 0],
+                }}
+                transition={{
+                  duration: 5.2 + i * 0.35,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4,
+                }}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="relative border border-rule bg-bg-2/40 backdrop-blur-sm p-5"
+                style={{
+                  boxShadow: "0 20px 50px -28px rgba(0,0,0,0.6)",
+                }}
+              >
+                {/* Accent rail */}
                 <span
-                  className="f-mono text-[0.52rem] font-semibold tracking-[0.2em] uppercase"
-                  style={{ color: stateColor[j.state] }}
-                >
-                  {j.tag}
-                </span>
-                <span
-                  className="f-mono text-[0.5rem] font-medium tracking-[0.18em] uppercase"
-                  style={{ color: stateColor[j.state] }}
-                >
-                  {j.state}
-                </span>
-              </div>
-              <div className="text-[15px] text-fg font-medium leading-[1.35] mb-5 min-h-[2.5em]">
-                {j.title}
-              </div>
-              <div className="h-[2px] bg-rule overflow-hidden">
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: j.p }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{
-                    duration: 1.1,
-                    delay: 0.3 + i * 0.06,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
+                  className="absolute left-0 top-0 bottom-0 w-[2px]"
                   style={{
-                    transformOrigin: "left",
                     background: stateColor[j.state],
-                    height: "100%",
+                    boxShadow:
+                      j.state === "Running"
+                        ? `0 0 10px ${stateColor[j.state]}`
+                        : undefined,
                   }}
                 />
-              </div>
+                <div className="flex items-center justify-between mb-3 pl-2">
+                  <span
+                    className="f-mono text-[0.52rem] font-semibold tracking-[0.2em] uppercase"
+                    style={{ color: stateColor[j.state] }}
+                  >
+                    {j.tag}
+                  </span>
+                  <span
+                    className="f-mono text-[0.5rem] font-medium tracking-[0.18em] uppercase"
+                    style={{ color: stateColor[j.state] }}
+                  >
+                    {j.state}
+                  </span>
+                </div>
+                <div className="text-[15px] text-fg font-medium leading-[1.35] mb-5 min-h-[2.5em] pl-2">
+                  {j.title}
+                </div>
+                <div className="h-[2px] bg-rule overflow-hidden relative">
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: j.p }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{
+                      duration: 1.2,
+                      delay: 0.5 + i * 0.08,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    style={{
+                      transformOrigin: "left",
+                      background: stateColor[j.state],
+                      height: "100%",
+                    }}
+                  />
+                  {j.state === "Running" && (
+                    <motion.div
+                      className="absolute inset-y-0 w-[40%]"
+                      animate={{ x: ["-40%", "140%"] }}
+                      transition={{
+                        duration: 2.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 1 + i * 0.2,
+                      }}
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${stateColor[j.state]}80, transparent)`,
+                      }}
+                    />
+                  )}
+                </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
