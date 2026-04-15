@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+import { Children, ReactNode, ReactElement, cloneElement, isValidElement, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 type Props = {
@@ -9,54 +9,30 @@ type Props = {
 
 /**
  * KineticHeadline — per-letter stagger reveal with independent spring
- * physics on each character. Matches anime.js-style decoded-letter
- * motion: each glyph rises from below, clears a blur, and settles on
- * its own spring.
- *
- * Accepts strings OR React nodes. Strings get split into chars for
- * per-letter animation. Nodes (like nested italic accent spans) get
- * fallback block-level animation so nested formatting still works.
+ * physics on each character. Recurses into nested React elements so
+ * nested italic accent spans still get split, but skips void elements
+ * (br, img, hr) which cannot have children.
  */
 
-function splitIntoLetters(node: ReactNode, keyPrefix = "k"): ReactNode[] {
-  if (typeof node === "string") {
-    return node.split("").map((char, i) => ({
-      char,
-      key: `${keyPrefix}-${i}`,
-    })).map(({ char, key }) => (
-      <LetterSpan key={key} char={char} />
-    ));
-  }
+const VOID_TAGS = new Set([
+  "br",
+  "hr",
+  "img",
+  "input",
+  "area",
+  "base",
+  "col",
+  "embed",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr",
+]);
 
-  if (Array.isArray(node)) {
-    return node.flatMap((child, i) =>
-      splitIntoLetters(child, `${keyPrefix}-${i}`)
-    );
-  }
-
-  // React element — recurse into children while preserving the wrapper
-  // element so its classes / styles still apply
-  if (
-    node &&
-    typeof node === "object" &&
-    "props" in (node as Record<string, unknown>)
-  ) {
-    const el = node as React.ReactElement<{ children?: ReactNode; className?: string; style?: React.CSSProperties }>;
-    const inner = splitIntoLetters(el.props.children, `${keyPrefix}-c`);
-    const Type = el.type as React.ElementType;
-    return [
-      <Type
-        key={`${keyPrefix}-wrap`}
-        className={el.props.className}
-        style={el.props.style}
-      >
-        {inner}
-      </Type>,
-    ];
-  }
-
-  return [node];
-}
+let keyCounter = 0;
+const nextKey = () => `k${++keyCounter}`;
 
 function LetterSpan({ char }: { char: string }) {
   return (
@@ -90,6 +66,39 @@ function LetterSpan({ char }: { char: string }) {
   );
 }
 
+function splitNode(node: ReactNode): ReactNode {
+  if (node == null || typeof node === "boolean") return node;
+
+  if (typeof node === "string") {
+    return Array.from(node).map((char) => (
+      <LetterSpan key={nextKey()} char={char} />
+    ));
+  }
+
+  if (typeof node === "number") {
+    return Array.from(String(node)).map((char) => (
+      <LetterSpan key={nextKey()} char={char} />
+    ));
+  }
+
+  if (Array.isArray(node)) {
+    return Children.map(node, (child) => splitNode(child));
+  }
+
+  if (isValidElement(node)) {
+    const el = node as ReactElement<{ children?: ReactNode }>;
+    const tag = typeof el.type === "string" ? el.type : "";
+    // Void elements (br, hr, img...) cannot have children — return as-is
+    if (VOID_TAGS.has(tag)) return el;
+    // Preserve the wrapper element + its props, recurse into its children
+    return cloneElement(el, {
+      children: splitNode(el.props.children ?? null),
+    });
+  }
+
+  return node;
+}
+
 export default function KineticHeadline({
   children,
   className = "sec-h2",
@@ -108,9 +117,8 @@ export default function KineticHeadline({
         delayChildren: delay,
         staggerChildren: 0.028,
       }}
-      style={{ display: "block" }}
     >
-      {splitIntoLetters(children)}
+      {splitNode(children)}
     </motion.h2>
   );
 }
