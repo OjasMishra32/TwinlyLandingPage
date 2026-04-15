@@ -12,6 +12,7 @@ import GrainOverlay from "@/components/landing/GrainOverlay";
 import AmbientMesh from "@/components/landing/AmbientMesh";
 import Loader from "@/components/landing/Loader";
 import Reticle from "@/components/landing/Reticle";
+import TimelineBadge from "@/components/landing/TimelineBadge";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
       <Reticle />
       <AmbientMesh />
       <GrainOverlay />
+      <TimelineBadge />
       <Nav />
       <main className="relative z-[2]">
         <Hero />

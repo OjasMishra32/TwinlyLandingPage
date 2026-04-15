@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import RevealH2 from "./RevealH2";
+import KineticHeadline from "./KineticHeadline";
 
 type Claim = {
   code: string;
@@ -107,11 +107,11 @@ export default function TwinEdge() {
             Positioning
           </div>
           <div>
-            <RevealH2>
+            <KineticHeadline>
               A new <span className="tw-italic text-accent">category.</span>
               <br />
               Not a smarter tab.
-            </RevealH2>
+            </KineticHeadline>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}

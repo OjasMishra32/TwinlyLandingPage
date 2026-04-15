@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import RevealH2 from "./RevealH2";
+import KineticHeadline from "./KineticHeadline";
 
 type StepStatus = "auto" | "gate" | "win";
 
@@ -352,9 +352,9 @@ export default function UseCases() {
             Playbooks
           </div>
           <div>
-            <RevealH2>
+            <KineticHeadline>
               Not a demo. An <span className="tw-italic text-accent">execution trace.</span>
-            </RevealH2>
+            </KineticHeadline>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}

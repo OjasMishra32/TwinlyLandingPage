@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import RevealH2 from "./RevealH2";
+import KineticHeadline from "./KineticHeadline";
 
 export default function Problem() {
   return (
@@ -25,11 +25,11 @@ export default function Problem() {
             The problem
           </div>
           <div>
-            <RevealH2>
+            <KineticHeadline>
               You don't want to manage <span className="tw-italic text-accent">tools.</span>
               <br />
               You want things <span className="tw-italic text-accent">handled.</span>
-            </RevealH2>
+            </KineticHeadline>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
