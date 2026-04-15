@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import SplineRobot from "./SplineRobot";
-import CharGrid from "./CharGrid";
 import ScrambleText from "./ScrambleText";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
@@ -74,9 +73,8 @@ export default function Hero() {
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
       style={{ padding: "140px 0 80px" }}
     >
-      {/* Ambient washes + kinetic dot grid */}
+      {/* Ambient wash */}
       <div className="absolute inset-0 hero-wash" aria-hidden />
-      <CharGrid />
 
       {/* Spline robot — pushed further right so it doesn't compete with text */}
       <div className="absolute inset-y-0 right-[-18%] w-full md:w-[80%] z-[1]">

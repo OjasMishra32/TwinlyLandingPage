@@ -69,9 +69,6 @@ export default function SplineRobot() {
       className="absolute inset-0 pointer-events-none"
       style={{ perspective: "1400px" }}
     >
-      {/* No floor glow, no orbital rings — nothing under the robot */}
-
-      {/* The Spline bot (or orb fallback) */}
       {enabled && !fallback && (
         <Suspense fallback={null}>
           <motion.div

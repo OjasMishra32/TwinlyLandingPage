@@ -1,18 +1,12 @@
 import { useEffect, useRef } from "react";
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 /**
- * TwinReveal — scroll-scrubbed video. The source is encoded with
- * every-frame keyframes (-g 1) so video.currentTime seeks are
- * near-instant. Scroll drives the frame position directly via a
- * spring-smoothed progress value. No image sequence, no frame
- * preload, just a 12MB MP4 that seeks as fast as you scroll.
+ * TwinReveal — scroll-scrubbed video. Source is encoded with every-
+ * frame keyframes (-g 1) so seeks are cheap. Scroll drives the frame
+ * position via a single rAF tick that reads scrollYProgress once per
+ * frame — no spring, no motion-value-event listener. Cheaper + still
+ * buttery because rAF caps us at the display's native frame rate.
  */
 
 export default function TwinReveal() {
@@ -22,14 +16,6 @@ export default function TwinReveal() {
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
-  });
-
-  // Spring smooths the scroll-to-frame mapping so the scrub feels
-  // weighted instead of jittery
-  const smoothProgress = useSpring(scrollYProgress, {
-    damping: 38,
-    stiffness: 180,
-    mass: 0.35,
   });
 
   const captionOpacity = useTransform(
@@ -43,30 +29,29 @@ export default function TwinReveal() {
     [0, 1, 1, 0]
   );
 
-  useMotionValueEvent(smoothProgress, "change", (p) => {
-    const v = videoRef.current;
-    if (!v || !v.duration) return;
-    const target = Math.max(0, Math.min(v.duration - 0.04, p * v.duration));
-    if (Math.abs(v.currentTime - target) > 0.015) {
-      v.currentTime = target;
-    }
-  });
-
-  // Make sure the video is loaded enough to seek before first scroll
+  // Single rAF loop: on every animation frame, sample scrollYProgress
+  // and seek the video if we've moved enough. Cheaper than spring +
+  // motion-value-event on every scroll tick.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     v.pause();
-    const onReady = () => {
-      if (v.readyState >= 2) {
-        // Paint the first frame
-        v.currentTime = 0;
+    let raf = 0;
+    let lastTarget = -1;
+    const tick = () => {
+      const p = scrollYProgress.get();
+      if (p >= 0 && p <= 1 && v.duration) {
+        const target = p * (v.duration - 0.04);
+        if (Math.abs(target - lastTarget) > 0.04) {
+          v.currentTime = target;
+          lastTarget = target;
+        }
       }
+      raf = requestAnimationFrame(tick);
     };
-    v.addEventListener("loadedmetadata", onReady);
-    if (v.readyState >= 2) onReady();
-    return () => v.removeEventListener("loadedmetadata", onReady);
-  }, []);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [scrollYProgress]);
 
   return (
     <section
