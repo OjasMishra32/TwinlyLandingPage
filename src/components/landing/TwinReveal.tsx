@@ -117,7 +117,7 @@ export default function TwinReveal() {
     <section
       ref={sectionRef}
       id="reveal"
-      className="relative bg-bg overflow-hidden border-t border-rule/60"
+      className="relative bg-bg border-t border-rule/60"
       style={{ height: "300vh" }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">

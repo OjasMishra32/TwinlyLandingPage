@@ -80,15 +80,12 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: "ss01", "ss02", "kern";
-    /* Prevent horizontal scroll without using overflow-clip, which
-       would break position:sticky descendants like TwinReveal */
-    max-width: 100vw;
   }
-  html { max-width: 100vw; overflow-x: hidden; }
-  /* Keep horizontal overflow contained but allow sticky to work in
-     descendant elements. The html overflow-x hidden creates the
-     scroll containment, and individual sections clip their own
-     overflow, so position:sticky still functions inside <main>. */
+  /* NO overflow / max-width on html or body. Any overflow value other
+     than visible breaks position:sticky on all descendants. Horizontal
+     bleed from absolutely-positioned children (like the hero robot) is
+     contained at the section level via overflow-hidden on those
+     specific sections — not globally. */
 
   a { color: inherit; text-decoration: none; }
   img, svg, canvas { display: block; max-width: 100%; }
