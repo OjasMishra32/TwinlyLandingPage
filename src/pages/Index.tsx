@@ -1,5 +1,6 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
+import SlideTransition from "@/components/landing/SlideTransition";
 import SlideVoice from "@/components/landing/SlideVoice";
 import SlideParallel from "@/components/landing/SlideParallel";
 import SlideApproval from "@/components/landing/SlideApproval";
@@ -25,13 +26,21 @@ const Index = () => {
       <Nav />
       <main className="relative z-[2]">
         <Hero />
+        <SlideTransition />
         <SlideVoice />
+        <SlideTransition />
         <SlideParallel />
+        <SlideTransition />
         <SlideApproval />
+        <SlideTransition />
         <SlideCode />
+        <SlideTransition />
         <SlideHomework />
+        <SlideTransition />
         <SlideTax />
+        <SlideTransition />
         <SlideTrip />
+        <SlideTransition />
         <SlideNumbers />
         <Waitlist />
       </main>
