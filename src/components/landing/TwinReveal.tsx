@@ -1,22 +1,26 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
 /**
- * TwinReveal — scroll-scrubbed reveal video, sized so the whole
- * video plays inside the visible sticky window and fades out
- * cleanly before the section unpins.
+ * TwinReveal — scroll-scrubbed reveal video. Dead simple version:
  *
- * Fix for earlier bugs:
- *  - 320vh section left 100vh of "below-sticky" dead scroll that
- *    read as black space after the video. Shortened to 220vh so
- *    the visible and scrubbable ranges are tight
- *  - Video duration was scrubbed 0→1 across the full progress
- *    which meant the last ~15% of the visible range played the
- *    fade-out-to-black frames. Now the full video plays across
- *    progress 0→0.85, and 0.85→1 fades the element opacity to 0
- *    as a graceful exit
- *  - Ready-gate buffers the target time and applies it the moment
- *    the video is decodable, so first-scroll still renders
+ *  - Section is 200vh. Sticky child is 100vh. Progress 0→1 spans
+ *    exactly the 100vh of scroll where the child is pinned.
+ *  - Video is encoded with every-frame keyframes and trimmed to
+ *    7.5s (no fade-out tail), so there's no "black frame" at the end.
+ *  - currentTime seeks are driven by useMotionValueEvent on
+ *    scrollYProgress, which fires synchronously on every scroll
+ *    tick. No rAF polling, no useMotionTemplate string wrappers.
+ *  - Ready-gate: listens to canplay / loadeddata. If scroll happens
+ *    before the video is decodable, the latest target time is
+ *    buffered and applied the moment it becomes ready.
+ *  - Element opacity is a straight transform from progress, so the
+ *    video fades in/out gracefully at the section boundaries.
  */
 
 export default function TwinReveal() {
@@ -32,103 +36,92 @@ export default function TwinReveal() {
     offset: ["start start", "end end"],
   });
 
-  // The video scrubs across 0 → 0.85 of the visible progress.
-  // The remaining 0.85 → 1 is the fade-out window.
+  // No video opacity transform — the video stays at full opacity for the
+  // entire scrub. The sticky pins it while the user scrolls, the video plays
+  // through, and when the section bottom catches the viewport bottom the
+  // sticky releases naturally and the section scrolls past.
   const captionOpacity = useTransform(
     scrollYProgress,
-    [0.3, 0.48, 0.78, 0.9],
+    [0.42, 0.55, 0.85, 0.95],
     [0, 1, 1, 0]
   );
   const metaOpacity = useTransform(
     scrollYProgress,
-    [0, 0.06, 0.88, 0.98],
+    [0, 0.06, 0.92, 1],
     [0, 1, 1, 0]
   );
-  const videoFade = useTransform(
-    scrollYProgress,
-    [0, 0.05, 0.85, 1],
-    [0, 1, 1, 0]
-  );
-  // Combine the fade opacity with the ready state
-  const videoOpacity = useMotionTemplate`${videoFade}`;
 
+  // Apply target time directly on scroll. No rAF polling, no spring,
+  // no throttling. currentTime seeks on an all-keyframe MP4 are cheap.
+  useMotionValueEvent(scrollYProgress, "change", (p) => {
+    const v = videoRef.current;
+    if (!v || !v.duration) {
+      targetRef.current = p;
+      return;
+    }
+    const target = Math.max(0, Math.min(v.duration - 0.02, p * v.duration));
+    targetRef.current = target;
+    if (!readyRef.current) return;
+    if (Math.abs(target - appliedRef.current) < 0.025) return;
+    try {
+      v.currentTime = target;
+      appliedRef.current = target;
+    } catch {
+      /* silently skip — will retry on next scroll event */
+    }
+  });
+
+  // Preload + ready gate
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-
     v.pause();
     try {
       v.load();
     } catch {
       /* noop */
     }
-
     const markReady = () => {
       if (v.readyState >= 2 && !readyRef.current) {
         readyRef.current = true;
         setReady(true);
-        const t = Math.max(0, Math.min(v.duration - 0.04, targetRef.current));
+        // Apply the last buffered target (if any), otherwise start at 0
+        const bufferedProgress = targetRef.current;
+        const target =
+          bufferedProgress <= 1
+            ? Math.max(
+                0,
+                Math.min(v.duration - 0.02, bufferedProgress * v.duration)
+              )
+            : bufferedProgress;
         try {
-          v.currentTime = t;
-          appliedRef.current = t;
+          v.currentTime = target;
+          appliedRef.current = target;
         } catch {
           /* noop */
         }
       }
     };
-
     v.addEventListener("loadedmetadata", markReady);
     v.addEventListener("loadeddata", markReady);
     v.addEventListener("canplay", markReady);
-    v.addEventListener("canplaythrough", markReady);
     if (v.readyState >= 2) markReady();
-
-    let raf = 0;
-    const tick = () => {
-      const p = scrollYProgress.get();
-      if (v.duration) {
-        // Full video plays across 0 → 0.85 progress. After that,
-        // the element fades out (see videoFade transform above).
-        const scrubP = Math.max(0, Math.min(1, p / 0.85));
-        const target = Math.max(
-          0,
-          Math.min(v.duration - 0.04, scrubP * v.duration)
-        );
-        targetRef.current = target;
-        if (
-          readyRef.current &&
-          Math.abs(target - appliedRef.current) > 0.033
-        ) {
-          try {
-            v.currentTime = target;
-            appliedRef.current = target;
-          } catch {
-            /* noop */
-          }
-        }
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
     return () => {
-      cancelAnimationFrame(raf);
       v.removeEventListener("loadedmetadata", markReady);
       v.removeEventListener("loadeddata", markReady);
       v.removeEventListener("canplay", markReady);
-      v.removeEventListener("canplaythrough", markReady);
     };
-  }, [scrollYProgress]);
+  }, []);
 
   return (
     <section
       ref={sectionRef}
       id="reveal"
       className="relative bg-bg overflow-hidden border-t border-rule/60"
-      style={{ height: "220vh" }}
+      style={{ height: "300vh" }}
     >
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
-        <motion.video
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <video
           ref={videoRef}
           src="/hero-reveal.mp4"
           muted
@@ -136,18 +129,13 @@ export default function TwinReveal() {
           preload="auto"
           disablePictureInPicture
           className="absolute inset-0 h-full w-full object-cover"
-          style={{
-            opacity: ready ? videoOpacity : 0.3,
-            transition: ready
-              ? undefined
-              : "opacity 0.6s ease",
-          }}
+          style={{ opacity: ready ? 1 : 0.3, transition: "opacity 0.5s ease" }}
         />
 
         {/* Edge fades into site bg */}
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-[26%] pointer-events-none z-[1]"
+          className="absolute inset-x-0 top-0 h-[24%] pointer-events-none z-[1]"
           style={{
             background:
               "linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0.6) 50%, transparent 100%)",
@@ -155,7 +143,7 @@ export default function TwinReveal() {
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 h-[36%] pointer-events-none z-[1]"
+          className="absolute inset-x-0 bottom-0 h-[34%] pointer-events-none z-[1]"
           style={{
             background:
               "linear-gradient(0deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0.7) 45%, transparent 100%)",
@@ -178,7 +166,6 @@ export default function TwinReveal() {
           }}
         />
 
-        {/* Top-left meta */}
         <motion.div
           style={{ opacity: metaOpacity }}
           className="absolute top-10 left-6 md:top-16 md:left-14 z-[3] flex items-center gap-3"
@@ -189,7 +176,6 @@ export default function TwinReveal() {
           </span>
         </motion.div>
 
-        {/* Top-right spec */}
         <motion.div
           style={{ opacity: metaOpacity }}
           className="absolute top-10 right-6 md:top-16 md:right-14 z-[3] flex items-center gap-3 f-mono text-[0.54rem] tracking-[0.2em] uppercase text-fg-3"
@@ -205,7 +191,6 @@ export default function TwinReveal() {
           </div>
         )}
 
-        {/* Bottom caption, serif italic */}
         <motion.div
           style={{ opacity: captionOpacity }}
           className="absolute bottom-16 md:bottom-24 left-0 right-0 z-[3] text-center px-6"
