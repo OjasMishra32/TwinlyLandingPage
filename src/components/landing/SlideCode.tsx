@@ -1,12 +1,4 @@
 import { motion } from "framer-motion";
-import {
-  Camera,
-  Sparkles,
-  Truck,
-  Check,
-  Github,
-  ArrowUpRight,
-} from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
@@ -45,17 +37,17 @@ const code: CodeLine[] = [
 
 const features = [
   {
-    Icon: Camera,
+    code: "01",
     title: "Snap your fridge",
     body: "One photo. We identify every ingredient.",
   },
   {
-    Icon: Sparkles,
+    code: "02",
     title: "AI picks recipes",
     body: "Dietary, budget, and taste, all accounted for.",
   },
   {
-    Icon: Truck,
+    code: "03",
     title: "Delivered tonight",
     body: "Missing ingredients arrive in 90 minutes.",
   },
@@ -340,17 +332,14 @@ export default function SlideCode() {
                       }}
                     >
                       <div
-                        className="flex items-center justify-center w-5 h-5 mb-2 border border-accent/40"
+                        className="f-mono text-accent mb-2"
                         style={{
-                          background: "hsl(var(--accent) / 0.1)",
-                          borderRadius: "3px",
+                          fontSize: "7px",
+                          letterSpacing: "0.2em",
+                          fontWeight: 600,
                         }}
                       >
-                        <f.Icon
-                          size={10}
-                          strokeWidth={1.8}
-                          className="text-accent"
-                        />
+                        {f.code}
                       </div>
                       <div
                         className="text-fg font-medium mb-1"
@@ -391,23 +380,25 @@ export default function SlideCode() {
             }}
           >
             {[
-              { k: "Repo", v: "mealmap/web", Icon: Github },
-              { k: "Build", v: "14.3s", Icon: Check },
-              { k: "Lighthouse", v: "98", Icon: Sparkles },
-              { k: "Deploy", v: "mealmap.app", Icon: ArrowUpRight },
+              { k: "Repo", v: "mealmap/web" },
+              { k: "Build", v: "14.3s" },
+              { k: "Lighthouse", v: "98" },
+              { k: "Deploy", v: "mealmap.app" },
             ].map((s, i) => (
               <div
                 key={s.k}
                 className={`flex-1 flex items-center gap-3 px-4 py-3 ${i < 3 ? "border-r border-rule/60" : ""}`}
               >
                 <div
-                  className="flex items-center justify-center w-7 h-7 border border-accent/40 shrink-0"
+                  className="flex items-center justify-center w-7 h-7 border border-accent/50 shrink-0 f-mono text-accent tabular-nums"
                   style={{
                     background: "hsl(var(--accent) / 0.08)",
-                    borderRadius: "5px",
+                    fontSize: "0.55rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.04em",
                   }}
                 >
-                  <s.Icon size={12} strokeWidth={1.8} className="text-accent" />
+                  0{i + 1}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="f-mono text-[0.48rem] tracking-[0.2em] uppercase text-fg-4">

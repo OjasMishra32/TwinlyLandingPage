@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Bug, Users, PhoneCall } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
@@ -12,8 +11,8 @@ import KeynoteSlide from "./KeynoteSlide";
 type State = "running" | "approve" | "done";
 
 type Job = {
+  code: string;
   tag: string;
-  Icon: typeof Bug;
   title: string;
   state: State;
   progress: number;
@@ -24,8 +23,8 @@ type Job = {
 
 const jobs: Job[] = [
   {
+    code: "01",
     tag: "DEBUG",
-    Icon: Bug,
     title: "Fixing a Sentry crash from 2am",
     state: "running",
     progress: 0.72,
@@ -34,8 +33,8 @@ const jobs: Job[] = [
     subLabel: "git-blamed PR #812 · wrote regression test · pushing fix",
   },
   {
+    code: "02",
     tag: "OUTREACH",
-    Icon: Users,
     title: "DM'ing 240 VCs in your voice",
     state: "approve",
     progress: 0.96,
@@ -44,8 +43,8 @@ const jobs: Job[] = [
     subLabel: "Crunchbase scraped · each opener tuned to their last tweet",
   },
   {
+    code: "03",
     tag: "CALL",
-    Icon: PhoneCall,
     title: "On the phone with Geico · 47 min",
     state: "done",
     progress: 1,
@@ -149,22 +148,20 @@ export default function SlideParallel() {
                   />
                   {/* Content */}
                   <div className="relative p-7 md:p-8 flex flex-col h-full">
-                    {/* Top row: icon + state */}
+                    {/* Top row: big number + state */}
                     <div className="flex items-start justify-between mb-7 md:mb-9">
                       <div
-                        className="flex items-center justify-center w-11 h-11 border"
+                        className="text-fg-4"
                         style={{
-                          borderColor: color,
-                          background: `${color
-                            .replace("hsl(", "hsla(")
-                            .replace(")", ", 0.06)")}`,
+                          fontFamily: "'Fraunces', serif",
+                          fontStyle: "italic",
+                          fontVariationSettings: "'SOFT' 30",
+                          fontSize: "2.6rem",
+                          letterSpacing: "-0.04em",
+                          lineHeight: 0.85,
                         }}
                       >
-                        <j.Icon
-                          size={18}
-                          strokeWidth={1.5}
-                          style={{ color }}
-                        />
+                        {j.code}
                       </div>
                       <div className="flex items-center gap-2">
                         <span

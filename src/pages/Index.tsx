@@ -9,6 +9,7 @@ import SlideCode from "@/components/landing/SlideCode";
 import SlideHomework from "@/components/landing/SlideHomework";
 import SlideTax from "@/components/landing/SlideTax";
 import SlideTrip from "@/components/landing/SlideTrip";
+import SlideMontage from "@/components/landing/SlideMontage";
 import SlideNumbers from "@/components/landing/SlideNumbers";
 import Waitlist from "@/components/landing/Waitlist";
 import Footer from "@/components/landing/Footer";
@@ -36,6 +37,7 @@ const Index = () => {
         <SlideHomework />
         <SlideTax />
         <SlideTrip />
+        <SlideMontage />
         <SlideNumbers />
         <Waitlist />
       </main>

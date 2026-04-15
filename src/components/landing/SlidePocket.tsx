@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import { Plane, Check } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
+import { Check } from "./icons";
 
 /**
  * SlidePocket — "just text it". A big iPhone mockup with a full
- * iMessage-style Twinly thread. Messages stagger in, a live working
- * indicator pulses, a rich action card appears mid-conversation,
- * the approval lands, and Twinly replies with a surprise insight.
- * Full device chrome: titanium bezel, Dynamic Island, status bar.
+ * chat thread in the native Twinly iOS app. Messages stagger in, a
+ * live working indicator pulses, a rich action card appears mid-
+ * conversation, the approval lands, and Twinly replies with a
+ * surprise insight. Full device chrome: titanium bezel, Dynamic
+ * Island, status bar.
  */
 
 type BubbleProps = {
@@ -119,13 +120,16 @@ function FlightCard({ delay }: { delay: number }) {
         <div className="p-3">
           <div className="flex items-center gap-2 mb-2">
             <div
-              className="w-6 h-6 flex items-center justify-center border border-accent/40"
+              className="w-6 h-6 flex items-center justify-center border border-accent/40 text-accent f-mono"
               style={{
                 background: "hsl(var(--accent) / 0.1)",
                 borderRadius: "6px",
+                fontSize: "7px",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
               }}
             >
-              <Plane size={11} strokeWidth={2} className="text-accent" />
+              FLT
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[10.5px] text-fg font-semibold leading-tight">
@@ -187,9 +191,9 @@ export default function SlidePocket() {
       }
       body={
         <>
-          One-tap install, ready in 60 seconds. Twinly lives in iMessage
-          after that — text a request, watch it work, tap to approve. No
-          browser extension, no agent window, no prompts. Just you texting.
+          Download the native Twinly app from the App Store. One-tap install,
+          ready in 60 seconds. Text a request, watch it work, tap to approve.
+          No browser extension, no agent window, no prompts. Just you texting.
         </>
       }
       align="center"

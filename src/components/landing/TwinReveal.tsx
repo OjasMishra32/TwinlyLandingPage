@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 
 /**
- * TwinReveal — scroll-scrubbed reveal video. Reliability plan:
- *  1. Preload: preload="auto" + explicit .load() on mount so the
- *     video is fetched before the user scrolls to it.
- *  2. Single rAF loop samples scrollYProgress every frame, stores
- *     the target time in a ref, applies it via v.currentTime only
- *     when the delta is meaningful and readyState >= 2.
- *  3. If the scroll event fires before the video is ready, the
- *     target time is buffered — the first canplay event applies it.
- *  4. Initial frame is painted explicitly on loadedmetadata so you
- *     never see a blank section on first paint.
- *  5. Source is encoded with every-frame keyframes (-g 1) so seeks
- *     are near-instant.
+ * TwinReveal — scroll-scrubbed reveal video, sized so the whole
+ * video plays inside the visible sticky window and fades out
+ * cleanly before the section unpins.
+ *
+ * Fix for earlier bugs:
+ *  - 320vh section left 100vh of "below-sticky" dead scroll that
+ *    read as black space after the video. Shortened to 220vh so
+ *    the visible and scrubbable ranges are tight
+ *  - Video duration was scrubbed 0→1 across the full progress
+ *    which meant the last ~15% of the visible range played the
+ *    fade-out-to-black frames. Now the full video plays across
+ *    progress 0→0.85, and 0.85→1 fades the element opacity to 0
+ *    as a graceful exit
+ *  - Ready-gate buffers the target time and applies it the moment
+ *    the video is decodable, so first-scroll still renders
  */
 
 export default function TwinReveal() {
@@ -29,23 +32,30 @@ export default function TwinReveal() {
     offset: ["start start", "end end"],
   });
 
+  // The video scrubs across 0 → 0.85 of the visible progress.
+  // The remaining 0.85 → 1 is the fade-out window.
   const captionOpacity = useTransform(
     scrollYProgress,
-    [0.36, 0.5, 0.84, 0.96],
+    [0.3, 0.48, 0.78, 0.9],
     [0, 1, 1, 0]
   );
   const metaOpacity = useTransform(
     scrollYProgress,
-    [0, 0.06, 0.94, 1],
+    [0, 0.06, 0.88, 0.98],
     [0, 1, 1, 0]
   );
+  const videoFade = useTransform(
+    scrollYProgress,
+    [0, 0.05, 0.85, 1],
+    [0, 1, 1, 0]
+  );
+  // Combine the fade opacity with the ready state
+  const videoOpacity = useMotionTemplate`${videoFade}`;
 
-  // Mount: preload video aggressively and set up rAF scrub loop
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
-    // Pause and force load
     v.pause();
     try {
       v.load();
@@ -57,7 +67,6 @@ export default function TwinReveal() {
       if (v.readyState >= 2 && !readyRef.current) {
         readyRef.current = true;
         setReady(true);
-        // Seek to whatever the buffered target is right now
         const t = Math.max(0, Math.min(v.duration - 0.04, targetRef.current));
         try {
           v.currentTime = t;
@@ -72,16 +81,24 @@ export default function TwinReveal() {
     v.addEventListener("loadeddata", markReady);
     v.addEventListener("canplay", markReady);
     v.addEventListener("canplaythrough", markReady);
-    // In case the video was already loaded by the time the listeners attached
     if (v.readyState >= 2) markReady();
 
     let raf = 0;
     const tick = () => {
       const p = scrollYProgress.get();
       if (v.duration) {
-        const target = Math.max(0, Math.min(v.duration - 0.04, p * v.duration));
+        // Full video plays across 0 → 0.85 progress. After that,
+        // the element fades out (see videoFade transform above).
+        const scrubP = Math.max(0, Math.min(1, p / 0.85));
+        const target = Math.max(
+          0,
+          Math.min(v.duration - 0.04, scrubP * v.duration)
+        );
         targetRef.current = target;
-        if (readyRef.current && Math.abs(target - appliedRef.current) > 0.033) {
+        if (
+          readyRef.current &&
+          Math.abs(target - appliedRef.current) > 0.033
+        ) {
           try {
             v.currentTime = target;
             appliedRef.current = target;
@@ -108,10 +125,10 @@ export default function TwinReveal() {
       ref={sectionRef}
       id="reveal"
       className="relative bg-bg overflow-hidden border-t border-rule/60"
-      style={{ height: "320vh" }}
+      style={{ height: "220vh" }}
     >
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
-        <video
+        <motion.video
           ref={videoRef}
           src="/hero-reveal.mp4"
           muted
@@ -120,18 +137,20 @@ export default function TwinReveal() {
           disablePictureInPicture
           className="absolute inset-0 h-full w-full object-cover"
           style={{
-            opacity: ready ? 1 : 0.35,
-            transition: "opacity 0.7s ease",
+            opacity: ready ? videoOpacity : 0.3,
+            transition: ready
+              ? undefined
+              : "opacity 0.6s ease",
           }}
         />
 
-        {/* Edge fades that blend the video into the site background */}
+        {/* Edge fades into site bg */}
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-[28%] pointer-events-none z-[1]"
+          className="absolute inset-x-0 top-0 h-[26%] pointer-events-none z-[1]"
           style={{
             background:
-              "linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0.65) 50%, transparent 100%)",
+              "linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0.6) 50%, transparent 100%)",
           }}
         />
         <div
@@ -180,7 +199,6 @@ export default function TwinReveal() {
           <span className="text-accent">1920 × 1080</span>
         </motion.div>
 
-        {/* Loading sentinel if the video hasn't painted yet */}
         {!ready && (
           <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-[4] f-mono text-[0.52rem] tracking-[0.22em] uppercase text-fg-4">
             buffering

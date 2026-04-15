@@ -1,29 +1,29 @@
 import { motion } from "framer-motion";
-import { Plane, Hotel, Star, MapPin, ArrowRight } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
+import { Arrow, Pin } from "./icons";
 
 /**
  * SlideTrip — the phone is the hero of the slide, dead center. iOS
- * 17 / 18 visual language: SF-style bold sans, generous 16/20 spacing,
- * tinted accent buttons, rounded list rows. The flow: header, map
- * card, three list rows, total summary, pinned CTA.
+ * visual language: SF-style bold sans, generous 16/20 spacing,
+ * tinted accent buttons, rounded list rows. Mono code labels
+ * instead of icons in the list rows so the UI reads as real product.
  */
 
 const bookings = [
   {
-    Icon: Plane,
+    code: "FLT",
     title: "SFO → JFK",
     sub: "Delta · Fri 7:40am · 5h 30m",
     price: "$312",
   },
   {
-    Icon: Hotel,
+    code: "HTL",
     title: "Made Hotel · NoMad",
     sub: "2 nights · king · breakfast",
     price: "$486",
   },
   {
-    Icon: Star,
+    code: "SAT",
     title: "Saturday plan",
     sub: "Brunch · MoMA · dinner reso",
     price: "$140",
@@ -231,15 +231,14 @@ export default function SlideTrip() {
                       className="absolute"
                       style={{ left: "55%", top: "50%", transform: "translate(-50%, -100%)" }}
                     >
-                      <MapPin
-                        size={20}
-                        strokeWidth={2.4}
+                      <div
                         className="text-accent relative z-[2]"
                         style={{
                           filter: "drop-shadow(0 0 10px hsl(var(--accent) / 0.85))",
-                          fill: "hsl(var(--accent))",
                         }}
-                      />
+                      >
+                        <Pin size={20} strokeWidth={2} />
+                      </div>
                       <motion.div
                         initial={{ scale: 0.6, opacity: 0.6 }}
                         animate={{ scale: 2.6, opacity: 0 }}
@@ -280,14 +279,24 @@ export default function SlideTrip() {
                         }}
                       >
                         <div
-                          className="w-9 h-9 flex items-center justify-center shrink-0"
+                          className="w-11 h-11 flex items-center justify-center shrink-0"
                           style={{
                             background:
                               "linear-gradient(135deg, hsl(var(--accent) / 0.18) 0%, hsl(var(--accent) / 0.04) 100%)",
                             borderRadius: "10px",
                           }}
                         >
-                          <b.Icon size={15} strokeWidth={2.2} className="text-accent" />
+                          <span
+                            className="text-accent"
+                            style={{
+                              fontFamily: "'JetBrains Mono', monospace",
+                              fontSize: "8.5px",
+                              fontWeight: 600,
+                              letterSpacing: "0.12em",
+                            }}
+                          >
+                            {b.code}
+                          </span>
                         </div>
                         <div className="flex-1 min-w-0" style={{ fontFamily: "'Hanken Grotesk', system-ui" }}>
                           <div className="flex items-baseline justify-between gap-2">
@@ -302,7 +311,9 @@ export default function SlideTrip() {
                             {b.sub}
                           </div>
                         </div>
-                        <ArrowRight size={11} strokeWidth={2.5} className="text-fg-4 shrink-0" />
+                        <div className="text-fg-4 shrink-0">
+                          <Arrow size={11} strokeWidth={2} />
+                        </div>
                       </motion.div>
                     ))}
                   </div>

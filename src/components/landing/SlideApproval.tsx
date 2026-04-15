@@ -5,8 +5,8 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowRight, Check, Command, CornerDownLeft } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
+import { Check, Arrow } from "./icons";
 
 /**
  * SlideApproval — cinematic approval-interface mockup with a 3D mouse
@@ -244,9 +244,8 @@ export default function SlideApproval() {
                   >
                     <Check size={14} strokeWidth={2.5} />
                     Approve &amp; send
-                    <span className="flex items-center gap-0.5 ml-2 opacity-70">
-                      <Command size={10} strokeWidth={2} />
-                      <CornerDownLeft size={10} strokeWidth={2} />
+                    <span className="ml-2 f-mono opacity-70 tabular-nums" style={{ fontSize: "0.62rem" }}>
+                      ⌘↵
                     </span>
                   </button>
                   <button
@@ -257,7 +256,7 @@ export default function SlideApproval() {
                   </button>
                   <span className="ml-auto flex items-center gap-1.5 f-mono text-[0.5rem] tracking-[0.16em] uppercase text-fg-4">
                     Hold
-                    <ArrowRight size={9} strokeWidth={2} />
+                    <Arrow size={9} strokeWidth={2} />
                     Discard
                   </span>
                 </motion.div>

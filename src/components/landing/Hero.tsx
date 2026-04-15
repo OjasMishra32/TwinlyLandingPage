@@ -89,13 +89,13 @@ export default function Hero() {
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
 
-      {/* Spline robot. Mobile: full-bleed behind text (dimmed). Desktop:
-          hard-left anchor at 58% so the robot can never bleed into the text
-          column, no matter the zoom or viewport width. overflow-clipped. */}
+      {/* Spline robot. Wrapper has NO overflow-hidden so the wave arm
+          doesn't get clipped. Instead, the text column is protected by
+          a hard left wash that fully covers the left 58% (see below). */}
       <div
-        className="absolute inset-y-0 right-0 md:left-[58%] md:right-[-6%]
+        className="absolute inset-y-0 right-[-10%] md:left-[52%] md:right-[-10%]
                    w-full md:w-auto z-[1]
-                   opacity-40 md:opacity-100 overflow-hidden"
+                   opacity-40 md:opacity-100"
       >
         <div className="relative h-full w-full">
           <SplineRobot />
@@ -114,10 +114,10 @@ export default function Hero() {
       />
       <div
         aria-hidden
-        className="absolute inset-y-0 left-0 w-[60%] z-[2] pointer-events-none hidden md:block"
+        className="absolute inset-y-0 left-0 w-[58%] z-[2] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 80%, hsl(var(--bg) / 0.5) 95%, transparent 100%)",
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 85%, hsl(var(--bg) / 0.92) 94%, hsl(var(--bg) / 0.4) 100%)",
         }}
       />
 
