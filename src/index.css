@@ -79,9 +79,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    overflow-x: clip;
     font-feature-settings: "ss01", "ss02", "kern";
+    /* Prevent horizontal scroll without using overflow-clip, which
+       would break position:sticky descendants like TwinReveal */
+    max-width: 100vw;
   }
+  html { max-width: 100vw; overflow-x: hidden; }
+  /* Keep horizontal overflow contained but allow sticky to work in
+     descendant elements. The html overflow-x hidden creates the
+     scroll containment, and individual sections clip their own
+     overflow, so position:sticky still functions inside <main>. */
 
   a { color: inherit; text-decoration: none; }
   img, svg, canvas { display: block; max-width: 100%; }

@@ -20,7 +20,7 @@ import Reticle from "@/components/landing/Reticle";
 
 const Index = () => {
   return (
-    <div className="relative bg-bg text-fg min-h-screen overflow-x-clip">
+    <div className="relative bg-bg text-fg min-h-screen">
       <Loader />
       <Reticle />
       <AmbientMesh />
