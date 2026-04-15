@@ -152,18 +152,18 @@ export default function SlideCode() {
               />
 
               {/* Chrome bar */}
-              <div className="relative flex items-center gap-3 px-4 py-3 border-b border-rule/70 bg-bg-3/50">
-                <div className="flex gap-1.5">
-                  <span className="w-[10px] h-[10px] rounded-full bg-ember/60" />
-                  <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
-                  <span className="w-[10px] h-[10px] rounded-full bg-accent/60" />
+              <div className="relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-rule/70 bg-bg-3/50">
+                <div className="flex gap-1.5 shrink-0">
+                  <span className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-full bg-ember/60" />
+                  <span className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-full bg-fg-4" />
+                  <span className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-full bg-accent/60" />
                 </div>
-                <div className="flex items-center gap-4 ml-2 f-mono text-[0.52rem] tracking-[0.14em] uppercase">
+                <div className="flex items-center gap-3 sm:gap-4 ml-1 sm:ml-2 f-mono text-[0.48rem] sm:text-[0.52rem] tracking-[0.14em] uppercase min-w-0">
                   <span className="text-accent">page.tsx</span>
-                  <span className="text-fg-4">hero.tsx</span>
-                  <span className="text-fg-4">focus-chart.tsx</span>
+                  <span className="hidden sm:inline text-fg-4">hero.tsx</span>
+                  <span className="hidden md:inline text-fg-4">focus-chart.tsx</span>
                 </div>
-                <div className="ml-auto flex items-center gap-2 f-mono text-[0.5rem] tracking-[0.18em] uppercase text-accent">
+                <div className="ml-auto flex items-center gap-2 f-mono text-[0.46rem] sm:text-[0.5rem] tracking-[0.18em] uppercase text-accent shrink-0">
                   <span
                     className="w-[6px] h-[6px] rounded-full bg-accent"
                     style={{
@@ -190,17 +190,17 @@ export default function SlideCode() {
               {/* Code area with line numbers */}
               <div
                 ref={codeBodyRef}
-                className="relative flex text-[11.5px] leading-[1.85] text-left"
+                className="relative flex text-[10.5px] sm:text-[11.5px] leading-[1.85] text-left overflow-hidden"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 {/* Line number gutter */}
-                <div className="flex-shrink-0 pt-4 pb-6 pl-4 pr-3 text-right text-fg-4 select-none border-r border-rule/40">
+                <div className="flex-shrink-0 pt-4 pb-6 pl-3 sm:pl-4 pr-2 sm:pr-3 text-right text-fg-4 select-none border-r border-rule/40">
                   {code.map((_, i) => (
                     <div key={i}>{i + 1}</div>
                   ))}
                 </div>
                 {/* Code lines */}
-                <div className="flex-1 pt-4 pb-6 pl-4 pr-5 overflow-hidden">
+                <div className="flex-1 min-w-0 pt-4 pb-6 pl-3 sm:pl-4 pr-3 sm:pr-5 overflow-x-auto">
                   {code.map((line, i) => {
                     const isLast = i === code.length - 1;
                     return (
@@ -587,7 +587,7 @@ export default function SlideCode() {
 
             {/* Log body */}
             <div
-              className="relative px-4 md:px-6 py-4 md:py-5 text-[11.5px] leading-[1.95] text-left"
+              className="relative px-3 sm:px-4 md:px-6 py-4 md:py-5 text-[9.5px] sm:text-[11.5px] leading-[1.85] sm:leading-[1.95] text-left overflow-x-auto"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               <motion.div

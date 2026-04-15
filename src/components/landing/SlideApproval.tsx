@@ -406,24 +406,24 @@ export default function SlideApproval() {
             >
               {/* macOS-style chrome */}
               <div
-                className="flex items-center gap-3 px-5 py-3.5 border-b border-rule/80"
+                className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 sm:py-3.5 border-b border-rule/80"
                 style={{ background: "hsl(var(--bg-3) / 0.7)" }}
               >
-                <div className="flex gap-1.5">
-                  <span className="w-[11px] h-[11px] rounded-full bg-ember/70" />
-                  <span className="w-[11px] h-[11px] rounded-full bg-fg-4" />
-                  <span className="w-[11px] h-[11px] rounded-full bg-accent/70" />
+                <div className="flex gap-1.5 shrink-0">
+                  <span className="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px] rounded-full bg-ember/70" />
+                  <span className="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px] rounded-full bg-fg-4" />
+                  <span className="w-[10px] h-[10px] sm:w-[11px] sm:h-[11px] rounded-full bg-accent/70" />
                 </div>
-                <div className="flex items-center gap-3 ml-2">
-                  <span className="f-mono text-[0.52rem] tracking-[0.22em] uppercase text-accent">
+                <div className="flex items-center gap-2 sm:gap-3 ml-1 sm:ml-2 min-w-0">
+                  <span className="f-mono text-[0.48rem] sm:text-[0.52rem] tracking-[0.2em] sm:tracking-[0.22em] uppercase text-accent whitespace-nowrap">
                     twinly · approval
                   </span>
-                  <span className="f-mono text-[0.5rem] tracking-[0.16em] uppercase text-fg-4">
+                  <span className="hidden sm:inline f-mono text-[0.5rem] tracking-[0.16em] uppercase text-fg-4">
                     · 6 pending · 2 live
                   </span>
                 </div>
-                <div className="ml-auto flex items-center gap-3">
-                  <span className="flex items-center gap-1.5 f-mono text-[0.48rem] tracking-[0.18em] uppercase text-fg-4">
+                <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
+                  <span className="hidden sm:flex items-center gap-1.5 f-mono text-[0.48rem] tracking-[0.18em] uppercase text-fg-4">
                     <motion.span
                       className="w-[5px] h-[5px] rounded-full bg-accent"
                       animate={{ opacity: [1, 0.35, 1] }}
@@ -431,7 +431,7 @@ export default function SlideApproval() {
                     />
                     sync'd
                   </span>
-                  <span className="f-mono text-[0.52rem] tracking-[0.16em] uppercase text-fg-3">
+                  <span className="f-mono text-[0.48rem] sm:text-[0.52rem] tracking-[0.16em] uppercase text-fg-3 tabular-nums">
                     <LiveClock />
                   </span>
                 </div>
@@ -443,7 +443,7 @@ export default function SlideApproval() {
                 style={{ transform: "translateZ(40px)" }}
               >
                 {/* LEFT — queue */}
-                <div className="border-b md:border-b-0 md:border-r border-rule/70 p-5 md:p-5 relative overflow-hidden">
+                <div className="border-b md:border-b-0 md:border-r border-rule/70 p-4 sm:p-5 relative overflow-hidden">
                   {/* Subtle vertical sheen, ambient */}
                   <motion.div
                     aria-hidden
@@ -551,7 +551,7 @@ export default function SlideApproval() {
                 </div>
 
                 {/* RIGHT — active detail */}
-                <div className="p-6 md:p-8">
+                <div className="p-4 sm:p-6 md:p-8">
                   {/* Landlord email snippet — grounds the stakes.
                       This is the incoming message that triggered the
                       twin's draft. Red-highlighted dollar amounts
@@ -624,7 +624,7 @@ export default function SlideApproval() {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, margin: "-8%" }}
                     transition={{ duration: 0.5, delay: 0.9 }}
-                    className="relative mb-5 flex items-stretch gap-0 overflow-hidden"
+                    className="relative mb-5 grid grid-cols-2 sm:grid-cols-4 gap-0 overflow-hidden"
                   >
                     {activitySteps.map((step, i) => (
                       <motion.div
@@ -637,7 +637,7 @@ export default function SlideApproval() {
                           delay: 1.0 + i * 0.18,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className="flex-1 relative flex items-center gap-2 px-3 py-2 border-t border-b border-rule/50"
+                        className="relative flex items-center gap-2 px-2.5 sm:px-3 py-2 border-t border-b border-rule/50"
                         style={{
                           background:
                             i === activitySteps.length - 1
@@ -786,7 +786,7 @@ export default function SlideApproval() {
                   {/* Stats strip — with live count-up on the annual
                       save so the savings actually earn themselves on
                       screen. */}
-                  <div className="grid grid-cols-3 gap-4 mb-6 py-5 border-y border-rule">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 py-5 border-y border-rule">
                     {[
                       { k: "Comps pulled", v: 18, prefix: "", suffix: "", sub: "on your block" },
                       { k: "Tickets cited", v: 6, prefix: "", suffix: "", sub: "unresolved" },
@@ -804,7 +804,7 @@ export default function SlideApproval() {
                         }}
                         className="relative"
                       >
-                        <div className="f-mono text-[0.48rem] tracking-[0.2em] uppercase text-fg-4 mb-1.5">
+                        <div className="f-mono text-[0.42rem] sm:text-[0.48rem] tracking-[0.16em] sm:tracking-[0.2em] uppercase text-fg-4 mb-1.5">
                           {s.k}
                         </div>
                         <div
@@ -812,7 +812,7 @@ export default function SlideApproval() {
                           style={{
                             fontFamily: "'Fraunces', serif",
                             fontVariationSettings: "'SOFT' 40",
-                            fontSize: "1.8rem",
+                            fontSize: "clamp(1.15rem, 3.6vw, 1.8rem)",
                             letterSpacing: "-0.028em",
                             lineHeight: 1,
                             textShadow: s.highlight
@@ -842,11 +842,14 @@ export default function SlideApproval() {
                     viewport={{ once: true, margin: "-8%" }}
                     transition={{ duration: 0.6, delay: 0.9 }}
                   >
-                    <div className="relative h-[44px] w-[218px]">
+                    <div className="relative h-[44px] w-full max-w-[218px] sm:w-[218px]">
                       {/* Orbital particle sparks around the approve
                           button. Eight tiny lime dots ride invisible
                           ellipses at different radii and speeds so
-                          the button feels charged. */}
+                          the button feels charged. Hidden on mobile
+                          since the orbits sit well beyond the card's
+                          visible area. */}
+                      <div className="hidden sm:block absolute inset-0">
                       {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
                         const rX = 150 + (i % 3) * 16;
                         const rY = 32 + (i % 2) * 8;
@@ -882,6 +885,7 @@ export default function SlideApproval() {
                           />
                         );
                       })}
+                      </div>
                       <motion.button
                         type="button"
                         initial={{ opacity: 1 }}

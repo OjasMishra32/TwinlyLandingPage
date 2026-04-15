@@ -57,7 +57,7 @@ export default function SlideHomework() {
         <div className="max-w-[1280px] mx-auto">
           {/* Workflow stepper — lights up phase-by-phase as Twinly runs */}
           <div className="mb-10 md:mb-14 px-2">
-            <div className="flex items-start justify-between max-w-[940px] mx-auto">
+            <div className="flex items-start justify-between max-w-[940px] mx-auto gap-1">
               {phases.map((p, i) => (
                 <Fragment key={p.num}>
                   <motion.div
@@ -69,8 +69,7 @@ export default function SlideHomework() {
                       delay: 0.1 + i * 0.08,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="flex flex-col items-center text-center shrink-0 relative"
-                    style={{ width: "92px" }}
+                    className="flex flex-col items-center text-center shrink-0 relative w-[58px] sm:w-[92px]"
                   >
                     <motion.div
                       initial={{
@@ -97,11 +96,11 @@ export default function SlideHomework() {
                         times: [0, 0.3, 1],
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className="relative w-10 h-10 flex items-center justify-center border"
+                      className="relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border"
                       style={{ borderRadius: "999px" }}
                     >
                       <span
-                        className="f-mono text-[0.58rem] font-bold tabular-nums"
+                        className="f-mono text-[0.5rem] sm:text-[0.58rem] font-bold tabular-nums"
                         style={{ color: "hsl(var(--accent))" }}
                       >
                         {p.num}
@@ -121,10 +120,10 @@ export default function SlideHomework() {
                         }}
                       />
                     </motion.div>
-                    <div className="f-mono text-[0.5rem] tracking-[0.18em] uppercase text-fg font-semibold mt-2.5">
+                    <div className="f-mono text-[0.42rem] sm:text-[0.5rem] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-fg font-semibold mt-2 sm:mt-2.5 leading-tight">
                       {p.label}
                     </div>
-                    <div className="f-mono text-[0.44rem] tracking-[0.1em] uppercase text-fg-4 mt-1 leading-tight">
+                    <div className="hidden sm:block f-mono text-[0.44rem] tracking-[0.1em] uppercase text-fg-4 mt-1 leading-tight">
                       {p.detail}
                     </div>
                   </motion.div>

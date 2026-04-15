@@ -178,28 +178,28 @@ export default function SlideTax() {
             </div>
 
             {/* Taxpayer info strip */}
-            <div className="grid grid-cols-3 gap-4 px-5 md:px-7 py-3.5 border-b border-rule/60">
-              <div>
-                <div className="f-mono text-[0.42rem] tracking-[0.18em] uppercase text-fg-4 mb-1">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 px-4 sm:px-5 md:px-7 py-3.5 border-b border-rule/60">
+              <div className="min-w-0">
+                <div className="f-mono text-[0.38rem] sm:text-[0.42rem] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-fg-4 mb-1">
                   Taxpayer
                 </div>
-                <div className="text-[12px] text-fg font-medium leading-none">
+                <div className="text-[10.5px] sm:text-[12px] text-fg font-medium leading-none truncate">
                   Ojasva Mishra
                 </div>
               </div>
-              <div>
-                <div className="f-mono text-[0.42rem] tracking-[0.18em] uppercase text-fg-4 mb-1">
+              <div className="min-w-0">
+                <div className="f-mono text-[0.38rem] sm:text-[0.42rem] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-fg-4 mb-1">
                   SSN
                 </div>
-                <div className="text-[12px] text-fg font-medium tabular-nums leading-none">
+                <div className="text-[10.5px] sm:text-[12px] text-fg font-medium tabular-nums leading-none truncate">
                   ***-**-8234
                 </div>
               </div>
-              <div className="text-right">
-                <div className="f-mono text-[0.42rem] tracking-[0.18em] uppercase text-fg-4 mb-1">
-                  Filing status
+              <div className="text-right min-w-0">
+                <div className="f-mono text-[0.38rem] sm:text-[0.42rem] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-fg-4 mb-1">
+                  Filing
                 </div>
-                <div className="text-[12px] text-fg font-medium leading-none">
+                <div className="text-[10.5px] sm:text-[12px] text-fg font-medium leading-none truncate">
                   Single
                 </div>
               </div>

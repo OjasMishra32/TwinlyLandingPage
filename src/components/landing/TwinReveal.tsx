@@ -178,11 +178,12 @@ export default function TwinReveal() {
 
         <motion.div
           style={{ opacity: metaOpacity }}
-          className="absolute top-10 right-6 md:top-16 md:right-14 z-[3] flex items-center gap-3 f-mono text-[0.54rem] tracking-[0.2em] uppercase text-fg-3"
+          className="absolute top-10 right-6 md:top-16 md:right-14 z-[3] flex items-center gap-2 sm:gap-3 f-mono text-[0.5rem] sm:text-[0.54rem] tracking-[0.18em] sm:tracking-[0.2em] uppercase text-fg-3"
         >
-          <span>scroll to reveal</span>
+          <span className="hidden sm:inline">scroll to reveal</span>
+          <span className="sm:hidden">scroll</span>
           <span className="text-fg-4">·</span>
-          <span className="text-accent">1920 × 1080</span>
+          <span className="text-accent">1920×1080</span>
         </motion.div>
 
         {!ready && (

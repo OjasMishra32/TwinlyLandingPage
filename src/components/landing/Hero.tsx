@@ -84,7 +84,10 @@ export default function Hero() {
     <section
       id="top"
       className="relative min-h-[100svh] flex flex-col justify-center overflow-x-clip"
-      style={{ paddingTop: "140px", paddingBottom: "80px" }}
+      style={{
+        paddingTop: "clamp(104px, 15vh, 140px)",
+        paddingBottom: "clamp(60px, 8vh, 80px)",
+      }}
     >
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
@@ -98,9 +101,9 @@ export default function Hero() {
           (TwinReveal has bg-bg, which would otherwise paint over the arm
           and make it look faded). */}
       <div
-        className="absolute top-0 -bottom-[240px] right-[-10%] md:left-[52%] md:right-[-10%]
-                   w-full md:w-auto z-[30]
-                   opacity-40 md:opacity-100
+        className="absolute top-0 -bottom-[140px] md:-bottom-[240px] right-[-20%] md:left-[52%] md:right-[-10%]
+                   w-[140%] md:w-auto z-[30]
+                   opacity-[0.22] md:opacity-100
                    pointer-events-none"
       >
         <div className="relative h-full w-full pointer-events-auto">
@@ -138,12 +141,12 @@ export default function Hero() {
 
         {/* Headline */}
         <h1
-          className="text-fg mb-8 md:mb-10"
+          className="text-fg mb-7 md:mb-10"
           style={{
             fontFamily: "'Fraunces', serif",
             fontOpticalSizing: "auto",
             fontVariationSettings: "'SOFT' 40, 'WONK' 0",
-            fontSize: "clamp(2.6rem, 8.4vw, 9.6rem)",
+            fontSize: "clamp(2.3rem, 8.4vw, 9.6rem)",
             lineHeight: 0.98,
             letterSpacing: "-0.03em",
             fontWeight: 400,
@@ -166,14 +169,14 @@ export default function Hero() {
         {/* Promise line, same serif family as the headline for cohesion */}
         <Fade delay={0.42}>
           <p
-            className="text-fg-2 mb-9 md:mb-12"
+            className="text-fg-2 mb-8 md:mb-12"
             style={{
               fontFamily: "'Fraunces', serif",
               fontStyle: "italic",
               fontOpticalSizing: "auto",
               fontVariationSettings: "'SOFT' 40, 'WONK' 0",
               fontWeight: 400,
-              fontSize: "clamp(1.65rem, 2.8vw, 2.6rem)",
+              fontSize: "clamp(1.4rem, 2.8vw, 2.6rem)",
               lineHeight: 1.14,
               letterSpacing: "-0.022em",
               maxWidth: "22ch",
@@ -231,7 +234,7 @@ export default function Hero() {
         <Fade delay={0.78}>
           <div
             ref={statsRef}
-            className="grid grid-cols-3 gap-5 sm:gap-8 md:gap-12 pt-7 md:pt-8 border-t border-rule max-w-[680px]"
+            className="grid grid-cols-3 gap-3 sm:gap-8 md:gap-12 pt-6 md:pt-8 border-t border-rule max-w-[680px]"
           >
             {[
               { k: "Tasks / day", v: 12, d: 0, em: "avg" },

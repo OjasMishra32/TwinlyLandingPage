@@ -577,7 +577,7 @@ export default function SlidePocket() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 mb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-5">
                       {[
                         { k: "First name", v: "Ojasva" },
                         { k: "Last name", v: "Mishra" },
@@ -737,12 +737,7 @@ export default function SlidePocket() {
                       Action log
                     </span>
                   </div>
-                  <div
-                    className="grid gap-x-5 gap-y-1"
-                    style={{
-                      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                    }}
-                  >
+                  <div className="grid gap-x-5 gap-y-1 grid-cols-1 sm:grid-cols-2">
                     {log.map((entry, i) => (
                       <motion.div
                         key={i}

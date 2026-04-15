@@ -156,7 +156,7 @@ export default function KeynoteSlide({
             fontOpticalSizing: "auto",
             fontVariationSettings: "'SOFT' 40, 'WONK' 0",
             fontWeight: 400,
-            fontSize: "clamp(2.6rem, 7.6vw, 9rem)",
+            fontSize: "clamp(2.25rem, 7.6vw, 9rem)",
             lineHeight: 0.98,
             letterSpacing: "-0.028em",
             maxWidth: align === "center" ? "18ch" : "16ch",
@@ -180,7 +180,7 @@ export default function KeynoteSlide({
             style={{
               y: bodyY,
               opacity: bodyOpacity,
-              fontSize: "clamp(1.1rem, 1.4vw, 1.4rem)",
+              fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
               lineHeight: 1.52,
               maxWidth: "52ch",
               fontWeight: 400,

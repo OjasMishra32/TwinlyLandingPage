@@ -143,7 +143,7 @@ export default function Waitlist() {
             fontOpticalSizing: "auto",
             fontVariationSettings: "'SOFT' 40, 'WONK' 0",
             fontWeight: 400,
-            fontSize: "clamp(2.6rem, 7.6vw, 9rem)",
+            fontSize: "clamp(2.3rem, 7.6vw, 9rem)",
             lineHeight: 0.98,
             letterSpacing: "-0.028em",
             maxWidth: "14ch",
@@ -200,7 +200,7 @@ export default function Waitlist() {
             <button
               type="submit"
               disabled={status === "submitting" || status === "success"}
-              className="btn primary h-14 min-w-[200px] justify-center !py-0 !px-6 disabled:opacity-80"
+              className="btn primary h-14 w-full sm:w-auto sm:min-w-[200px] justify-center !py-0 !px-6 disabled:opacity-80"
             >
               {status === "submitting" && "Submitting…"}
               {status === "success" && (

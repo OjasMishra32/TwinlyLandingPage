@@ -110,7 +110,7 @@ const TaskCard = memo(function TaskCard({ task }: { task: Task }) {
 
   return (
     <div
-      className="relative shrink-0 w-[300px] md:w-[340px] text-left border border-rule-hi/60 overflow-hidden"
+      className="relative shrink-0 w-[248px] md:w-[340px] text-left border border-rule-hi/60 overflow-hidden"
       style={{
         background:
           "linear-gradient(180deg, hsl(var(--bg-2) / 0.85) 0%, hsl(var(--bg) / 0.85) 100%)",
@@ -322,7 +322,7 @@ export default function SlideMontage() {
       }
       align="center"
       visual={
-        <div className="max-w-[1760px] mx-auto w-full">
+        <div className="max-w-[1760px] mx-auto w-full -mx-5 sm:-mx-8 md:mx-auto">
           {/* The whole montage scene. Edge fades left/right so ribbons
               appear/disappear into the page bg instead of hard-cutting. */}
           <div
@@ -374,7 +374,7 @@ export default function SlideMontage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-8%" }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-8 md:mt-10 max-w-[920px] mx-auto text-left p-7 md:p-9 overflow-hidden"
+            className="relative mt-8 md:mt-10 max-w-[920px] mx-5 sm:mx-8 md:mx-auto text-left p-5 sm:p-7 md:p-9 overflow-hidden"
             style={{
               background:
                 "linear-gradient(135deg, hsl(var(--accent) / 0.12) 0%, hsl(var(--accent) / 0.02) 100%)",
@@ -427,7 +427,7 @@ export default function SlideMontage() {
                 fontFamily: "'Fraunces', serif",
                 fontStyle: "italic",
                 fontVariationSettings: "'SOFT' 40",
-                fontSize: "clamp(1.6rem, 2.4vw, 2.4rem)",
+                fontSize: "clamp(1.35rem, 2.4vw, 2.4rem)",
                 lineHeight: 1.02,
                 letterSpacing: "-0.03em",
               }}
@@ -440,14 +440,14 @@ export default function SlideMontage() {
             </div>
 
             {/* Stat strip at the bottom of the banner */}
-            <div className="relative mt-5 pt-4 border-t border-accent/20 grid grid-cols-3 gap-4">
+            <div className="relative mt-5 pt-4 border-t border-accent/20 grid grid-cols-3 gap-2 sm:gap-4">
               {[
                 { k: "Jobs shipped", v: "2,847" },
                 { k: "Hours saved", v: "9,312" },
                 { k: "Approve rate", v: "94%" },
               ].map((s) => (
                 <div key={s.k}>
-                  <div className="f-mono text-[0.44rem] tracking-[0.18em] uppercase text-fg-4 mb-1">
+                  <div className="f-mono text-[0.4rem] sm:text-[0.44rem] tracking-[0.18em] uppercase text-fg-4 mb-1">
                     {s.k}
                   </div>
                   <div
@@ -455,7 +455,7 @@ export default function SlideMontage() {
                     style={{
                       fontFamily: "'Fraunces', serif",
                       fontVariationSettings: "'SOFT' 40",
-                      fontSize: "1.4rem",
+                      fontSize: "clamp(1.05rem, 3vw, 1.4rem)",
                       letterSpacing: "-0.028em",
                       lineHeight: 1,
                     }}
