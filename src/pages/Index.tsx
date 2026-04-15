@@ -4,6 +4,7 @@ import TwinReveal from "@/components/landing/TwinReveal";
 import SlideVoice from "@/components/landing/SlideVoice";
 import SlideParallel from "@/components/landing/SlideParallel";
 import SlideApproval from "@/components/landing/SlideApproval";
+import SlidePocket from "@/components/landing/SlidePocket";
 import SlideCode from "@/components/landing/SlideCode";
 import SlideHomework from "@/components/landing/SlideHomework";
 import SlideTax from "@/components/landing/SlideTax";
@@ -30,6 +31,7 @@ const Index = () => {
         <SlideVoice />
         <SlideParallel />
         <SlideApproval />
+        <SlidePocket />
         <SlideCode />
         <SlideHomework />
         <SlideTax />
