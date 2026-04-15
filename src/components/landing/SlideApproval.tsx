@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  animate,
   motion,
+  useInView,
   useMotionValue,
   useSpring,
   useTransform,
@@ -119,6 +121,195 @@ function Countdown() {
     </span>
   );
 }
+
+/**
+ * Animated number count-up that fires once when the element scrolls
+ * into view. Used on the $7,200 annual save tile so the savings feel
+ * earned, not just printed.
+ */
+function AnimatedCounter({
+  to,
+  prefix = "",
+  suffix = "",
+  duration = 1.8,
+}: {
+  to: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-8%" });
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, to, {
+      duration,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (v) => setVal(v),
+    });
+    return controls.stop;
+  }, [inView, to, duration]);
+  return (
+    <span ref={ref} className="tabular-nums">
+      {prefix}
+      {Math.round(val).toLocaleString()}
+      {suffix}
+    </span>
+  );
+}
+
+/**
+ * The 18 comparable rental units the twin pulled from your block.
+ * Deterministic so the dots land at the same positions every render.
+ * Range is $2,800 – $3,700 so all three reference markers
+ * (block average, your counter, your current, landlord ask) fit
+ * cleanly on the y-axis.
+ */
+const comparableRentals = [
+  2820, 2950, 3020, 2880, 3150, 3080, 2950, 3220, 2880, 3020, 3100, 2900, 3050,
+  3180, 2970, 3090, 3010, 2940,
+];
+
+const RENT_MIN = 2800;
+const RENT_MAX = 3700;
+const BLOCK_AVG = 3020;
+const TWIN_COUNTER = 3200;
+const YOUR_CURRENT = 3400;
+const LANDLORD_ASK = 3586;
+
+/**
+ * Mini scatter chart of 18 comparable rentals on your block with
+ * four reference lines (block avg, your counter, your current,
+ * landlord ask) so the user can SEE the argument the draft is
+ * making, not just read about it. Dots fall into place on scroll
+ * and the reference lines draw left-to-right in sequence.
+ */
+function ScatterChart() {
+  const height = 130;
+  const padTop = 14;
+  const padBottom = 26;
+  const plotHeight = height - padTop - padBottom;
+
+  const yFor = (rent: number) =>
+    padTop + plotHeight * (1 - (rent - RENT_MIN) / (RENT_MAX - RENT_MIN));
+
+  const markers = [
+    { label: "Block avg", value: BLOCK_AVG, color: "hsl(var(--fg-4))", delay: 0.4, dashed: true },
+    { label: "Counter", value: TWIN_COUNTER, color: "hsl(var(--accent))", delay: 0.6, dashed: false },
+    { label: "Current", value: YOUR_CURRENT, color: "hsl(var(--fg-2))", delay: 0.8, dashed: true },
+    { label: "Landlord ask", value: LANDLORD_ASK, color: "hsl(var(--ember))", delay: 1.0, dashed: false },
+  ];
+
+  return (
+    <div className="relative w-full">
+      <div className="flex items-baseline justify-between mb-2">
+        <div className="f-mono text-[0.48rem] tracking-[0.22em] uppercase text-fg-4">
+          18 comps · rent / mo
+        </div>
+        <div className="f-mono text-[0.44rem] tracking-[0.14em] uppercase text-fg-4">
+          pulled 2m ago · rentcast api
+        </div>
+      </div>
+
+      <svg
+        viewBox={`0 0 600 ${height}`}
+        preserveAspectRatio="none"
+        className="w-full"
+        style={{ height: `${height}px`, overflow: "visible" }}
+      >
+        {/* Faint horizontal gridlines at $200 intervals */}
+        {[3000, 3200, 3400, 3600].map((v) => (
+          <line
+            key={v}
+            x1="0"
+            x2="600"
+            y1={yFor(v)}
+            y2={yFor(v)}
+            stroke="hsl(var(--rule))"
+            strokeWidth="0.5"
+            strokeOpacity="0.4"
+          />
+        ))}
+
+        {/* Reference lines draw-in */}
+        {markers.map((m) => (
+          <g key={m.label}>
+            <motion.line
+              x1="0"
+              x2="600"
+              y1={yFor(m.value)}
+              y2={yFor(m.value)}
+              stroke={m.color}
+              strokeWidth="1.4"
+              strokeDasharray={m.dashed ? "3 3" : undefined}
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 0.95 }}
+              viewport={{ once: true, margin: "-8%" }}
+              transition={{ duration: 0.95, delay: m.delay, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                filter: !m.dashed ? `drop-shadow(0 0 4px ${m.color})` : undefined,
+              }}
+            />
+            <motion.text
+              x="596"
+              y={yFor(m.value) - 4}
+              fill={m.color}
+              fontSize="8"
+              textAnchor="end"
+              fontFamily="'JetBrains Mono', monospace"
+              style={{ letterSpacing: "0.12em", textTransform: "uppercase" }}
+              initial={{ opacity: 0, x: 8 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-8%" }}
+              transition={{ duration: 0.5, delay: m.delay + 0.6 }}
+            >
+              {m.label} · ${m.value.toLocaleString()}
+            </motion.text>
+          </g>
+        ))}
+
+        {/* 18 comp dots, evenly spaced horizontally */}
+        {comparableRentals.map((rent, i) => {
+          const cx = 14 + (i / (comparableRentals.length - 1)) * (600 - 28);
+          const cy = yFor(rent);
+          return (
+            <motion.circle
+              key={i}
+              cx={cx}
+              cy={cy}
+              r="3"
+              fill="hsl(var(--fg-3))"
+              initial={{ opacity: 0, cy: height - padBottom }}
+              whileInView={{ opacity: 1, cy }}
+              viewport={{ once: true, margin: "-8%" }}
+              transition={{
+                duration: 0.6,
+                delay: 0.1 + i * 0.035,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              style={{
+                filter: "drop-shadow(0 0 2px hsl(var(--fg-3) / 0.5))",
+              }}
+            />
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * The 4 analysis steps the twin took before drafting. Shown as a
+ * horizontal breadcrumb above the draft so the reader sees the
+ * actual work, not just the output.
+ */
+const activitySteps = [
+  { num: "01", label: "Scanned listings", detail: "127 on Zillow + RentCast" },
+  { num: "02", label: "Matched block", detail: "18 units within 2 blocks" },
+  { num: "03", label: "Pulled tickets", detail: "6 unresolved since 2024" },
+  { num: "04", label: "Drafted counter", detail: "94% confidence · your voice" },
+];
 
 export default function SlideApproval() {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -361,6 +552,116 @@ export default function SlideApproval() {
 
                 {/* RIGHT — active detail */}
                 <div className="p-6 md:p-8">
+                  {/* Landlord email snippet — grounds the stakes.
+                      This is the incoming message that triggered the
+                      twin's draft. Red-highlighted dollar amounts
+                      make the demand visceral. */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="relative mb-5 border border-ember/30 overflow-hidden"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, hsl(var(--ember) / 0.05) 0%, hsl(var(--bg) / 0.4) 100%)",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    <div
+                      className="flex items-center gap-2 px-4 py-2 border-b border-ember/20"
+                      style={{ background: "hsl(var(--ember) / 0.06)" }}
+                    >
+                      <div
+                        className="w-4 h-4 flex items-center justify-center shrink-0 border border-ember/50"
+                        style={{
+                          background: "hsl(var(--ember) / 0.12)",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        <span className="f-mono text-[0.42rem] font-bold text-ember">
+                          G
+                        </span>
+                      </div>
+                      <span className="f-mono text-[0.46rem] tracking-[0.18em] uppercase text-ember/90 truncate">
+                        Greenwood Property Mgmt · legal@greenwood-pm.com
+                      </span>
+                      <span className="ml-auto f-mono text-[0.44rem] tracking-[0.12em] uppercase text-fg-4">
+                        Tue 9:41am
+                      </span>
+                    </div>
+                    <div className="px-4 py-3">
+                      <div className="f-mono text-[0.46rem] tracking-[0.14em] uppercase text-fg-4 mb-1.5">
+                        Subject · Lease renewal — rate adjustment
+                      </div>
+                      <p
+                        className="text-fg-2 italic"
+                        style={{
+                          fontSize: "12.5px",
+                          lineHeight: 1.55,
+                          fontFamily: "'Fraunces', serif",
+                        }}
+                      >
+                        "Per your lease, we're renewing at a{" "}
+                        <b className="not-italic text-ember font-semibold">
+                          12% increase
+                        </b>{" "}
+                        effective next month. New rate:{" "}
+                        <b className="not-italic text-ember font-semibold tabular-nums">
+                          $3,586 / mo
+                        </b>
+                        . Please confirm by Friday or we'll be forced to list
+                        the unit."
+                      </p>
+                    </div>
+                  </motion.div>
+
+                  {/* Activity breadcrumb — the 4 steps the twin took
+                      before drafting. Each step fills in sequence to
+                      show actual work happened. */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.5, delay: 0.9 }}
+                    className="relative mb-5 flex items-stretch gap-0 overflow-hidden"
+                  >
+                    {activitySteps.map((step, i) => (
+                      <motion.div
+                        key={step.num}
+                        initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+                        whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                        viewport={{ once: true, margin: "-8%" }}
+                        transition={{
+                          duration: 0.55,
+                          delay: 1.0 + i * 0.18,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="flex-1 relative flex items-center gap-2 px-3 py-2 border-t border-b border-rule/50"
+                        style={{
+                          background:
+                            i === activitySteps.length - 1
+                              ? "linear-gradient(90deg, hsl(var(--accent) / 0.1) 0%, hsl(var(--bg) / 0.4) 100%)"
+                              : "hsl(var(--bg) / 0.35)",
+                          borderLeft: i === 0 ? "1px solid hsl(var(--rule) / 0.5)" : undefined,
+                          borderRight: "1px solid hsl(var(--rule) / 0.5)",
+                        }}
+                      >
+                        <span className="flex items-center justify-center w-4 h-4 border border-accent/60 text-accent shrink-0">
+                          <Check size={8} strokeWidth={3} />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="f-mono text-[0.4rem] tracking-[0.18em] uppercase text-accent">
+                            {step.num} · {step.label}
+                          </div>
+                          <div className="f-mono text-[0.4rem] tracking-[0.08em] text-fg-4 truncate">
+                            {step.detail}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+
                   {/* Status row */}
                   <div className="flex flex-wrap items-center gap-3 mb-5">
                     <span className="flex items-center gap-2 px-2.5 py-1 border border-ember/50 bg-ember/[0.06]">
@@ -463,12 +764,33 @@ export default function SlideApproval() {
                     </p>
                   </div>
 
-                  {/* Stats strip */}
+                  {/* Scatter chart — 18 comps visualised with 4
+                      reference lines. Shows the argument at a glance:
+                      the counter sits above the block average but
+                      well below the current and landlord ask. */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="relative mb-6 p-4 border border-rule/50"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, hsl(var(--bg) / 0.5) 0%, hsl(var(--bg-3) / 0.3) 100%)",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    <ScatterChart />
+                  </motion.div>
+
+                  {/* Stats strip — with live count-up on the annual
+                      save so the savings actually earn themselves on
+                      screen. */}
                   <div className="grid grid-cols-3 gap-4 mb-6 py-5 border-y border-rule">
                     {[
-                      { k: "Comps pulled", v: "18", sub: "on your block" },
-                      { k: "Tickets cited", v: "6", sub: "unresolved" },
-                      { k: "Annual save", v: "$7,200", sub: "if landlord signs" },
+                      { k: "Comps pulled", v: 18, prefix: "", suffix: "", sub: "on your block" },
+                      { k: "Tickets cited", v: 6, prefix: "", suffix: "", sub: "unresolved" },
+                      { k: "Annual save", v: 7200, prefix: "$", suffix: "", sub: "if landlord signs", highlight: true },
                     ].map((s, i) => (
                       <motion.div
                         key={s.k}
@@ -480,21 +802,30 @@ export default function SlideApproval() {
                           delay: 0.5 + i * 0.1,
                           ease: [0.22, 1, 0.36, 1],
                         }}
+                        className="relative"
                       >
                         <div className="f-mono text-[0.48rem] tracking-[0.2em] uppercase text-fg-4 mb-1.5">
                           {s.k}
                         </div>
                         <div
-                          className="text-fg mb-1"
+                          className={s.highlight ? "text-accent mb-1" : "text-fg mb-1"}
                           style={{
                             fontFamily: "'Fraunces', serif",
                             fontVariationSettings: "'SOFT' 40",
-                            fontSize: "1.7rem",
+                            fontSize: "1.8rem",
                             letterSpacing: "-0.028em",
                             lineHeight: 1,
+                            textShadow: s.highlight
+                              ? "0 0 24px hsl(var(--accent) / 0.35)"
+                              : undefined,
                           }}
                         >
-                          {s.v}
+                          <AnimatedCounter
+                            to={s.v}
+                            prefix={s.prefix}
+                            suffix={s.suffix}
+                            duration={s.highlight ? 2.2 : 1.4}
+                          />
                         </div>
                         <div className="f-mono text-[0.48rem] tracking-[0.1em] text-fg-4">
                           {s.sub}
@@ -512,6 +843,45 @@ export default function SlideApproval() {
                     transition={{ duration: 0.6, delay: 0.9 }}
                   >
                     <div className="relative h-[44px] w-[218px]">
+                      {/* Orbital particle sparks around the approve
+                          button. Eight tiny lime dots ride invisible
+                          ellipses at different radii and speeds so
+                          the button feels charged. */}
+                      {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
+                        const rX = 150 + (i % 3) * 16;
+                        const rY = 32 + (i % 2) * 8;
+                        const dur = 5.5 + (i % 4) * 1.1;
+                        const phase = (i / 8) * Math.PI * 2;
+                        return (
+                          <motion.span
+                            key={i}
+                            aria-hidden
+                            className="absolute left-1/2 top-1/2 w-[3px] h-[3px] rounded-full bg-accent pointer-events-none"
+                            style={{
+                              boxShadow: "0 0 6px hsl(var(--accent) / 0.9)",
+                              originX: 0,
+                              originY: 0,
+                            }}
+                            animate={{
+                              x: Array.from({ length: 9 }, (_, k) => {
+                                const th = phase + (k / 8) * Math.PI * 2;
+                                return Math.cos(th) * rX;
+                              }),
+                              y: Array.from({ length: 9 }, (_, k) => {
+                                const th = phase + (k / 8) * Math.PI * 2;
+                                return Math.sin(th) * rY;
+                              }),
+                              opacity: [0.3, 0.85, 0.3, 0.85, 0.3, 0.85, 0.3, 0.85, 0.3],
+                            }}
+                            transition={{
+                              duration: dur,
+                              repeat: Infinity,
+                              ease: "linear",
+                              times: [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
+                            }}
+                          />
+                        );
+                      })}
                       <motion.button
                         type="button"
                         initial={{ opacity: 1 }}
