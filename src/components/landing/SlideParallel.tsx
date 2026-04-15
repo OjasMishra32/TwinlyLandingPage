@@ -2,10 +2,11 @@ import { motion } from "framer-motion";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
- * SlideParallel: three rich product-card tiles with real depth.
- * Each card is a parallel job that a normal AI assistant genuinely
- * cannot do — debugging production code, running personalized cold
- * outreach at scale, or holding a live phone negotiation.
+ * SlideParallel — three parallel jobs running right now, each one in
+ * a different state (running / awaiting approval / done). Each card
+ * streams its recent actions like a live log so you can watch Twinly
+ * work. Jobs are universal: canceling forgotten subscriptions, applying
+ * to jobs, fighting an insurance claim. Not a chatbot job in the set.
  */
 
 type State = "running" | "approve" | "done";
@@ -18,29 +19,37 @@ type Job = {
   progress: number;
   metricLabel: string;
   metricValue: string;
-  subLabel: string;
+  actions: string[];
 };
 
 const jobs: Job[] = [
   {
     code: "01",
-    tag: "DEBUG",
-    title: "Fixing a Sentry crash from 2am",
+    tag: "CANCEL",
+    title: "Killing 12 subscriptions you forgot about",
     state: "running",
-    progress: 0.72,
-    metricLabel: "ETA · PR",
-    metricValue: "4 min",
-    subLabel: "git-blamed PR #812 · wrote regression test · pushing fix",
+    progress: 0.68,
+    metricLabel: "Saved / mo",
+    metricValue: "$287",
+    actions: [
+      "Emailed Planet Fitness cancel form",
+      "Canceled Hulu · Peacock · HBO · Paramount",
+      "Currently disputing Audible auto-renew",
+    ],
   },
   {
     code: "02",
-    tag: "OUTREACH",
-    title: "DM'ing 240 VCs in your voice",
+    tag: "APPLY",
+    title: "Applying to 38 jobs in your name",
     state: "approve",
-    progress: 0.96,
-    metricLabel: "Drafted",
-    metricValue: "240 / 240",
-    subLabel: "Crunchbase scraped · each opener tuned to their last tweet",
+    progress: 0.82,
+    metricLabel: "Submitted",
+    metricValue: "31 / 38",
+    actions: [
+      "Scraped Greenhouse · Lever · Ashby",
+      "Tailored resume per role · 38 drafts",
+      "Needs your OK on 3 cover letters",
+    ],
   },
   {
     code: "03",
@@ -50,7 +59,11 @@ const jobs: Job[] = [
     progress: 1,
     metricLabel: "Won",
     metricValue: "$842",
-    subLabel: "navigated IVR, argued with 2 reps, escalated to supervisor",
+    actions: [
+      "Navigated 6-level IVR menu in 12s",
+      "Argued with 2 reps · escalated to supervisor",
+      "Claim accepted · direct deposit in 3 days",
+    ],
   },
 ];
 
@@ -62,7 +75,7 @@ const stateColor: Record<State, string> = {
 
 const stateLabel: Record<State, string> = {
   running: "Running",
-  approve: "Awaiting you",
+  approve: "Needs you",
   done: "Delivered",
 };
 
@@ -79,10 +92,10 @@ export default function SlideParallel() {
       }
       body={
         <>
-          Three jobs in flight right now: Twinly is debugging a crash in
-          your production code, drafting 240 personalized VC cold DMs, and
-          holding a live phone call with your insurance company. All at the
-          same time. None of them things a chatbot could touch.
+          Three jobs in flight right now: killing a dozen forgotten
+          subscriptions, applying to 38 jobs in your voice, and holding
+          a 47-minute phone call with your insurance company. Same time.
+          None of these are things a chatbot could touch.
         </>
       }
       align="center"
@@ -149,7 +162,7 @@ export default function SlideParallel() {
                   {/* Content */}
                   <div className="relative p-7 md:p-8 flex flex-col h-full">
                     {/* Top row: big number + state */}
-                    <div className="flex items-start justify-between mb-7 md:mb-9">
+                    <div className="flex items-start justify-between mb-6 md:mb-7">
                       <div
                         className="text-fg-4"
                         style={{
@@ -196,7 +209,7 @@ export default function SlideParallel() {
 
                     {/* Title */}
                     <h4
-                      className="text-fg mb-3"
+                      className="text-fg mb-4"
                       style={{
                         fontFamily: "'Fraunces', serif",
                         fontVariationSettings: "'SOFT' 40, 'WONK' 0",
@@ -209,9 +222,33 @@ export default function SlideParallel() {
                       {j.title}
                     </h4>
 
-                    {/* Sub label */}
-                    <div className="text-[12.5px] leading-[1.5] text-fg-3 mb-7 min-h-[2.6em]">
-                      {j.subLabel}
+                    {/* Streaming action log */}
+                    <div
+                      className="mb-6 pl-3 border-l border-rule/50 space-y-1.5"
+                      style={{ borderLeftColor: `${color.replace("hsl(", "hsla(").replace(")", ", 0.3)")}` }}
+                    >
+                      {j.actions.map((a, ai) => (
+                        <motion.div
+                          key={ai}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: "-8%" }}
+                          transition={{
+                            duration: 0.45,
+                            delay: 0.9 + i * 0.14 + ai * 0.22,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="flex items-start gap-2"
+                        >
+                          <span
+                            className="mt-[7px] w-[3px] h-[3px] rounded-full shrink-0"
+                            style={{ background: color }}
+                          />
+                          <span className="text-[11.5px] leading-[1.45] text-fg-3">
+                            {a}
+                          </span>
+                        </motion.div>
+                      ))}
                     </div>
 
                     {/* Metric + progress row */}

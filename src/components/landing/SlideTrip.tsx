@@ -319,7 +319,7 @@ export default function SlideTrip() {
                   </div>
                 </div>
 
-                {/* Bottom safe area + CTA */}
+                {/* Bottom safe area + CTA with cursor tap */}
                 <motion.div
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -331,19 +331,84 @@ export default function SlideTrip() {
                       "linear-gradient(180deg, transparent 0%, hsl(36 10% 4%) 35%)",
                   }}
                 >
-                  <button
-                    type="button"
-                    className="w-full py-3.5 bg-accent text-bg font-bold tracking-[-0.01em]"
-                    style={{
-                      fontFamily: "'Hanken Grotesk', system-ui",
-                      fontSize: "14px",
-                      borderRadius: "14px",
-                      boxShadow:
-                        "0 0 0 0.5px hsl(var(--accent) / 0.4), 0 18px 36px -12px hsl(var(--accent) / 0.65)",
-                    }}
-                  >
-                    Approve · book all 3
-                  </button>
+                  <div className="relative h-[46px]">
+                    <motion.button
+                      type="button"
+                      initial={{ opacity: 1 }}
+                      whileInView={{ opacity: [1, 1, 0] }}
+                      viewport={{ once: true, margin: "-10%" }}
+                      transition={{
+                        duration: 0.45,
+                        delay: 3.55,
+                        times: [0, 0.6, 1],
+                      }}
+                      className="absolute inset-0 w-full bg-accent text-bg font-bold tracking-[-0.01em]"
+                      style={{
+                        fontFamily: "'Hanken Grotesk', system-ui",
+                        fontSize: "14px",
+                        borderRadius: "14px",
+                        boxShadow:
+                          "0 0 0 0.5px hsl(var(--accent) / 0.4), 0 18px 36px -12px hsl(var(--accent) / 0.65)",
+                      }}
+                    >
+                      Approve · book all 3
+                    </motion.button>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.92 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, margin: "-10%" }}
+                      transition={{
+                        duration: 0.55,
+                        delay: 4.0,
+                        type: "spring",
+                        damping: 16,
+                        stiffness: 240,
+                      }}
+                      className="absolute inset-0 w-full flex items-center justify-center gap-2 border border-accent/60 bg-accent/10"
+                      style={{ borderRadius: "14px" }}
+                    >
+                      <Pin size={11} strokeWidth={2.5} />
+                      <span
+                        className="text-accent font-bold tabular-nums tracking-[-0.01em]"
+                        style={{
+                          fontFamily: "'Hanken Grotesk', system-ui",
+                          fontSize: "13px",
+                        }}
+                      >
+                        Booked all 3 · $938
+                      </span>
+                    </motion.div>
+
+                    {/* Cursor tap */}
+                    <motion.div
+                      aria-hidden
+                      initial={{ opacity: 0, x: 80, y: -54 }}
+                      whileInView={{
+                        opacity: [0, 1, 1, 1, 0],
+                        x: [80, 40, 10, -8, -8],
+                        y: [-54, -28, -10, 6, 6],
+                        scale: [1, 1, 1, 0.82, 0.82],
+                      }}
+                      viewport={{ once: true, margin: "-10%" }}
+                      transition={{
+                        duration: 1.8,
+                        delay: 2.7,
+                        times: [0, 0.3, 0.65, 0.88, 1],
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="absolute left-[68%] top-[-10px] z-[5]"
+                    >
+                      <svg width="16" height="20" viewBox="0 0 18 22" fill="none">
+                        <path
+                          d="M2 2 L2 18 L6 14 L9 20 L11 19 L8 13 L14 13 Z"
+                          fill="hsl(var(--fg))"
+                          stroke="hsl(var(--bg))"
+                          strokeWidth="1"
+                          strokeLinejoin="miter"
+                        />
+                      </svg>
+                    </motion.div>
+                  </div>
                   {/* Home indicator */}
                   <div
                     className="mx-auto mt-4 rounded-full"

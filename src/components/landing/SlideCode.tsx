@@ -366,50 +366,123 @@ export default function SlideCode() {
             </motion.div>
           </div>
 
-          {/* Build pipeline strip */}
+          {/* Terminal pane — streams the actual ship log */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-8%" }}
-            transition={{ duration: 0.9, delay: 2.4, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 md:mt-7 border border-rule-hi/70 flex items-center gap-0 overflow-hidden"
+            transition={{ duration: 0.95, delay: 2.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 md:mt-7 relative overflow-hidden border border-rule-hi/70"
             style={{
               background:
-                "linear-gradient(180deg, hsl(36 10% 8%) 0%, hsl(36 10% 5%) 100%)",
-              borderRadius: "6px",
+                "linear-gradient(180deg, hsl(36 10% 6%) 0%, hsl(36 10% 3%) 100%)",
+              boxShadow: "0 40px 100px -40px rgba(0,0,0,0.8)",
+              borderRadius: "8px",
             }}
           >
-            {[
-              { k: "Repo", v: "mealmap/web" },
-              { k: "Build", v: "14.3s" },
-              { k: "Lighthouse", v: "98" },
-              { k: "Deploy", v: "mealmap.app" },
-            ].map((s, i) => (
-              <div
-                key={s.k}
-                className={`flex-1 flex items-center gap-3 px-4 py-3 ${i < 3 ? "border-r border-rule/60" : ""}`}
-              >
-                <div
-                  className="flex items-center justify-center w-7 h-7 border border-accent/50 shrink-0 f-mono text-accent tabular-nums"
-                  style={{
-                    background: "hsl(var(--accent) / 0.08)",
-                    fontSize: "0.55rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.04em",
-                  }}
-                >
-                  0{i + 1}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="f-mono text-[0.48rem] tracking-[0.2em] uppercase text-fg-4">
-                    {s.k}
-                  </div>
-                  <div className="f-mono text-[0.64rem] font-medium text-fg truncate tabular-nums">
-                    {s.v}
-                  </div>
-                </div>
+            {/* Terminal chrome */}
+            <div
+              className="flex items-center gap-3 px-4 py-2.5 border-b border-rule/70"
+              style={{ background: "hsl(36 10% 9%)" }}
+            >
+              <div className="flex gap-1.5">
+                <span className="w-[10px] h-[10px] rounded-full bg-ember/60" />
+                <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
+                <span className="w-[10px] h-[10px] rounded-full bg-accent/60" />
               </div>
-            ))}
+              <div className="flex-1 text-center f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4">
+                zsh · twinly ship mealmap
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className="w-[5px] h-[5px] rounded-full bg-accent"
+                  style={{
+                    animation: "approval-blink 1.4s ease-in-out infinite",
+                    boxShadow: "0 0 6px hsl(var(--accent) / 0.7)",
+                  }}
+                />
+                <span className="f-mono text-[0.44rem] tracking-[0.14em] uppercase text-accent">
+                  Live
+                </span>
+              </div>
+            </div>
+
+            {/* Log body */}
+            <div
+              className="px-4 md:px-6 py-4 md:py-5 text-[11.5px] leading-[1.95]"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 0.35, delay: 2.7 }}
+                className="text-accent"
+              >
+                <span className="text-fg-4">$</span> twinly ship mealmap --prod
+              </motion.div>
+
+              {[
+                { t: "00:01", msg: "Design tokens · palette · type scale generated" },
+                { t: "00:03", msg: "Copywriting pass · hero, features, FAQ" },
+                { t: "00:06", msg: "Created 42 files · 1,847 lines of TSX" },
+                { t: "00:12", msg: "npm install · 438 packages · 0 vulns" },
+                { t: "00:18", msg: "vite build · 14.3s · 264KB gzipped" },
+                { t: "00:21", msg: "Lighthouse · perf 98 · a11y 100 · bp 98 · seo 100" },
+                { t: "00:23", msg: "Domain registered · mealmap.app · Namecheap" },
+                { t: "00:25", msg: "SSL provisioned · Let's Encrypt · auto-renew" },
+                { t: "00:27", msg: "Deployed to edge · 214 regions · cold start 34ms" },
+              ].map((line, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{
+                    duration: 0.35,
+                    delay: 2.95 + i * 0.16,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="flex items-center gap-3"
+                >
+                  <span className="text-fg-4 tabular-nums">[{line.t}]</span>
+                  <span className="text-accent">✓</span>
+                  <span className="text-fg-2">{line.msg}</span>
+                </motion.div>
+              ))}
+
+              {/* Final URL with cursor */}
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 0.45, delay: 4.5 }}
+                className="flex items-center gap-3 mt-2 pt-2 border-t border-rule/40"
+              >
+                <span className="text-fg-4 tabular-nums">[00:28]</span>
+                <span className="text-accent">→</span>
+                <a
+                  className="text-accent font-semibold underline decoration-accent/50"
+                  style={{ textDecorationThickness: "1px", textUnderlineOffset: "3px" }}
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  https://mealmap.app
+                </a>
+                <span className="text-fg-3 f-mono text-[0.56rem] tracking-[0.12em] uppercase">
+                  · Live · 1h 42m total
+                </span>
+                <motion.span
+                  className="inline-block w-[7px] h-[13px] bg-accent ml-1"
+                  animate={{ opacity: [1, 1, 0, 0] }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    times: [0, 0.5, 0.5, 1],
+                  }}
+                />
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       }

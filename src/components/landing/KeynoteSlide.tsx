@@ -91,9 +91,9 @@ export default function KeynoteSlide({
       ref={ref}
       id={id}
       className={`relative w-full flex flex-col justify-center overflow-hidden border-t border-rule/60 ${
-        fullHeight ? "min-h-[100svh]" : ""
+        fullHeight ? "min-h-[82svh]" : ""
       } ${className}`}
-      style={{ padding: "clamp(96px, 13vh, 170px) 0" }}
+      style={{ padding: "clamp(64px, 8vh, 120px) 0" }}
     >
       {particles && <FloatingParticles count={24} />}
 
@@ -115,7 +115,7 @@ export default function KeynoteSlide({
         {visualAbove && visual && (
           <motion.div
             style={{ y: visualY, scale: visualScale, opacity: visualOpacity }}
-            className="mb-12 md:mb-16 w-full"
+            className="mb-9 md:mb-12 w-full"
           >
             {visual}
           </motion.div>
@@ -126,7 +126,7 @@ export default function KeynoteSlide({
             initial={{ opacity: 0, y: 14 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-8 md:mb-10 flex items-center gap-3 f-mono text-[0.56rem] font-medium tracking-[0.28em] uppercase text-fg-3"
+            className="mb-5 md:mb-7 flex items-center gap-3 f-mono text-[0.56rem] font-medium tracking-[0.28em] uppercase text-fg-3"
           >
             <motion.span
               initial={{ scaleX: 0 }}
@@ -177,7 +177,7 @@ export default function KeynoteSlide({
               fontWeight: 400,
               margin: align === "center" ? "0 auto" : undefined,
             }}
-            className="mt-8 md:mt-10 text-fg-2"
+            className="mt-5 md:mt-7 text-fg-2"
           >
             {body}
           </motion.p>
@@ -186,7 +186,7 @@ export default function KeynoteSlide({
         {!visualAbove && visual && (
           <motion.div
             style={{ y: visualY, scale: visualScale, opacity: visualOpacity }}
-            className="mt-14 md:mt-20 w-full"
+            className="mt-10 md:mt-14 w-full"
           >
             {visual}
           </motion.div>

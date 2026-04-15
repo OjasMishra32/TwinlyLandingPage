@@ -228,26 +228,84 @@ export default function SlideApproval() {
 
                 {/* Action row */}
                 <motion.div
-                  className="flex items-center gap-3"
+                  className="relative flex items-center gap-3"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{ duration: 0.6, delay: 0.9 }}
                 >
-                  <button
-                    type="button"
-                    className="group relative flex items-center gap-2.5 px-5 py-3 bg-accent text-bg f-mono text-[0.58rem] font-semibold tracking-[0.18em] uppercase"
-                    style={{
-                      boxShadow:
-                        "0 0 0 1px hsl(var(--accent) / 0.2), 0 20px 60px -20px hsl(var(--accent) / 0.65)",
-                    }}
-                  >
-                    <Check size={14} strokeWidth={2.5} />
-                    Approve &amp; send
-                    <span className="ml-2 f-mono opacity-70 tabular-nums" style={{ fontSize: "0.62rem" }}>
-                      ⌘↵
-                    </span>
-                  </button>
+                  <div className="relative h-[44px] w-[218px]">
+                    <motion.button
+                      type="button"
+                      initial={{ opacity: 1 }}
+                      whileInView={{ opacity: [1, 1, 0] }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 2.3,
+                        times: [0, 0.6, 1],
+                      }}
+                      className="absolute inset-0 w-full flex items-center justify-center gap-2.5 bg-accent text-bg f-mono text-[0.58rem] font-semibold tracking-[0.18em] uppercase"
+                      style={{
+                        boxShadow:
+                          "0 0 0 1px hsl(var(--accent) / 0.2), 0 20px 60px -20px hsl(var(--accent) / 0.65)",
+                      }}
+                    >
+                      <Check size={14} strokeWidth={2.5} />
+                      Approve &amp; send
+                      <span className="ml-1 f-mono opacity-70 tabular-nums" style={{ fontSize: "0.62rem" }}>
+                        ⌘↵
+                      </span>
+                    </motion.button>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 0.55,
+                        delay: 2.75,
+                        type: "spring",
+                        damping: 16,
+                        stiffness: 240,
+                      }}
+                      className="absolute inset-0 w-full flex items-center justify-center gap-2.5 border border-accent/60 bg-accent/10"
+                    >
+                      <Check size={14} strokeWidth={3} className="text-accent" />
+                      <span className="f-mono text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-accent">
+                        Sent · 0s
+                      </span>
+                    </motion.div>
+
+                    {/* Cursor flying in */}
+                    <motion.div
+                      aria-hidden
+                      initial={{ opacity: 0, x: 130, y: -46 }}
+                      whileInView={{
+                        opacity: [0, 1, 1, 1, 0],
+                        x: [130, 80, 34, 6, 6],
+                        y: [-46, -22, -2, 10, 10],
+                        scale: [1, 1, 1, 0.82, 0.82],
+                      }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 1.7,
+                        delay: 1.3,
+                        times: [0, 0.3, 0.65, 0.88, 1],
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="absolute right-[12px] top-[-8px] z-[4]"
+                    >
+                      <svg width="17" height="21" viewBox="0 0 18 22" fill="none">
+                        <path
+                          d="M2 2 L2 18 L6 14 L9 20 L11 19 L8 13 L14 13 Z"
+                          fill="hsl(var(--fg))"
+                          stroke="hsl(var(--bg))"
+                          strokeWidth="1"
+                          strokeLinejoin="miter"
+                        />
+                      </svg>
+                    </motion.div>
+                  </div>
                   <button
                     type="button"
                     className="flex items-center gap-2 px-4 py-3 border border-rule-hi text-fg-2 f-mono text-[0.56rem] font-medium tracking-[0.16em] uppercase hover:text-fg hover:border-fg-3 transition-colors"
@@ -259,6 +317,60 @@ export default function SlideApproval() {
                     <Arrow size={9} strokeWidth={2} />
                     Discard
                   </span>
+                </motion.div>
+
+                {/* Queue — 3 more items waiting for your nod */}
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-8%" }}
+                  transition={{ duration: 0.8, delay: 3.2, ease: [0.22, 1, 0.36, 1] }}
+                  className="mt-6 pt-5 border-t border-rule/60"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="f-mono text-[0.48rem] tracking-[0.22em] uppercase text-fg-4">
+                      Next in queue · 3
+                    </div>
+                    <div className="f-mono text-[0.44rem] tracking-[0.16em] uppercase text-fg-4">
+                      Auto-approve in 4h if idle
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    {[
+                      { tag: "SEND", title: "Cover letter · Stripe PM role", amt: "via Greenhouse" },
+                      { tag: "SPEND", title: "Flight hold · JAL 002 · SFO → NRT", amt: "$712" },
+                      { tag: "REPLY", title: "Prof. Kim · deadline extension request", amt: "24h window" },
+                    ].map((item, i) => (
+                      <motion.div
+                        key={item.title}
+                        initial={{ opacity: 0, x: -12 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-8%" }}
+                        transition={{
+                          duration: 0.5,
+                          delay: 3.4 + i * 0.1,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="flex items-center gap-3 px-3 py-2 border border-rule/40"
+                        style={{
+                          background: "hsl(var(--bg) / 0.4)",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        <div
+                          className="f-mono text-[0.44rem] font-semibold tracking-[0.18em] uppercase text-accent shrink-0 w-[44px]"
+                        >
+                          {item.tag}
+                        </div>
+                        <div className="flex-1 text-[11.5px] text-fg-2 truncate">
+                          {item.title}
+                        </div>
+                        <div className="f-mono text-[0.46rem] tracking-[0.12em] uppercase text-fg-4 shrink-0">
+                          {item.amt}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
                 </motion.div>
               </div>
             </div>
