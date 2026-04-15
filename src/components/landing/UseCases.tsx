@@ -245,7 +245,14 @@ const PLAYBOOKS: Playbook[] = [
   },
 ];
 
-const THINK_TAGS = new Set(["MEM", "REASON", "THINK", "BRIEF", "SCORE", "MATCH"]);
+const THINK_TAGS = new Set([
+  "MEM",
+  "REASON",
+  "THINK",
+  "BRIEF",
+  "SCORE",
+  "MATCH",
+]);
 
 function tagColor(tag: string, status?: StepStatus): string {
   if (status === "gate") return "hsl(var(--ember))";
@@ -254,86 +261,114 @@ function tagColor(tag: string, status?: StepStatus): string {
   return "hsl(var(--fg-3))";
 }
 
-function StepRow({ step, i }: { step: Step; i: number }) {
+function StepCard({ step, i }: { step: Step; i: number }) {
   const color = tagColor(step.tag, step.status);
   const isGate = step.status === "gate";
   const isWin = step.status === "win";
 
   return (
     <motion.li
-      initial={{ opacity: 0, x: -16 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.45, delay: 0.03 * i, ease: [0.22, 1, 0.36, 1] }}
-      className="relative grid grid-cols-[72px_80px_1fr_20px] gap-3 md:gap-5 items-start py-3 md:py-3.5 border-b border-rule/70 last:border-b-0"
+      initial={{ opacity: 0, x: 80, filter: "blur(8px)" }}
+      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+      exit={{ opacity: 0, x: -60, filter: "blur(8px)" }}
+      transition={{
+        duration: 0.72,
+        delay: 0.06 * i,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="relative pl-9 pr-2 py-7 border-b border-rule/60 last:border-b-0"
     >
-      {/* Left accent bar */}
+      {/* Rail dot */}
       <span
-        className="absolute left-0 top-0 bottom-0 w-[2px]"
+        className="absolute left-0 top-[34px] w-[10px] h-[10px] rounded-full"
         style={{
-          background: isGate
-            ? "hsl(var(--ember))"
-            : isWin
-            ? "hsl(var(--accent))"
-            : "transparent",
+          background: color,
+          boxShadow:
+            isWin || isGate
+              ? `0 0 12px ${color}`
+              : "0 0 0 1px hsl(var(--rule-hi))",
+          animation: isGate ? "pb-pulse 1.6s ease-in-out infinite" : undefined,
         }}
       />
-
-      {/* Timestamp */}
-      <span className="f-mono text-[0.56rem] font-medium tracking-[0.08em] uppercase text-fg-4 pl-3">
-        {step.t}
-      </span>
-
-      {/* Tag chip */}
+      {/* Rail line to the next dot */}
       <span
-        className="f-mono text-[0.54rem] font-semibold tracking-[0.14em] uppercase px-1.5 py-0.5 border inline-flex items-center justify-center"
-        style={{
-          color,
-          borderColor:
-            isGate || isWin
-              ? color
-              : "hsl(var(--rule-hi))",
-          background:
-            isGate || isWin ? `${color.replace(")", " / 0.08)")}` : "transparent",
-        }}
-      >
-        {step.tag}
-      </span>
+        aria-hidden
+        className="absolute left-[4.5px] top-[44px] bottom-[-8px] w-[1px]"
+        style={{ background: "hsl(var(--rule))" }}
+      />
 
-      {/* Action text */}
-      <span
-        className={`text-[12.5px] leading-snug ${
-          isWin ? "text-fg font-medium" : isGate ? "text-fg" : "text-fg-2"
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-2.5">
+        <span className="f-mono text-[0.56rem] font-medium tracking-[0.18em] uppercase text-fg-4 tabular-nums">
+          {step.t}
+        </span>
+        <span
+          className="f-mono text-[0.56rem] font-semibold tracking-[0.2em] uppercase px-2 py-[3px] border"
+          style={{
+            color,
+            borderColor: `${color}${isGate || isWin ? "" : ""}`,
+            background:
+              isGate || isWin
+                ? `${color.replace(")", " / 0.08)")}`
+                : "transparent",
+          }}
+        >
+          {step.tag}
+        </span>
+        {isGate && (
+          <span className="f-mono text-[0.52rem] font-semibold tracking-[0.2em] uppercase text-ember ml-auto">
+            Awaiting you
+          </span>
+        )}
+        {isWin && (
+          <span className="f-mono text-[0.52rem] font-semibold tracking-[0.2em] uppercase text-accent ml-auto">
+            Delivered
+          </span>
+        )}
+      </div>
+
+      {/* Action — large readable */}
+      <p
+        className={`text-[16px] md:text-[17px] leading-[1.48] font-normal ${
+          isGate || isWin ? "text-fg" : "text-fg-2"
         }`}
       >
         {step.action}
-      </span>
-
-      {/* Right status icon */}
-      <span className="flex items-center justify-end pt-0.5">
-        {isGate && (
-          <span
-            className="inline-block w-[5px] h-[5px] rounded-full"
-            style={{
-              background: "hsl(var(--ember))",
-              animation: "pb-pulse 1.6s ease-in-out infinite",
-            }}
-          />
-        )}
-        {isWin && (
-          <span
-            className="inline-block w-[5px] h-[5px] rounded-full"
-            style={{ background: "hsl(var(--accent))" }}
-          />
-        )}
-        {!isGate && !isWin && (
-          <span
-            className="inline-block w-[3px] h-[3px] rounded-full"
-            style={{ background: "hsl(var(--fg-4))" }}
-          />
-        )}
-      </span>
+      </p>
     </motion.li>
+  );
+}
+
+function Metric({ m, i }: { m: { label: string; value: string }; i: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{
+        duration: 0.7,
+        delay: 0.1 + i * 0.06,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="flex flex-col gap-2"
+    >
+      <div className="f-mono text-[0.52rem] font-medium tracking-[0.22em] uppercase text-fg-4">
+        {m.label}
+      </div>
+      <div
+        className="text-fg"
+        style={{
+          fontFamily: "'Fraunces', serif",
+          fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+          fontSize: "clamp(1.9rem, 2.6vw, 2.7rem)",
+          letterSpacing: "-0.028em",
+          lineHeight: 0.98,
+          fontWeight: 400,
+        }}
+      >
+        {m.value}
+      </div>
+    </motion.div>
   );
 }
 
@@ -342,8 +377,21 @@ export default function UseCases() {
   const pb = PLAYBOOKS[activeIdx];
 
   return (
-    <section id="use-cases" className="sec border-t border-rule">
-      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-14">
+    <section id="use-cases" className="sec border-t border-rule relative overflow-hidden">
+      {/* Ghost wordmark backdrop */}
+      <span
+        aria-hidden
+        className="ghost-wordmark"
+        style={{
+          fontSize: "clamp(14rem, 34vw, 34rem)",
+          top: "18%",
+          right: "-6%",
+        }}
+      >
+        trace.
+      </span>
+
+      <div className="relative w-full max-w-[1680px] mx-auto px-6 md:px-14">
         <div className="sec-head">
           <div className="sec-ident">
             <span className="num">
@@ -351,165 +399,169 @@ export default function UseCases() {
             </span>
             Playbooks
           </div>
-          <div>
-            <KineticHeadline>
-              Not a demo. An <span className="tw-italic text-accent">execution trace.</span>
-            </KineticHeadline>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{ duration: 0.9, delay: 0.1 }}
-              className="sec-lede"
-            >
-              Pick any case below and read the <b>step-by-step log</b> of how a twin
-              actually delivers it — every sub-system it touches, every document it
-              pulls, every gate that waits for your nod. This is what "end-to-end" means
-              when nobody's lying.
-            </motion.p>
-          </div>
+          <KineticHeadline>
+            Not a demo. An <span className="tw-italic text-accent">execution trace.</span>
+          </KineticHeadline>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-15%" }}
+            transition={{ duration: 0.9, delay: 0.1 }}
+            className="sec-lede"
+          >
+            Pick any case and read the step-by-step log of how a twin actually
+            delivers it — every sub-system it touches, every gate that waits
+            for your nod. Click through the eight cases below.
+          </motion.p>
         </div>
 
-        {/* Playbook selector */}
-        <div className="mb-10 md:mb-12 -mx-6 md:mx-0 px-6 md:px-0 overflow-x-auto no-scrollbar">
-          <div className="flex gap-2 min-w-max">
-            {PLAYBOOKS.map((p, i) => {
-              const active = i === activeIdx;
-              return (
-                <button
-                  key={p.code}
-                  onClick={() => setActiveIdx(i)}
-                  data-magnetic
-                  className={`group relative px-4 py-3 border transition-colors whitespace-nowrap ${
-                    active
-                      ? "border-accent bg-accent/[0.06]"
-                      : "border-rule hover:border-rule-hi bg-bg-2/40"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`f-mono text-[0.56rem] font-semibold tracking-[0.16em] ${
-                        active ? "text-accent" : "text-fg-4"
-                      }`}
-                    >
-                      {p.code}
-                    </span>
-                    <span
-                      className={`f-mono text-[0.5rem] font-medium tracking-[0.18em] uppercase px-1.5 py-0.5 border ${
-                        active
-                          ? "border-accent text-accent"
-                          : "border-rule-hi text-fg-3"
-                      }`}
-                    >
-                      {p.tag}
-                    </span>
-                    <span
-                      className={`text-[13px] font-medium ${
-                        active ? "text-fg" : "text-fg-2 group-hover:text-fg"
-                      }`}
-                    >
-                      {p.shortTitle}
-                    </span>
-                  </div>
-                  {active && (
-                    <motion.span
-                      layoutId="pb-underline"
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent"
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Split: summary (left) + timeline (right) */}
-        <div className="grid lg:grid-cols-[380px_1fr] gap-8 md:gap-12">
-          {/* LEFT — case summary */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={pb.code}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:sticky lg:top-24 lg:self-start"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <span className="f-mono text-[0.6rem] font-semibold tracking-[0.18em] text-accent">
-                  {pb.code}
-                </span>
-                <span className="f-mono text-[0.54rem] font-medium tracking-[0.2em] uppercase text-fg-4 px-1.5 py-0.5 border border-rule-hi">
-                  {pb.tag}
-                </span>
-              </div>
-              <h3
-                className="text-fg font-semibold mb-5"
-                style={{
-                  fontSize: "clamp(2rem, 3.4vw, 3.2rem)",
-                  lineHeight: 0.94,
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                {pb.title}
-              </h3>
-              <p className="text-[14.5px] leading-relaxed text-fg-2 mb-7 max-w-[38ch]">
-                {pb.mission}
-              </p>
-
-              {/* Metrics grid */}
-              <div className="grid grid-cols-2 border border-rule bg-bg-2/40">
-                {pb.metrics.map((m, i) => (
-                  <div
-                    key={m.label}
-                    className={`px-4 py-3 ${i % 2 === 0 ? "border-r border-rule" : ""} ${
-                      i < 2 ? "border-b border-rule" : ""
-                    }`}
-                  >
-                    <div className="f-mono text-[0.52rem] font-medium tracking-[0.16em] uppercase text-fg-4 mb-1">
-                      {m.label}
-                    </div>
-                    <div
-                      className="font-semibold text-fg"
-                      style={{
-                        fontSize: "1.25rem",
-                        letterSpacing: "-0.02em",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {m.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 flex items-center gap-3 f-mono text-[0.54rem] font-medium tracking-[0.16em] uppercase text-fg-3">
-                <span className="live-dot" />
-                {pb.steps.length} steps · {pb.steps.filter((s) => s.status === "gate").length} approval{" "}
-                {pb.steps.filter((s) => s.status === "gate").length === 1 ? "gate" : "gates"}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* RIGHT — timeline */}
-          <div className="relative border-t border-rule">
-            <div className="px-5 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2.5 f-mono text-[0.56rem] font-medium tracking-[0.18em] uppercase text-fg-3">
-                trace · {pb.code}
-              </div>
-              <div className="f-mono text-[0.52rem] tracking-[0.14em] uppercase text-fg-4">
-                {pb.steps.length} events
-              </div>
+        {/* Split: sticky left nav + animated main content */}
+        <div className="grid lg:grid-cols-[260px_1fr] gap-10 lg:gap-20">
+          {/* LEFT — sticky case selector */}
+          <nav className="lg:sticky lg:top-28 lg:self-start">
+            <div className="f-mono text-[0.52rem] font-medium tracking-[0.22em] uppercase text-fg-4 mb-5 pb-3 border-b border-rule">
+              Select a case
             </div>
+            <ul className="flex flex-col">
+              {PLAYBOOKS.map((p, i) => {
+                const active = i === activeIdx;
+                return (
+                  <li key={p.code}>
+                    <button
+                      onClick={() => setActiveIdx(i)}
+                      data-magnetic
+                      className="group relative w-full flex items-baseline gap-3 py-3.5 text-left transition-colors"
+                    >
+                      <span
+                        className={`f-mono text-[0.56rem] font-medium tracking-[0.18em] transition-colors ${
+                          active ? "text-accent" : "text-fg-4"
+                        }`}
+                      >
+                        {p.code}
+                      </span>
+                      <span
+                        className={`text-[15px] transition-colors ${
+                          active
+                            ? "text-fg font-medium"
+                            : "text-fg-3 group-hover:text-fg-2"
+                        }`}
+                      >
+                        {p.shortTitle}
+                      </span>
+                      {active && (
+                        <motion.span
+                          layoutId="pb-active-rail"
+                          className="absolute left-[-24px] top-0 bottom-0 w-[2px] bg-accent"
+                          style={{
+                            boxShadow: "0 0 10px hsl(var(--accent) / 0.5)",
+                          }}
+                          transition={{
+                            type: "spring",
+                            damping: 28,
+                            stiffness: 260,
+                          }}
+                        />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
+          {/* RIGHT — animated main content */}
+          <div className="min-w-0">
             <AnimatePresence mode="wait">
-              <motion.ol key={pb.code} className="divide-y divide-rule/60">
-                {pb.steps.map((step, i) => (
-                  <StepRow key={`${pb.code}-${i}`} step={step} i={i} />
-                ))}
-              </motion.ol>
-            </AnimatePresence>
+              <motion.div
+                key={pb.code}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Case header */}
+                <div className="mb-14">
+                  <motion.div
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.7,
+                      delay: 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="flex items-center gap-3 mb-5"
+                  >
+                    <span className="f-mono text-[0.58rem] font-semibold tracking-[0.22em] text-accent">
+                      {pb.code}
+                    </span>
+                    <span className="h-px w-10 bg-rule-hi" />
+                    <span className="f-mono text-[0.54rem] font-medium tracking-[0.22em] uppercase text-fg-3">
+                      {pb.tag}
+                    </span>
+                  </motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, x: 60, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, x: -40, filter: "blur(6px)" }}
+                    transition={{
+                      duration: 0.9,
+                      delay: 0.12,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="text-fg mb-5"
+                    style={{
+                      fontFamily: "'Fraunces', serif",
+                      fontVariationSettings: "'SOFT' 30, 'WONK' 0",
+                      fontSize: "clamp(2.4rem, 4.2vw, 4.2rem)",
+                      lineHeight: 0.96,
+                      letterSpacing: "-0.03em",
+                      fontWeight: 400,
+                      maxWidth: "20ch",
+                    }}
+                  >
+                    {pb.title}
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 0.7,
+                      delay: 0.22,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="text-fg-2 max-w-[58ch]"
+                    style={{
+                      fontSize: "clamp(1.05rem, 1.25vw, 1.2rem)",
+                      lineHeight: 1.62,
+                    }}
+                  >
+                    {pb.mission}
+                  </motion.p>
+                </div>
 
+                {/* Metrics row */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-16 pt-8 border-t border-rule">
+                  {pb.metrics.map((m, i) => (
+                    <Metric key={m.label} m={m} i={i} />
+                  ))}
+                </div>
+
+                {/* Steps — spacious cards flying in from the right */}
+                <div className="relative">
+                  <div className="f-mono text-[0.52rem] font-medium tracking-[0.22em] uppercase text-fg-4 mb-5 flex items-center gap-3">
+                    <span className="h-px w-8 bg-accent" />
+                    Execution trace · {pb.steps.length} events
+                  </div>
+                  <ol className="flex flex-col relative">
+                    {pb.steps.map((step, i) => (
+                      <StepCard key={`${pb.code}-${i}`} step={step} i={i} />
+                    ))}
+                  </ol>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -517,10 +569,8 @@ export default function UseCases() {
       <style>{`
         @keyframes pb-pulse {
           0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.35; transform: scale(0.85); }
+          50% { opacity: 0.4; transform: scale(0.82); }
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { scrollbar-width: none; }
       `}</style>
     </section>
   );
