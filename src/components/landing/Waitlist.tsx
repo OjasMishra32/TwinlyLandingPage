@@ -33,7 +33,7 @@ export default function Waitlist() {
         `Email: ${email}`,
         `Would hand over first: ${intent || "(not specified)"}`,
         "",
-        "— Sent from twinly.tech waitlist",
+        "Sent from twinly.tech waitlist",
       ].join("\n")
     );
     const mailto = `mailto:${FOUNDER_EMAIL}?subject=${subject}&body=${body}`;
@@ -74,7 +74,7 @@ export default function Waitlist() {
           </h2>
           <p className="mt-8 max-w-[58ch] text-[17px] leading-relaxed text-fg-2 font-normal">
             We're letting people in a few at a time. Tell us what you'd hand
-            over first — we'll bring you in when your twin is ready. Founders
+            over first, we'll bring you in when your twin is ready. Founders
             read every reply.
           </p>
         </motion.div>
@@ -131,7 +131,7 @@ export default function Waitlist() {
           )}
           {status === "success" && (
             <p className="mt-3 f-mono text-[0.62rem] tracking-[0.14em] uppercase text-accent">
-              Your mail client opened — hit send and you're on the list.
+              Your mail client opened, hit send and you're on the list.
             </p>
           )}
 

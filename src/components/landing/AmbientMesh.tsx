@@ -1,5 +1,5 @@
 /**
- * AmbientMesh — 3 slowly drifting warm radial gradient orbs that sit
+ * AmbientMesh, 3 slowly drifting warm radial gradient orbs that sit
  * behind the whole page and fill the black space with atmosphere.
  * Pure CSS, GPU-accelerated, zero JS runtime cost.
  */

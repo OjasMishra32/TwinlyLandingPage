@@ -8,7 +8,7 @@ type Props = {
 };
 
 /**
- * FloatingParticles — a drifting field of small dots behind slide
+ * FloatingParticles, a drifting field of small dots behind slide
  * content. Each dot has its own independent float animation with a
  * randomized duration + phase, so the whole field is always subtly
  * moving without ever feeling choreographed.

@@ -45,7 +45,7 @@ export default function Hero() {
       {/* Ambient wash */}
       <div className="absolute inset-0 hero-wash" aria-hidden />
 
-      {/* Spline robot — the hero visual */}
+      {/* Spline robot, the hero visual */}
       <div className="absolute inset-y-0 right-[-16%] w-full md:w-[78%] z-[1]">
         <div className="relative h-full w-full">
           <SplineRobot />
@@ -109,7 +109,7 @@ export default function Hero() {
             A personal operator that learns how you{" "}
             <b className="text-fg font-medium">write</b>, what you{" "}
             <b className="text-fg font-medium">prefer</b>, and how you handle
-            things — then drafts, schedules, negotiates, and moves life-admin
+            things, then drafts, schedules, negotiates, and moves life-admin
             forward while you{" "}
             <b className="text-fg font-medium">stay in control</b>.
           </p>

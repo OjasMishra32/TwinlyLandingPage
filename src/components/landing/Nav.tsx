@@ -116,7 +116,7 @@ export default function Nav() {
 
 /**
  * Custom "twin" mark: two offset squares that overlap to form a ligature.
- * The overlap fills with the accent colour — a geometric nod to "twin".
+ * The overlap fills with the accent colour, a geometric nod to "twin".
  */
 function BrandMark() {
   return (

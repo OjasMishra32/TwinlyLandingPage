@@ -3,7 +3,10 @@ import Hero from "@/components/landing/Hero";
 import SlideVoice from "@/components/landing/SlideVoice";
 import SlideParallel from "@/components/landing/SlideParallel";
 import SlideApproval from "@/components/landing/SlideApproval";
-import UseCases from "@/components/landing/UseCases";
+import SlideCode from "@/components/landing/SlideCode";
+import SlideHomework from "@/components/landing/SlideHomework";
+import SlideTax from "@/components/landing/SlideTax";
+import SlideTrip from "@/components/landing/SlideTrip";
 import SlideNumbers from "@/components/landing/SlideNumbers";
 import Waitlist from "@/components/landing/Waitlist";
 import Footer from "@/components/landing/Footer";
@@ -25,7 +28,10 @@ const Index = () => {
         <SlideVoice />
         <SlideParallel />
         <SlideApproval />
-        <UseCases />
+        <SlideCode />
+        <SlideHomework />
+        <SlideTax />
+        <SlideTrip />
         <SlideNumbers />
         <Waitlist />
       </main>

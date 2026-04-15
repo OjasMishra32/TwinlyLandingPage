@@ -3,7 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
- * SlideApproval — single approval-card mock with a 3D mouse-follow
+ * SlideApproval, single approval-card mock with a 3D mouse-follow
  * tilt on the card itself. Pivots on pointer position like a Keynote
  * product reveal.
  */
@@ -41,7 +41,7 @@ export default function SlideApproval() {
       body={
         <>
           You decide what runs free and what always waits at a gate. Nothing
-          ships, nothing spends, nothing sends — until you've set the policy or
+          ships, nothing spends, nothing sends, until you've set the policy or
           tapped approve.
         </>
       }
@@ -103,7 +103,7 @@ export default function SlideApproval() {
                 "Based on 18 comparable units on your block running at $3,020
                 avg, and the 6 unresolved maintenance tickets since 2024, we're
                 countering at{" "}
-                <b className="text-fg font-medium">$3,200/mo</b> — $200 below
+                <b className="text-fg font-medium">$3,200/mo</b>, $200 below
                 your current rate."
               </p>
 

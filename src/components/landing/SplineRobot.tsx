@@ -32,7 +32,7 @@ export default function SplineRobot() {
     else window.setTimeout(run, 80);
   }, []);
 
-  // Timeout fallback — if Spline hasn't signalled ready within 5s, swap to orb
+  // Timeout fallback, if Spline hasn't signalled ready within 5s, swap to orb
   useEffect(() => {
     if (!enabled) return;
     const t = window.setTimeout(() => {

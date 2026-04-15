@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 /**
  * 3D particle sphere with constellation connections, cursor-driven camera
- * tilt, depth-based shading and a breathing inner core. Pure canvas — no
+ * tilt, depth-based shading and a breathing inner core. Pure canvas, no
  * three.js required, so the runtime cost is minimal.
  */
 export default function TwinOrb() {
@@ -39,7 +39,7 @@ export default function TwinOrb() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // Fibonacci sphere distribution — even coverage, organic feel
+    // Fibonacci sphere distribution, even coverage, organic feel
     const COUNT = 420;
     type P = {
       // Base unit-sphere coordinates
@@ -198,7 +198,7 @@ export default function TwinOrb() {
         }
       }
 
-      // Draw constellation links — alpha scales with combined depth
+      // Draw constellation links, alpha scales with combined depth
       ctx.lineWidth = 0.8;
       for (const L of links) {
         const a = particles[L.a];

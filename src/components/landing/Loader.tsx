@@ -204,7 +204,7 @@ export default function Loader() {
           <span className="w-[6px] h-[6px] bg-accent rounded-full" />
           Booting your twin
         </span>
-        <span className="text-fg-4">—</span>
+        <span className="text-fg-4">, </span>
         <span>TWN · 2026</span>
       </div>
 

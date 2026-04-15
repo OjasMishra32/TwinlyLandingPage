@@ -19,7 +19,7 @@ type Props = {
 };
 
 /**
- * KeynoteSlide — a full-viewport Apple-style slide with scroll-linked
+ * KeynoteSlide, a full-viewport Apple-style slide with scroll-linked
  * parallax depth. Eyebrow, headline, body, and visual each transform
  * at slightly different rates as you scroll through the slide,
  * creating a subtle 3D depth reveal. Adds optional floating particles
@@ -41,7 +41,7 @@ export default function KeynoteSlide({
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-15%" });
 
-  // Scroll-linked parallax — different elements move at different rates
+  // Scroll-linked parallax, different elements move at different rates
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
-const GLYPHS = "!<>-_\\/[]{}—=+*^?#________ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const GLYPHS = "!<>-_\\/[]{}=+*^?#________ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 type Props = {
   text: string;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 /**
- * ScrambleText — the signature anime.js-style kinetic text reveal.
+ * ScrambleText, the signature anime.js-style kinetic text reveal.
  * Each character cycles through random glyphs before resolving to the
  * final letter. Resolves left-to-right with a slight stagger so the
  * whole word feels like it's being "decoded".
@@ -38,7 +38,7 @@ export default function ScrambleText({
     const len = target.length;
     const start = performance.now() + delay;
 
-    // Each char has its own "resolve time" — progressively later so the
+    // Each char has its own "resolve time", progressively later so the
     // effect reads left-to-right like a decode sweep
     const resolveTimes = target.split("").map((_, i) => {
       return start + (i / len) * duration * 0.65 + Math.random() * 90;

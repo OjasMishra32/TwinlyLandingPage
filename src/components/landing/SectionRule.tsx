@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- * SectionRule — animated divider between sections. An SVG hairline
+ * SectionRule, animated divider between sections. An SVG hairline
  * draws in left-to-right, then a small ball marker travels along it
  * while a mono meta label fades in underneath. Pure anime.js-style
  * kinetic decoration.

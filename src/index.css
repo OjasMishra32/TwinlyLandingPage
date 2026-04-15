@@ -10,18 +10,18 @@
     --bg-3: 36 8% 11%;           /* #1e1b17 card */
     --surface: 36 8% 9%;         /* #18161 chrome */
 
-    /* Rules / separators — warmer */
+    /* Rules / separators , warmer */
     --rule: 36 8% 18%;           /* #2e2b24 */
     --rule-hi: 36 6% 28%;        /* #484539 */
 
-    /* Foreground — slightly softer to ease contrast */
+    /* Foreground , slightly softer to ease contrast */
     --fg: 44 28% 94%;           /* #f3ede1 warm off-white */
     --fg-2: 42 12% 72%;         /* #bdb6a6 */
     --fg-3: 40 6% 48%;          /* #7e7971 */
     --fg-4: 232 8% 34%;         /* #505160 */
 
     /* Accent: softer pistachio-lime (was electric #d2ff29) */
-    --accent: 74 74% 62%;       /* #bde055 — lower sat, lower brightness */
+    --accent: 74 74% 62%;       /* #bde055 , lower sat, lower brightness */
     --accent-hi: 74 74% 70%;
     --accent-dim: 74 74% 52%;
 
@@ -107,7 +107,7 @@
   .f-serif { font-family: 'Fraunces', 'Instrument Serif', 'Times New Roman', serif; }
   .f-display { font-family: 'Fraunces', 'Instrument Serif', 'Times New Roman', serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 30, "WONK" 0; }
 
-  /* Display heading — Fraunces variable with subtle wonk */
+  /* Display heading , Fraunces variable with subtle wonk */
   .tw-display {
     font-family: 'Fraunces', 'Instrument Serif', 'Times New Roman', serif;
     font-optical-sizing: auto;
@@ -117,7 +117,7 @@
     letter-spacing: -0.025em;
   }
 
-  /* Serif italic accent word — stays on Instrument for character contrast */
+  /* Serif italic accent word , stays on Instrument for character contrast */
   .tw-italic {
     font-family: 'Instrument Serif', 'Times New Roman', serif;
     font-style: italic;
@@ -167,7 +167,7 @@
     border-color: hsl(var(--rule-hi));
   }
 
-  /* Editorial section — centered-left, stacked, generous whitespace */
+  /* Editorial section , centered-left, stacked, generous whitespace */
   .sec { padding: clamp(120px, 16vh, 200px) 0; position: relative; }
   .sec-head {
     display: flex;
@@ -234,7 +234,7 @@
   }
   .sec-lede b { color: hsl(var(--fg)); font-weight: 500; }
 
-  /* Button — cleaner, thinner */
+  /* Button , cleaner, thinner */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -302,7 +302,7 @@
   }
   .btn:hover .arrow { width: 38px; }
 
-  /* Live blinking dot — no glow */
+  /* Live blinking dot , no glow */
   .live-dot {
     width: 6px;
     height: 6px;
@@ -317,10 +317,10 @@
     50% { opacity: 0.55; transform: scale(0.9); }
   }
 
-  /* Glow text — gone (too heavy, not needed) */
+  /* Glow text , gone (too heavy, not needed) */
   .glow-accent { text-shadow: none; }
 
-  /* Gradient wash across hero — warm, subtle */
+  /* Gradient wash across hero , warm, subtle */
   .hero-wash {
     background:
       radial-gradient(85% 60% at 78% 18%, hsl(var(--accent) / 0.04) 0%, transparent 55%),
@@ -328,7 +328,7 @@
     pointer-events: none;
   }
 
-  /* Grid overlay — removed (use background texture instead) */
+  /* Grid overlay , removed (use background texture instead) */
   .grid-overlay {
     background-image:
       linear-gradient(to right, hsl(var(--fg) / 0.008) 1px, transparent 1px),
@@ -338,14 +338,14 @@
     -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 68%);
   }
 
-  /* Marquee animation — used by Marquee.tsx */
+  /* Marquee animation , used by Marquee.tsx */
   .animate-marq { animation: marq 55s linear infinite; }
   @keyframes marq {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
   }
 
-  /* Ghost wordmark — enormous italic serif sitting behind sections */
+  /* Ghost wordmark , enormous italic serif sitting behind sections */
   .ghost-wordmark {
     position: absolute;
     pointer-events: none;
@@ -382,7 +382,7 @@
     background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
   }
 
-  /* Clip-based text reveal — content wrapped in .reveal-word is masked and
+  /* Clip-based text reveal , content wrapped in .reveal-word is masked and
      slides into view. Used for dramatic section headline entries. */
   .clip-reveal {
     display: inline-block;

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Reticle — a tight targeting aperture that tracks the cursor.
+ * Reticle, a tight targeting aperture that tracks the cursor.
  * Single element, single transform per frame, rAF idle-stops when
  * the cursor is still.
  */

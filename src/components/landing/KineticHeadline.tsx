@@ -8,7 +8,7 @@ type Props = {
 };
 
 /**
- * KineticHeadline — per-letter stagger reveal with independent spring
+ * KineticHeadline, per-letter stagger reveal with independent spring
  * physics on each character. Recurses into nested React elements so
  * nested italic accent spans still get split, but skips void elements
  * (br, img, hr) which cannot have children.
@@ -88,7 +88,7 @@ function splitNode(node: ReactNode): ReactNode {
   if (isValidElement(node)) {
     const el = node as ReactElement<{ children?: ReactNode }>;
     const tag = typeof el.type === "string" ? el.type : "";
-    // Void elements (br, hr, img...) cannot have children — return as-is
+    // Void elements (br, hr, img...) cannot have children, return as-is
     if (VOID_TAGS.has(tag)) return el;
     // Preserve the wrapper element + its props, recurse into its children
     return cloneElement(el, {

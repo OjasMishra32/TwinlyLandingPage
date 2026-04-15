@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- * TypewriterText — reveals a string character-by-character when
+ * TypewriterText, reveals a string character-by-character when
  * scrolled into view. Adds a blinking caret at the end until the
  * reveal completes.
  */

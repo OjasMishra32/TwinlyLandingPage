@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import KeynoteSlide from "./KeynoteSlide";
 import TypewriterText from "./TypewriterText";
 
-/** "Writes like you" — before/after with typewriter on the twin draft */
+/** "Writes like you", before/after with typewriter on the twin draft */
 export default function SlideVoice() {
   return (
     <KeynoteSlide
@@ -17,7 +17,7 @@ export default function SlideVoice() {
       body={
         <>
           Twinly learns your tone from the replies you've already sent. Every
-          draft reads like you wrote it at 3pm on a Tuesday — not a chatbot in
+          draft reads like you wrote it at 3pm on a Tuesday, not a chatbot in
           a suit.
         </>
       }
@@ -58,7 +58,7 @@ export default function SlideVoice() {
             </div>
           </motion.div>
 
-          {/* Twin draft — with typewriter effect */}
+          {/* Twin draft, with typewriter effect */}
           <motion.div
             initial={{ opacity: 0, x: 40, rotateY: -8 }}
             whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
@@ -79,7 +79,7 @@ export default function SlideVoice() {
             <div className="text-[15px] leading-[1.7] text-fg min-h-[210px]">
               <TypewriterText
                 as="div"
-                text="Hey Lena — something came up Thursday. Would Wed 9:30 or Tue 10 work on your side?  Sorry for the shuffle.  — O"
+                text="Hey Lena, something came up Thursday. Would Wed 9:30 or Tue 10 work on your side? Sorry for the shuffle. · O"
                 delay={600}
                 speed={40}
               />

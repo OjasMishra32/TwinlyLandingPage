@@ -16,7 +16,7 @@ const stateColor: Record<string, string> = {
   Done: "hsl(var(--accent))",
 };
 
-/** "Runs in parallel" — grid of 6 jobs with independent orbit drift */
+/** "Runs in parallel", grid of 6 jobs with independent orbit drift */
 export default function SlideParallel() {
   return (
     <KeynoteSlide
@@ -31,7 +31,7 @@ export default function SlideParallel() {
       body={
         <>
           Six jobs in flight. One waiting on your nod. One nearly done. A twin
-          doesn't take turns — it runs the parallel life you'd have if you
+          doesn't take turns, it runs the parallel life you'd have if you
           cloned yourself.
         </>
       }
