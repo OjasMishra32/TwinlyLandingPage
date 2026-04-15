@@ -89,32 +89,32 @@ export default function Hero() {
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
 
-      {/* Spline robot — the hero visual, right half on desktop, dimmed bg on mobile */}
+      {/* Spline robot, smaller + pushed further right, keeps the left text column clear */}
       <div
-        className="absolute inset-y-0 right-0
-                   w-full md:w-[72%] md:right-[-12%] z-[1]
-                   opacity-50 md:opacity-100"
+        className="absolute inset-y-0 right-[-6%] md:right-[-4%]
+                   w-full md:w-[44%] z-[1]
+                   opacity-45 md:opacity-100"
       >
         <div className="relative h-full w-full">
           <SplineRobot />
         </div>
       </div>
 
-      {/* Legibility wash. Mobile: full radial dimming over the orb. Desktop: left-to-right gradient */}
+      {/* Legibility wash. Mobile: full radial dimming over the robot. Desktop: left-to-right gradient */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none z-[2] md:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 90% 80% at 50% 50%, hsl(var(--bg) / 0.82) 0%, hsl(var(--bg) / 0.55) 55%, transparent 100%)",
+            "radial-gradient(ellipse 90% 80% at 50% 50%, hsl(var(--bg) / 0.85) 0%, hsl(var(--bg) / 0.55) 55%, transparent 100%)",
         }}
       />
       <div
         aria-hidden
-        className="absolute inset-y-0 left-0 w-[68%] z-[2] pointer-events-none hidden md:block"
+        className="absolute inset-y-0 left-0 w-[60%] z-[2] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 32%, hsl(var(--bg) / 0.88) 58%, hsl(var(--bg) / 0.4) 84%, transparent 100%)",
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 55%, hsl(var(--bg) / 0.6) 80%, transparent 100%)",
         }}
       />
 
@@ -154,24 +154,26 @@ export default function Hero() {
           </Line>
         </h1>
 
-        {/* Promise line, clear its own breathing room above and below */}
+        {/* Promise line, same serif family as the headline for cohesion */}
         <Fade delay={0.42}>
-          <div className="flex items-center gap-4 mb-8 md:mb-10">
-            <span className="h-px w-10 bg-accent/60 hidden sm:block" />
-            <p
-              className="text-fg"
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontStyle: "italic",
-                fontSize: "clamp(1.4rem, 2.2vw, 2rem)",
-                lineHeight: 1.12,
-                letterSpacing: "-0.015em",
-              }}
-            >
-              Anything you can do,{" "}
-              <span className="text-accent">twinly can.</span>
-            </p>
-          </div>
+          <p
+            className="text-fg-2 mb-9 md:mb-12"
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontStyle: "italic",
+              fontOpticalSizing: "auto",
+              fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+              fontWeight: 400,
+              fontSize: "clamp(1.65rem, 2.8vw, 2.6rem)",
+              lineHeight: 1.14,
+              letterSpacing: "-0.022em",
+              maxWidth: "22ch",
+            }}
+          >
+            Anything you can do,
+            <br />
+            <span className="text-accent">twinly can.</span>
+          </p>
         </Fade>
 
         {/* Body */}

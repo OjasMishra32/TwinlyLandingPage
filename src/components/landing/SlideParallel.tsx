@@ -1,40 +1,69 @@
 import { motion } from "framer-motion";
+import { FileText, Rocket, MapPin } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
- * SlideParallel: three big job cards instead of six. Apple-style
- * focal composition: fewer elements, more breathing room, bigger
- * typography per card.
+ * SlideParallel: three rich product-card tiles with real depth.
+ * Each card has a gradient backing, an icon, big title, metric row,
+ * state chip, and an accent rail that glows on running / approve.
  */
 
-const jobs = [
+type State = "running" | "approve" | "done";
+
+type Job = {
+  tag: string;
+  Icon: typeof FileText;
+  title: string;
+  state: State;
+  progress: number;
+  metricLabel: string;
+  metricValue: string;
+  subLabel: string;
+};
+
+const jobs: Job[] = [
   {
     tag: "TAX",
+    Icon: FileText,
     title: "Filing 2025 return",
-    state: "Running",
-    p: 0.74,
-    note: "14 docs · refund $4,217",
+    state: "running",
+    progress: 0.74,
+    metricLabel: "Est. refund",
+    metricValue: "$4,217",
+    subLabel: "14 docs classified · schedule C drafted",
   },
   {
     tag: "CODE",
+    Icon: Rocket,
     title: "Shipping mealmap.app",
-    state: "Approve",
-    p: 0.98,
-    note: "deploy held for your nod",
+    state: "approve",
+    progress: 0.96,
+    metricLabel: "Deploy",
+    metricValue: "Held",
+    subLabel: "Next.js built · Lighthouse 98 · ready",
   },
   {
     tag: "TRIP",
+    Icon: MapPin,
     title: "Tokyo · 8 days",
-    state: "Done",
-    p: 1,
-    note: "9 holds, all confirmed",
+    state: "done",
+    progress: 1,
+    metricLabel: "Bundle",
+    metricValue: "$3,847",
+    subLabel: "9 holds confirmed · itinerary live",
   },
 ];
 
-const stateColor: Record<string, string> = {
-  Running: "hsl(var(--accent))",
-  Approve: "hsl(var(--ember))",
-  Done: "hsl(var(--accent))",
+const stateColor: Record<State, string> = {
+  running: "hsl(var(--accent))",
+  approve: "hsl(var(--ember))",
+  done: "hsl(var(--accent))",
+};
+
+const stateLabel: Record<State, string> = {
+  running: "Running",
+  approve: "Awaiting you",
+  done: "Delivered",
 };
 
 export default function SlideParallel() {
@@ -50,119 +79,209 @@ export default function SlideParallel() {
       }
       body={
         <>
-          Twin doesn't take turns. Right now, three jobs are in flight: one
-          running, one waiting on your nod, one already done. A clone of you,
-          running in parallel.
+          Twin doesn't take turns. Three jobs in flight right now: one
+          running, one waiting on your nod, one already delivered. A clone of
+          you, running in parallel.
         </>
       }
       align="center"
       visual={
-        <div className="grid md:grid-cols-3 gap-5 md:gap-7 max-w-[1100px] mx-auto">
-          {jobs.map((j, i) => (
-            <motion.div
-              key={j.tag}
-              initial={{ opacity: 0, y: 60, rotateX: -10 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{
-                duration: 1,
-                delay: 0.12 + i * 0.14,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              style={{
-                perspective: "1200px",
-                transformStyle: "preserve-3d",
-              }}
-            >
+        <div className="grid md:grid-cols-3 gap-6 md:gap-7 max-w-[1180px] mx-auto">
+          {jobs.map((j, i) => {
+            const color = stateColor[j.state];
+            const isApprove = j.state === "approve";
+            return (
               <motion.div
-                animate={{ y: [0, i % 2 === 0 ? -8 : 8, 0] }}
+                key={j.tag}
+                initial={{ opacity: 0, y: 70, rotateX: -12 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true, margin: "-10%" }}
                 transition={{
-                  duration: 6 + i * 0.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.5,
+                  duration: 1,
+                  delay: 0.12 + i * 0.14,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
-                whileHover={{ scale: 1.03, y: -6 }}
-                className="relative border border-rule bg-bg-2/50 backdrop-blur-sm p-6 md:p-7 text-left h-full"
                 style={{
-                  boxShadow: "0 40px 100px -40px rgba(0,0,0,0.7)",
+                  perspective: "1400px",
+                  transformStyle: "preserve-3d",
                 }}
               >
-                <span
-                  className="absolute left-0 top-0 bottom-0 w-[2px]"
-                  style={{
-                    background: stateColor[j.state],
-                    boxShadow:
-                      j.state === "Running"
-                        ? `0 0 14px ${stateColor[j.state]}`
-                        : undefined,
+                <motion.div
+                  animate={{ y: [0, i % 2 === 0 ? -6 : 6, 0] }}
+                  transition={{
+                    duration: 6.5 + i * 0.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.5,
                   }}
-                />
-                <div className="flex items-center justify-between mb-5 pl-2">
-                  <span
-                    className="f-mono text-[0.58rem] font-semibold tracking-[0.22em] uppercase"
-                    style={{ color: stateColor[j.state] }}
-                  >
-                    {j.tag}
-                  </span>
-                  <span
-                    className="f-mono text-[0.52rem] font-medium tracking-[0.18em] uppercase"
-                    style={{ color: stateColor[j.state] }}
-                  >
-                    {j.state}
-                  </span>
-                </div>
-                <div
-                  className="text-fg mb-4 pl-2"
+                  whileHover={{ y: -10, transition: { duration: 0.35 } }}
+                  className="relative h-full border border-rule-hi/70 overflow-hidden group"
                   style={{
-                    fontFamily: "'Fraunces', serif",
-                    fontVariationSettings: "'SOFT' 40",
-                    fontSize: "1.4rem",
-                    letterSpacing: "-0.025em",
-                    lineHeight: 1.08,
-                    minHeight: "2.2em",
+                    background:
+                      "linear-gradient(180deg, hsl(var(--bg-2) / 0.8) 0%, hsl(var(--bg) / 0.7) 100%)",
+                    boxShadow: `0 50px 120px -50px rgba(0,0,0,0.8), 0 0 0 1px hsl(var(--rule-hi) / 0.3)`,
+                    backdropFilter: "blur(6px)",
                   }}
                 >
-                  {j.title}
-                </div>
-                <div className="f-mono text-[0.54rem] tracking-[0.08em] text-fg-3 mb-5 pl-2">
-                  {j.note}
-                </div>
-                <div className="h-[2px] bg-rule overflow-hidden relative">
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: j.p }}
-                    viewport={{ once: true, margin: "-8%" }}
-                    transition={{
-                      duration: 1.4,
-                      delay: 0.6 + i * 0.15,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
+                  {/* Accent rail on the left edge */}
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-0 bottom-0 w-[2px]"
                     style={{
-                      transformOrigin: "left",
-                      background: stateColor[j.state],
-                      height: "100%",
+                      background: color,
+                      boxShadow:
+                        j.state !== "done"
+                          ? `0 0 18px ${color}, 0 0 4px ${color}`
+                          : undefined,
                     }}
                   />
-                  {j.state === "Running" && (
-                    <motion.div
-                      className="absolute inset-y-0 w-[40%]"
-                      animate={{ x: ["-40%", "140%"] }}
-                      transition={{
-                        duration: 2.4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 1.2 + i * 0.3,
-                      }}
+                  {/* Diagonal accent gradient in the background */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 pointer-events-none opacity-50"
+                    style={{
+                      background: `radial-gradient(ellipse 60% 55% at 85% 15%, ${color
+                        .replace("hsl(", "hsla(")
+                        .replace(")", ", 0.09)")} 0%, transparent 60%)`,
+                    }}
+                  />
+                  {/* Content */}
+                  <div className="relative p-7 md:p-8 flex flex-col h-full">
+                    {/* Top row: icon + state */}
+                    <div className="flex items-start justify-between mb-7 md:mb-9">
+                      <div
+                        className="flex items-center justify-center w-11 h-11 border"
+                        style={{
+                          borderColor: color,
+                          background: `${color
+                            .replace("hsl(", "hsla(")
+                            .replace(")", ", 0.06)")}`,
+                        }}
+                      >
+                        <j.Icon
+                          size={18}
+                          strokeWidth={1.5}
+                          style={{ color }}
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-[7px] h-[7px] rounded-full"
+                          style={{
+                            background: color,
+                            boxShadow:
+                              j.state === "running"
+                                ? `0 0 10px ${color}`
+                                : undefined,
+                            animation: isApprove
+                              ? "approve-pulse 1.6s ease-in-out infinite"
+                              : undefined,
+                          }}
+                        />
+                        <span
+                          className="f-mono text-[0.54rem] font-semibold tracking-[0.2em] uppercase"
+                          style={{ color }}
+                        >
+                          {stateLabel[j.state]}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Tag */}
+                    <div
+                      className="f-mono text-[0.56rem] font-semibold tracking-[0.24em] uppercase mb-3"
+                      style={{ color }}
+                    >
+                      {j.tag}
+                    </div>
+
+                    {/* Title */}
+                    <h4
+                      className="text-fg mb-3"
                       style={{
-                        background: `linear-gradient(90deg, transparent, ${stateColor[j.state]}80, transparent)`,
+                        fontFamily: "'Fraunces', serif",
+                        fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+                        fontSize: "1.55rem",
+                        letterSpacing: "-0.028em",
+                        lineHeight: 1.05,
+                        fontWeight: 400,
                       }}
-                    />
-                  )}
-                </div>
+                    >
+                      {j.title}
+                    </h4>
+
+                    {/* Sub label */}
+                    <div className="text-[12.5px] leading-[1.5] text-fg-3 mb-7 min-h-[2.6em]">
+                      {j.subLabel}
+                    </div>
+
+                    {/* Metric + progress row */}
+                    <div className="mt-auto">
+                      <div className="flex items-baseline justify-between mb-3">
+                        <div className="f-mono text-[0.5rem] tracking-[0.2em] uppercase text-fg-4">
+                          {j.metricLabel}
+                        </div>
+                        <div
+                          className="text-fg tabular-nums"
+                          style={{
+                            fontFamily: "'Fraunces', serif",
+                            fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+                            fontSize: "1.4rem",
+                            letterSpacing: "-0.025em",
+                            lineHeight: 1,
+                            color: j.state === "approve" ? color : undefined,
+                          }}
+                        >
+                          {j.metricValue}
+                        </div>
+                      </div>
+                      {/* Progress rail */}
+                      <div className="h-[3px] bg-rule overflow-hidden relative">
+                        <motion.div
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: j.progress }}
+                          viewport={{ once: true, margin: "-8%" }}
+                          transition={{
+                            duration: 1.4,
+                            delay: 0.6 + i * 0.15,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          style={{
+                            transformOrigin: "left",
+                            background: color,
+                            height: "100%",
+                            boxShadow:
+                              j.state !== "done"
+                                ? `0 0 10px ${color}`
+                                : undefined,
+                          }}
+                        />
+                        {j.state === "running" && (
+                          <motion.div
+                            aria-hidden
+                            className="absolute inset-y-0 w-[40%]"
+                            animate={{ x: ["-40%", "260%"] }}
+                            transition={{
+                              duration: 2.6,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                              delay: 1.4 + i * 0.3,
+                            }}
+                            style={{
+                              background: `linear-gradient(90deg, transparent, ${color.replace(
+                                "hsl(",
+                                "hsla("
+                              ).replace(")", ", 0.65)")}, transparent)`,
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
       }
     />
