@@ -1,12 +1,66 @@
 import { motion } from "framer-motion";
+import {
+  Camera,
+  Sparkles,
+  Truck,
+  Check,
+  Github,
+  ArrowUpRight,
+} from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
-import TypewriterText from "./TypewriterText";
 
 /**
- * SlideCode, "I need a website." Twinly opens a code editor and a
- * live preview side by side. Code types into the editor, the preview
- * updates in sync, a Vercel deploy toast pops at the end.
+ * SlideCode — "Build me a website." Full macOS editor window with
+ * a real Next.js file typed into it, a browser window rendering a
+ * polished landing page preview, and a build-pipeline strip below.
+ * This is what ships — not 8 lines of placeholder JSX.
  */
+
+type CodeLine = {
+  indent: number;
+  tokens: Array<{ text: string; cls?: string }>;
+};
+
+const code: CodeLine[] = [
+  { indent: 0, tokens: [{ text: "import", cls: "tk-k" }, { text: " { Suspense } " }, { text: "from", cls: "tk-k" }, { text: " " }, { text: '"react"', cls: "tk-s" }, { text: ";" }] },
+  { indent: 0, tokens: [{ text: "import", cls: "tk-k" }, { text: " { Hero } " }, { text: "from", cls: "tk-k" }, { text: " " }, { text: '"@/components/Hero"', cls: "tk-s" }, { text: ";" }] },
+  { indent: 0, tokens: [{ text: "import", cls: "tk-k" }, { text: " { FeatureGrid } " }, { text: "from", cls: "tk-k" }, { text: " " }, { text: '"@/components/FeatureGrid"', cls: "tk-s" }, { text: ";" }] },
+  { indent: 0, tokens: [{ text: "import", cls: "tk-k" }, { text: " { Waitlist } " }, { text: "from", cls: "tk-k" }, { text: " " }, { text: '"@/components/Waitlist"', cls: "tk-s" }, { text: ";" }] },
+  { indent: 0, tokens: [{ text: "" }] },
+  { indent: 0, tokens: [{ text: "export default function ", cls: "tk-k" }, { text: "Page", cls: "tk-f" }, { text: "() {" }] },
+  { indent: 1, tokens: [{ text: "return", cls: "tk-k" }, { text: " (" }] },
+  { indent: 2, tokens: [{ text: "<", cls: "tk-p" }, { text: "main", cls: "tk-t" }, { text: " className", cls: "tk-a" }, { text: "=" }, { text: '"bg-ink min-h-screen"', cls: "tk-s" }, { text: ">", cls: "tk-p" }] },
+  { indent: 3, tokens: [{ text: "<", cls: "tk-p" }, { text: "Hero", cls: "tk-c" }] },
+  { indent: 4, tokens: [{ text: "title", cls: "tk-a" }, { text: "=" }, { text: '"Meal planning, done."', cls: "tk-s" }] },
+  { indent: 4, tokens: [{ text: "tagline", cls: "tk-a" }, { text: "=" }, { text: '"One photo. Every meal."', cls: "tk-s" }] },
+  { indent: 3, tokens: [{ text: "/>", cls: "tk-p" }] },
+  { indent: 3, tokens: [{ text: "<", cls: "tk-p" }, { text: "FeatureGrid", cls: "tk-c" }, { text: " ", }, { text: "items", cls: "tk-a" }, { text: "={features} />", cls: "tk-p" }] },
+  { indent: 3, tokens: [{ text: "<", cls: "tk-p" }, { text: "Suspense", cls: "tk-c" }, { text: " " }, { text: "fallback", cls: "tk-a" }, { text: "={<" }, { text: "Skeleton", cls: "tk-c" }, { text: "/>}>" }] },
+  { indent: 4, tokens: [{ text: "<", cls: "tk-p" }, { text: "Waitlist", cls: "tk-c" }, { text: " />", cls: "tk-p" }] },
+  { indent: 3, tokens: [{ text: "</", cls: "tk-p" }, { text: "Suspense", cls: "tk-c" }, { text: ">", cls: "tk-p" }] },
+  { indent: 2, tokens: [{ text: "</", cls: "tk-p" }, { text: "main", cls: "tk-t" }, { text: ">", cls: "tk-p" }] },
+  { indent: 1, tokens: [{ text: ");" }] },
+  { indent: 0, tokens: [{ text: "}" }] },
+];
+
+const features = [
+  {
+    Icon: Camera,
+    title: "Snap your fridge",
+    body: "One photo. We identify every ingredient.",
+  },
+  {
+    Icon: Sparkles,
+    title: "AI picks recipes",
+    body: "Dietary, budget, and taste, all accounted for.",
+  },
+  {
+    Icon: Truck,
+    title: "Delivered tonight",
+    body: "Missing ingredients arrive in 90 minutes.",
+  },
+];
+
 export default function SlideCode() {
   return (
     <KeynoteSlide
@@ -20,182 +74,354 @@ export default function SlideCode() {
       }
       body={
         <>
-          You say one sentence. Twinly opens a code editor, writes the
-          Next.js, previews it live, points a domain at it, and ships it
-          to Vercel. You never touch a terminal.
+          You say one sentence. Twinly designs the brand, writes the Next.js,
+          ships it to Vercel, points a domain, files the SSL, and sends you
+          the URL. 1h 42m. You never touch a terminal.
         </>
       }
       align="center"
       spotlight
       visual={
-        <div className="max-w-[1180px] mx-auto">
-          <div className="grid md:grid-cols-2 gap-5 md:gap-6">
-            {/* Code editor mock */}
+        <div className="max-w-[1280px] mx-auto">
+          <div className="grid md:grid-cols-[1.05fr_1fr] gap-5 md:gap-6 items-stretch">
+            {/* Editor window */}
             <motion.div
-              initial={{ opacity: 0, x: -30, rotateY: 6 }}
+              initial={{ opacity: 0, x: -40, rotateY: 6 }}
               whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
               viewport={{ once: true, margin: "-8%" }}
-              transition={{ duration: 0.95, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="relative border border-rule-hi bg-bg-2/75 backdrop-blur-sm overflow-hidden text-left"
+              transition={{
+                duration: 1,
+                delay: 0.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="relative overflow-hidden border border-rule-hi/70"
               style={{
-                boxShadow: "0 40px 100px -40px rgba(0,0,0,0.7)",
+                background:
+                  "linear-gradient(180deg, hsl(36 10% 9%) 0%, hsl(36 10% 6%) 100%)",
+                boxShadow: "0 50px 120px -40px rgba(0,0,0,0.85)",
                 transformStyle: "preserve-3d",
+                borderRadius: "8px",
               }}
             >
-              {/* Editor chrome */}
-              <div className="flex items-center gap-2 px-4 py-2.5 border-b border-rule bg-bg-3/60">
-                <span className="w-[10px] h-[10px] rounded-full bg-ember/60" />
-                <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
-                <span className="w-[10px] h-[10px] rounded-full bg-accent/60" />
-                <span className="ml-3 f-mono text-[0.56rem] tracking-[0.14em] uppercase text-fg-3">
-                  src/app/page.tsx
-                </span>
-                <span className="ml-auto f-mono text-[0.5rem] tracking-[0.14em] uppercase text-accent">
-                  Writing…
-                </span>
+              {/* Chrome bar */}
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-rule/70 bg-bg-3/50">
+                <div className="flex gap-1.5">
+                  <span className="w-[10px] h-[10px] rounded-full bg-ember/60" />
+                  <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
+                  <span className="w-[10px] h-[10px] rounded-full bg-accent/60" />
+                </div>
+                <div className="flex items-center gap-4 ml-2 f-mono text-[0.52rem] tracking-[0.14em] uppercase">
+                  <span className="text-accent">page.tsx</span>
+                  <span className="text-fg-4">hero.tsx</span>
+                  <span className="text-fg-4">layout.tsx</span>
+                </div>
+                <div className="ml-auto flex items-center gap-2 f-mono text-[0.5rem] tracking-[0.18em] uppercase text-accent">
+                  <span
+                    className="w-[6px] h-[6px] rounded-full bg-accent"
+                    style={{
+                      animation: "approval-blink 1.6s ease-in-out infinite",
+                      boxShadow: "0 0 8px hsl(var(--accent) / 0.7)",
+                    }}
+                  />
+                  Writing
+                </div>
               </div>
-              {/* Code body */}
+
+              {/* Code area with line numbers */}
               <div
-                className="px-5 py-5 text-[12px] leading-[1.65] min-h-[320px]"
+                className="flex text-[11.5px] leading-[1.85]"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
-                <CodeLine line="1" delay={600} color="fg-3">
-                  {`export default function Page() {`}
-                </CodeLine>
-                <CodeLine line="2" delay={900} color="fg" indent={2}>
-                  {`return (`}
-                </CodeLine>
-                <CodeLine line="3" delay={1200} color="fg" indent={4}>
-                  {`<main className="hero">`}
-                </CodeLine>
-                <CodeLine line="4" delay={1550} color="accent" indent={6}>
-                  {`<h1>Meal planning, done.</h1>`}
-                </CodeLine>
-                <CodeLine line="5" delay={1900} color="fg" indent={6}>
-                  {`<WaitlistForm />`}
-                </CodeLine>
-                <CodeLine line="6" delay={2200} color="fg" indent={4}>
-                  {`</main>`}
-                </CodeLine>
-                <CodeLine line="7" delay={2400} color="fg" indent={2}>
-                  {`)`}
-                </CodeLine>
-                <CodeLine line="8" delay={2600} color="fg-3">
-                  {`}`}
-                </CodeLine>
+                {/* Line number gutter */}
+                <div className="flex-shrink-0 pt-4 pb-6 pl-4 pr-3 text-right text-fg-4 select-none border-r border-rule/40">
+                  {code.map((_, i) => (
+                    <div key={i}>{i + 1}</div>
+                  ))}
+                </div>
+                {/* Code lines */}
+                <div className="flex-1 pt-4 pb-6 pl-4 pr-5 overflow-hidden">
+                  {code.map((line, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -12 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 0.35,
+                        delay: 0.4 + i * 0.04,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      style={{ paddingLeft: `${line.indent * 18}px` }}
+                      className="whitespace-pre"
+                    >
+                      {line.tokens.map((t, j) => (
+                        <span key={j} className={t.cls || "text-fg-2"}>
+                          {t.text}
+                        </span>
+                      ))}
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
 
-            {/* Live preview mock */}
+            {/* Browser preview window */}
             <motion.div
-              initial={{ opacity: 0, x: 30, rotateY: -6 }}
+              initial={{ opacity: 0, x: 40, rotateY: -6 }}
               whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
               viewport={{ once: true, margin: "-8%" }}
-              transition={{ duration: 0.95, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="relative border border-rule-hi bg-bg-2/50 backdrop-blur-sm overflow-hidden"
+              transition={{
+                duration: 1,
+                delay: 0.22,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="relative overflow-hidden border border-rule-hi/70"
               style={{
-                boxShadow: "0 40px 100px -40px hsl(var(--accent) / 0.25)",
+                background:
+                  "linear-gradient(180deg, hsl(36 10% 7%) 0%, hsl(36 10% 4%) 100%)",
+                boxShadow:
+                  "0 50px 120px -40px hsl(var(--accent) / 0.22), 0 40px 100px -50px rgba(0,0,0,0.7)",
                 transformStyle: "preserve-3d",
+                borderRadius: "8px",
               }}
             >
               {/* Browser chrome */}
-              <div className="flex items-center gap-3 px-4 py-2.5 border-b border-rule bg-bg-3/60">
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-rule/70 bg-bg-3/50">
                 <div className="flex gap-1.5">
                   <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
                   <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
                   <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
                 </div>
-                <div className="flex-1 text-center f-mono text-[0.52rem] tracking-[0.14em] text-fg-3 truncate">
+                <div
+                  className="flex-1 mx-3 px-3 py-1 text-center f-mono text-[0.5rem] tracking-[0.1em] text-fg-3 truncate"
+                  style={{
+                    background: "hsl(36 10% 12%)",
+                    borderRadius: "6px",
+                  }}
+                >
                   mealmap.app
                 </div>
-                <span className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-accent">
+                <span className="f-mono text-[0.5rem] tracking-[0.18em] uppercase text-accent flex items-center gap-1.5">
+                  <span
+                    className="w-[5px] h-[5px] rounded-full bg-accent"
+                    style={{ boxShadow: "0 0 8px hsl(var(--accent) / 0.7)" }}
+                  />
                   Live
                 </span>
               </div>
-              {/* Preview body */}
-              <div className="px-6 md:px-8 py-10 md:py-14 min-h-[320px] flex flex-col items-center justify-center text-center">
+
+              {/* Rendered page */}
+              <div
+                className="relative overflow-hidden"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--accent) / 0.05) 0%, transparent 55%), linear-gradient(180deg, hsl(36 10% 5%) 0%, hsl(36 10% 3%) 100%)",
+                  minHeight: "440px",
+                }}
+              >
+                {/* Fake nav */}
                 <motion.div
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: -10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.7, delay: 2.2 }}
-                  className="f-mono text-[0.52rem] tracking-[0.2em] uppercase text-fg-4 mb-4"
+                  transition={{ duration: 0.6, delay: 0.9 }}
+                  className="flex items-center justify-between px-5 py-4 border-b border-rule/30"
                 >
-                  Eat without thinking
-                </motion.div>
-                <motion.h4
-                  initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
-                  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 1, delay: 2.35 }}
-                  className="text-fg mb-5"
-                  style={{
-                    fontFamily: "'Fraunces', serif",
-                    fontVariationSettings: "'SOFT' 40",
-                    fontSize: "clamp(1.5rem, 2.8vw, 2.6rem)",
-                    letterSpacing: "-0.025em",
-                    lineHeight: 0.96,
-                  }}
-                >
-                  Meal planning,
-                  <br />
-                  done.
-                </motion.h4>
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.7, delay: 2.7 }}
-                  className="w-full max-w-[280px] flex gap-0 border border-rule"
-                >
-                  <div className="flex-1 px-3 py-2 text-[10px] text-fg-3 text-left f-sans">
-                    you@domain.com
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-accent" />
+                    <span
+                      className="text-fg"
+                      style={{
+                        fontFamily: "'Fraunces', serif",
+                        fontStyle: "italic",
+                        fontSize: "10px",
+                      }}
+                    >
+                      mealmap
+                    </span>
                   </div>
-                  <div className="px-3 py-2 bg-accent text-bg f-mono text-[0.52rem] tracking-[0.14em] uppercase font-semibold">
+                  <div className="hidden sm:flex items-center gap-4 f-mono text-[7px] tracking-[0.14em] uppercase text-fg-3">
+                    <span>How</span>
+                    <span>Pricing</span>
+                    <span>Faq</span>
+                  </div>
+                  <div
+                    className="px-3 py-1 bg-accent text-bg f-mono text-[7px] font-semibold tracking-[0.14em] uppercase"
+                    style={{ borderRadius: "3px" }}
+                  >
                     Join
                   </div>
                 </motion.div>
+
+                {/* Hero */}
+                <div className="px-6 py-7 md:py-9 text-center">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.6, delay: 1.1 }}
+                    className="f-mono text-[0.48rem] tracking-[0.22em] uppercase text-accent mb-2"
+                  >
+                    Eat without thinking
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.9, delay: 1.2 }}
+                    className="text-fg mb-3"
+                    style={{
+                      fontFamily: "'Fraunces', serif",
+                      fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+                      fontSize: "clamp(1.3rem, 2.4vw, 2rem)",
+                      letterSpacing: "-0.028em",
+                      lineHeight: 0.98,
+                    }}
+                  >
+                    Meal planning,
+                    <br />
+                    done.
+                  </motion.div>
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.7, delay: 1.4 }}
+                    className="text-fg-3 mb-4 mx-auto"
+                    style={{
+                      fontSize: "10px",
+                      lineHeight: 1.5,
+                      maxWidth: "28ch",
+                    }}
+                  >
+                    One photo of your fridge. Every meal, planned. Missing
+                    ingredients at the door by dinner.
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.6, delay: 1.6 }}
+                    className="inline-flex items-stretch w-full max-w-[240px] mx-auto border border-rule/60"
+                    style={{ borderRadius: "3px" }}
+                  >
+                    <div
+                      className="flex-1 px-3 py-2 text-left text-fg-4"
+                      style={{ fontSize: "9px" }}
+                    >
+                      you@domain.com
+                    </div>
+                    <div
+                      className="px-3 py-2 bg-accent text-bg f-mono font-semibold tracking-[0.14em] uppercase"
+                      style={{ fontSize: "8px" }}
+                    >
+                      Join
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Feature grid */}
+                <div className="grid grid-cols-3 gap-2 px-5 pb-5">
+                  {features.map((f, i) => (
+                    <motion.div
+                      key={f.title}
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 0.7,
+                        delay: 1.75 + i * 0.1,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="p-2.5 border border-rule/50"
+                      style={{
+                        background: "hsl(36 10% 6% / 0.8)",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      <div
+                        className="flex items-center justify-center w-5 h-5 mb-2 border border-accent/40"
+                        style={{
+                          background: "hsl(var(--accent) / 0.1)",
+                          borderRadius: "3px",
+                        }}
+                      >
+                        <f.Icon
+                          size={10}
+                          strokeWidth={1.8}
+                          className="text-accent"
+                        />
+                      </div>
+                      <div
+                        className="text-fg font-medium mb-1"
+                        style={{
+                          fontSize: "9px",
+                          lineHeight: 1.15,
+                        }}
+                      >
+                        {f.title}
+                      </div>
+                      <div
+                        className="text-fg-4"
+                        style={{
+                          fontSize: "7.5px",
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        {f.body}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>
 
-          {/* Deploy toast */}
+          {/* Build pipeline strip */}
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-8%" }}
-            transition={{ duration: 0.7, delay: 3.1 }}
-            className="mt-6 md:mt-8 flex items-center justify-center gap-3 f-mono text-[0.58rem] tracking-[0.22em] uppercase text-fg-2"
+            transition={{ duration: 0.9, delay: 2.4, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 md:mt-7 border border-rule-hi/70 flex items-center gap-0 overflow-hidden"
+            style={{
+              background:
+                "linear-gradient(180deg, hsl(36 10% 8%) 0%, hsl(36 10% 5%) 100%)",
+              borderRadius: "6px",
+            }}
           >
-            <span className="live-dot" />
-            Deployed to Vercel · <span className="text-accent">mealmap.app live in 1h 42m</span>
+            {[
+              { k: "Repo", v: "mealmap/web", Icon: Github },
+              { k: "Build", v: "14.3s", Icon: Check },
+              { k: "Lighthouse", v: "98", Icon: Sparkles },
+              { k: "Deploy", v: "mealmap.app", Icon: ArrowUpRight },
+            ].map((s, i) => (
+              <div
+                key={s.k}
+                className={`flex-1 flex items-center gap-3 px-4 py-3 ${i < 3 ? "border-r border-rule/60" : ""}`}
+              >
+                <div
+                  className="flex items-center justify-center w-7 h-7 border border-accent/40 shrink-0"
+                  style={{
+                    background: "hsl(var(--accent) / 0.08)",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <s.Icon size={12} strokeWidth={1.8} className="text-accent" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="f-mono text-[0.48rem] tracking-[0.2em] uppercase text-fg-4">
+                    {s.k}
+                  </div>
+                  <div className="f-mono text-[0.64rem] font-medium text-fg truncate tabular-nums">
+                    {s.v}
+                  </div>
+                </div>
+              </div>
+            ))}
           </motion.div>
         </div>
       }
     />
-  );
-}
-
-function CodeLine({
-  line,
-  delay,
-  indent = 0,
-  color = "fg",
-  children,
-}: {
-  line: string;
-  delay: number;
-  indent?: number;
-  color?: "fg" | "fg-3" | "accent";
-  children: string;
-}) {
-  const cls = color === "accent" ? "text-accent" : color === "fg-3" ? "text-fg-3" : "text-fg-2";
-  return (
-    <div className="flex">
-      <span className="w-6 text-right mr-4 text-fg-4 select-none">{line}</span>
-      <span style={{ paddingLeft: `${indent * 6}px` }} className={cls}>
-        <TypewriterText as="span" text={children} delay={delay} speed={90} />
-      </span>
-    </div>
   );
 }

@@ -187,9 +187,9 @@ export default function SlidePocket() {
       }
       body={
         <>
-          Twinly lives in iMessage. Text a request, watch it work, tap to
-          approve. It remembers every exchange, every preference, every
-          detail you've ever shared.
+          One-tap install, ready in 60 seconds. Twinly lives in iMessage
+          after that — text a request, watch it work, tap to approve. No
+          browser extension, no agent window, no prompts. Just you texting.
         </>
       }
       align="center"

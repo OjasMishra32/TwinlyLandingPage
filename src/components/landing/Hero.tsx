@@ -89,24 +89,27 @@ export default function Hero() {
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
 
-      {/* Spline robot, smaller + pushed further right, keeps the left text column clear */}
+      {/* Spline robot. Mobile: full-bleed behind text (dimmed). Desktop:
+          hard-left anchor at 58% so the robot can never bleed into the text
+          column, no matter the zoom or viewport width. overflow-clipped. */}
       <div
-        className="absolute inset-y-0 right-[-6%] md:right-[-4%]
-                   w-full md:w-[44%] z-[1]
-                   opacity-45 md:opacity-100"
+        className="absolute inset-y-0 right-0 md:left-[58%] md:right-[-6%]
+                   w-full md:w-auto z-[1]
+                   opacity-40 md:opacity-100 overflow-hidden"
       >
         <div className="relative h-full w-full">
           <SplineRobot />
         </div>
       </div>
 
-      {/* Legibility wash. Mobile: full radial dimming over the robot. Desktop: left-to-right gradient */}
+      {/* Legibility wash. Mobile: radial over the robot. Desktop: hard fade
+          covering the left 60% so any robot bleed gets absorbed. */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none z-[2] md:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 90% 80% at 50% 50%, hsl(var(--bg) / 0.85) 0%, hsl(var(--bg) / 0.55) 55%, transparent 100%)",
+            "radial-gradient(ellipse 95% 85% at 50% 50%, hsl(var(--bg) / 0.88) 0%, hsl(var(--bg) / 0.55) 55%, transparent 100%)",
         }}
       />
       <div
@@ -114,7 +117,7 @@ export default function Hero() {
         className="absolute inset-y-0 left-0 w-[60%] z-[2] pointer-events-none hidden md:block"
         style={{
           background:
-            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 55%, hsl(var(--bg) / 0.6) 80%, transparent 100%)",
+            "linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg)) 80%, hsl(var(--bg) / 0.5) 95%, transparent 100%)",
         }}
       />
 

@@ -1,37 +1,32 @@
 import { motion } from "framer-motion";
-import { Plane, Hotel, Train, Utensils, MapPin } from "lucide-react";
+import { Plane, Hotel, Star, MapPin, ArrowRight } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
- * SlideTrip — iPhone-style mockup with flying trip cards. A vertical
- * device frame with a stylized Tokyo map and 4 booking cards that
- * stagger-fly up from the bottom like a real iOS app animation.
+ * SlideTrip — the phone is the hero of the slide, dead center. iOS
+ * 17 / 18 visual language: SF-style bold sans, generous 16/20 spacing,
+ * tinted accent buttons, rounded list rows. The flow: header, map
+ * card, three list rows, total summary, pinned CTA.
  */
 
 const bookings = [
   {
     Icon: Plane,
-    title: "SFO → NRT",
-    meta: "JAL 002 · window seat",
-    price: "$1,240",
+    title: "SFO → JFK",
+    sub: "Delta · Fri 7:40am · 5h 30m",
+    price: "$312",
   },
   {
     Icon: Hotel,
-    title: "Park Hyatt Shinjuku",
-    meta: "8 nights · suite upgrade",
-    price: "$1,820",
+    title: "Made Hotel · NoMad",
+    sub: "2 nights · king · breakfast",
+    price: "$486",
   },
   {
-    Icon: Train,
-    title: "JR Pass · 8 days",
-    meta: "Kyoto + Hakone",
-    price: "$412",
-  },
-  {
-    Icon: Utensils,
-    title: "Ghibli jazz kissaten",
-    meta: "4 reservations",
-    price: "$375",
+    Icon: Star,
+    title: "Saturday plan",
+    sub: "Brunch · MoMA · dinner reso",
+    price: "$140",
   },
 ];
 
@@ -42,196 +37,188 @@ export default function SlideTrip() {
       eyebrow="Live demo · 04"
       headline={
         <>
-          "Plan{" "}
-          <span className="tw-italic text-accent">Tokyo.</span>"
+          "Get me to{" "}
+          <span className="tw-italic text-accent">New York.</span>"
         </>
       }
       body={
         <>
-          Eight days, two travelers, a budget, and a Ghibli fan. Forty minutes
-          later: flights, hotel, rail pass, dinners. One tap from booked.
+          One sentence in. Forty seconds later: flight, hotel, weekend plan,
+          all held. Twinly already knows you don't like layovers, want
+          breakfast included, and prefer hotels under 30 minutes from a
+          subway stop.
         </>
       }
       align="center"
       spotlight
       visual={
-        <div className="max-w-[1180px] mx-auto">
-          <div className="grid md:grid-cols-[1.15fr_auto] gap-10 md:gap-16 items-center">
-            {/* Left: brief + metrics */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.95, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col items-start text-left order-2 md:order-1"
+        <div className="flex flex-col items-center w-full">
+          {/* Brief quote above */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 0.85, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center mb-10 md:mb-14"
+          >
+            <div className="f-mono text-[0.54rem] tracking-[0.24em] uppercase text-fg-4 mb-3">
+              Brief · 38 seconds ago
+            </div>
+            <p
+              className="text-fg-2 mx-auto"
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: "italic",
+                fontSize: "clamp(1.4rem, 2.4vw, 2.1rem)",
+                lineHeight: 1.18,
+                letterSpacing: "-0.015em",
+                maxWidth: "26ch",
+              }}
             >
-              <div className="f-mono text-[0.54rem] tracking-[0.22em] uppercase text-fg-4 mb-5">
-                Brief · 38 min ago
-              </div>
-              <h4
-                className="text-fg mb-6"
+              "Cheapest flight to NYC,
+              <br />
+              Friday to Sunday. Hotel near a subway."
+            </p>
+          </motion.div>
+
+          {/* iPhone — centered hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 80, rotateY: -6 }}
+            whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 1.2, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            style={{ perspective: "2400px", transformStyle: "preserve-3d" }}
+          >
+            <div
+              className="relative"
+              style={{
+                width: "min(86vw, 360px)",
+                aspectRatio: "9 / 19.5",
+                borderRadius: "54px",
+                padding: "13px",
+                background:
+                  "linear-gradient(150deg, #2d2d33 0%, #0e0e10 45%, #1a1a1e 100%)",
+                boxShadow:
+                  "0 0 0 1px hsl(var(--rule-hi) / 0.6), inset 0 0 0 1px hsl(var(--fg) / 0.05), 0 100px 220px -50px rgba(0,0,0,0.95), 0 0 120px -30px hsl(var(--accent) / 0.22)",
+              }}
+            >
+              {/* Inner screen */}
+              <div
+                className="relative w-full h-full overflow-hidden"
                 style={{
-                  fontFamily: "'Fraunces', serif",
-                  fontVariationSettings: "'SOFT' 30, 'WONK' 0",
-                  fontSize: "clamp(1.65rem, 2.6vw, 2.4rem)",
-                  letterSpacing: "-0.025em",
-                  lineHeight: 1.08,
+                  borderRadius: "42px",
+                  background:
+                    "linear-gradient(180deg, hsl(36 10% 6%) 0%, hsl(36 10% 4%) 100%)",
                 }}
               >
-                "8 days in Tokyo,
-                <br />
-                mid-March, window seats,
-                <br />
-                a Ghibli fan, $4k."
-              </h4>
-              <div className="h-px w-14 bg-accent/60 my-5" />
-              <div className="grid grid-cols-2 gap-x-10 gap-y-6 w-full max-w-[380px]">
-                {[
-                  { k: "Research", v: "38 min" },
-                  { k: "Tabs opened", v: "0" },
-                  { k: "Holds secured", v: "9" },
-                  { k: "Bundle total", v: "$3,847" },
-                ].map((m, i) => (
+                {/* Dynamic Island */}
+                <div
+                  className="absolute top-2 left-1/2 -translate-x-1/2 z-[10]"
+                  style={{
+                    width: "104px",
+                    height: "30px",
+                    borderRadius: "999px",
+                    background: "#000",
+                  }}
+                />
+
+                {/* Status bar */}
+                <div className="absolute top-[15px] left-7 z-[6] text-[11px] text-fg font-semibold tabular-nums" style={{ fontFamily: "'Hanken Grotesk', system-ui" }}>
+                  9:41
+                </div>
+                <div className="absolute top-[16px] right-7 z-[6] flex items-center gap-1.5">
+                  <div className="flex items-end gap-[2px]">
+                    {[3, 5, 7, 9].map((h) => (
+                      <span
+                        key={h}
+                        className="bg-fg"
+                        style={{ width: "3.5px", height: `${h}px`, borderRadius: "0.5px" }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[9.5px] text-fg font-semibold ml-0.5" style={{ fontFamily: "'Hanken Grotesk', system-ui", letterSpacing: "-0.02em" }}>
+                    5G
+                  </span>
+                  <div className="ml-1.5 relative" style={{ width: "25px", height: "11px" }}>
+                    <div className="absolute inset-0 border border-fg/85" style={{ borderRadius: "3px" }} />
+                    <div className="absolute left-[1.5px] top-[1.5px] bottom-[1.5px] bg-fg" style={{ width: "18px", borderRadius: "1.5px" }} />
+                    <div className="absolute right-[-3px] top-[3px] w-[1.5px] h-[5px] bg-fg/85" />
+                  </div>
+                </div>
+
+                {/* App content */}
+                <div className="relative pt-[58px] px-5 pb-[88px] h-full overflow-hidden">
+                  {/* Header */}
                   <motion.div
-                    key={m.k}
-                    initial={{ opacity: 0, y: 14 }}
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-8%" }}
-                    transition={{ duration: 0.7, delay: 0.3 + i * 0.08 }}
+                    transition={{ duration: 0.7, delay: 0.5 }}
+                    className="mb-4"
+                    style={{ fontFamily: "'Hanken Grotesk', system-ui" }}
                   >
-                    <div className="f-mono text-[0.5rem] tracking-[0.22em] uppercase text-fg-4 mb-1.5">
-                      {m.k}
+                    <div className="flex items-baseline justify-between mb-1">
+                      <div
+                        className="text-fg font-bold"
+                        style={{ fontSize: "26px", letterSpacing: "-0.03em", lineHeight: 1 }}
+                      >
+                        New York
+                      </div>
+                      <div className="text-[11px] text-fg-3 font-semibold tracking-[-0.01em]">
+                        Fri · Sun
+                      </div>
                     </div>
-                    <div
-                      className="text-fg"
-                      style={{
-                        fontFamily: "'Fraunces', serif",
-                        fontVariationSettings: "'SOFT' 40, 'WONK' 0",
-                        fontSize: "1.5rem",
-                        letterSpacing: "-0.028em",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {m.v}
+                    <div className="text-[12.5px] text-fg-3 font-medium tracking-[-0.01em]">
+                      Twinly held everything · 938 total
                     </div>
                   </motion.div>
-                ))}
-              </div>
-            </motion.div>
 
-            {/* Right: iPhone mockup */}
-            <motion.div
-              initial={{ opacity: 0, y: 60, rotateY: -10 }}
-              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="order-1 md:order-2 mx-auto"
-              style={{ perspective: "2000px", transformStyle: "preserve-3d" }}
-            >
-              <div
-                className="relative"
-                style={{
-                  width: "min(86vw, 320px)",
-                  aspectRatio: "9 / 19.5",
-                  borderRadius: "44px",
-                  padding: "11px",
-                  background:
-                    "linear-gradient(145deg, #1d1d22 0%, #0b0b0d 100%)",
-                  boxShadow:
-                    "0 0 0 1.5px hsl(var(--rule-hi) / 0.4), 0 70px 180px -30px rgba(0,0,0,0.9), 0 0 80px -20px hsl(var(--accent) / 0.2)",
-                }}
-              >
-                <div
-                  className="relative w-full h-full overflow-hidden"
-                  style={{
-                    borderRadius: "34px",
-                    background:
-                      "linear-gradient(180deg, hsl(36 10% 4%) 0%, hsl(36 10% 7%) 100%)",
-                  }}
-                >
-                  {/* Dynamic Island */}
-                  <div
-                    className="absolute top-2 left-1/2 -translate-x-1/2 z-[5]"
+                  {/* Map card */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.85, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                    className="relative overflow-hidden mb-4"
                     style={{
-                      width: "92px",
-                      height: "27px",
-                      borderRadius: "999px",
-                      background: "#000",
-                    }}
-                  />
-
-                  {/* Status bar time */}
-                  <div className="absolute top-[14px] left-6 z-[6] text-[9.5px] text-fg f-sans font-semibold tabular-nums">
-                    9:41
-                  </div>
-
-                  {/* App header */}
-                  <div className="relative z-[2] pt-[52px] px-5">
-                    <div className="f-mono text-[0.44rem] tracking-[0.26em] uppercase text-fg-4 mb-1">
-                      Trip · held
-                    </div>
-                    <div className="flex items-baseline justify-between">
-                      <div
-                        className="text-fg"
-                        style={{
-                          fontFamily: "'Fraunces', serif",
-                          fontVariationSettings: "'SOFT' 40, 'WONK' 0",
-                          fontSize: "1.35rem",
-                          letterSpacing: "-0.028em",
-                          lineHeight: 1,
-                        }}
-                      >
-                        Tokyo
-                      </div>
-                      <div className="f-mono text-[0.5rem] tracking-[0.08em] text-accent">
-                        $3,847
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Map area */}
-                  <div
-                    className="relative mx-5 mt-4 overflow-hidden"
-                    style={{
-                      height: "128px",
+                      height: "112px",
+                      borderRadius: "16px",
                       background:
-                        "radial-gradient(ellipse at 50% 50%, hsl(36 10% 11%) 0%, hsl(36 10% 5%) 100%)",
-                      borderRadius: "14px",
-                      border: "1px solid hsl(var(--rule) / 0.5)",
+                        "radial-gradient(ellipse at 60% 50%, hsl(36 10% 13%) 0%, hsl(36 10% 6%) 100%)",
                     }}
                   >
+                    {/* Topographic accent */}
                     <svg
                       viewBox="0 0 300 200"
                       className="absolute inset-0 w-full h-full"
                       preserveAspectRatio="xMidYMid slice"
                     >
-                      {[0, 1, 2, 3, 4].map((i) => (
+                      {[0, 1, 2, 3].map((i) => (
                         <motion.path
                           key={i}
-                          d="M140,50 Q180,30 210,55 T240,110 Q250,150 220,170 T140,180 Q100,160 100,110 T140,50 Z"
+                          d="M40,80 Q80,40 140,60 T220,90 Q260,130 240,170 T140,180 Q60,160 50,120 T40,80 Z"
                           fill="none"
                           stroke="hsl(var(--accent))"
                           strokeWidth="0.8"
-                          strokeOpacity={0.08 + i * 0.04}
+                          strokeOpacity={0.1 + i * 0.05}
                           initial={{ pathLength: 0 }}
                           whileInView={{ pathLength: 1 }}
                           viewport={{ once: true, margin: "-10%" }}
                           transition={{
-                            duration: 2,
-                            delay: 0.4 + i * 0.12,
+                            duration: 1.8,
+                            delay: 0.8 + i * 0.12,
                             ease: [0.22, 1, 0.36, 1],
                           }}
                           style={{
                             transform: `scale(${1 - i * 0.08})`,
-                            transformOrigin: "170px 110px",
+                            transformOrigin: "150px 110px",
                           }}
                         />
                       ))}
                     </svg>
-
-                    {/* Pin with echo */}
+                    {/* Pin */}
                     <motion.div
-                      initial={{ opacity: 0, y: -24, scale: 0.5 }}
+                      initial={{ opacity: 0, y: -22, scale: 0.5 }}
                       whileInView={{ opacity: 1, y: 0, scale: 1 }}
                       viewport={{ once: true, margin: "-10%" }}
                       transition={{
@@ -242,19 +229,15 @@ export default function SlideTrip() {
                         stiffness: 140,
                       }}
                       className="absolute"
-                      style={{
-                        left: "50%",
-                        top: "54%",
-                        transform: "translate(-50%, -100%)",
-                      }}
+                      style={{ left: "55%", top: "50%", transform: "translate(-50%, -100%)" }}
                     >
                       <MapPin
-                        size={18}
-                        strokeWidth={2.2}
+                        size={20}
+                        strokeWidth={2.4}
                         className="text-accent relative z-[2]"
                         style={{
-                          filter:
-                            "drop-shadow(0 0 8px hsl(var(--accent) / 0.75))",
+                          filter: "drop-shadow(0 0 10px hsl(var(--accent) / 0.85))",
+                          fill: "hsl(var(--accent))",
                         }}
                       />
                       <motion.div
@@ -267,86 +250,132 @@ export default function SlideTrip() {
                           ease: "easeOut",
                         }}
                         className="absolute inset-0 rounded-full"
-                        style={{ background: "hsl(var(--accent) / 0.45)" }}
+                        style={{ background: "hsl(var(--accent) / 0.55)" }}
                       />
                     </motion.div>
-                  </div>
+                    <div className="absolute bottom-2 left-3 text-[9px] text-fg-3 font-semibold" style={{ fontFamily: "'Hanken Grotesk', system-ui" }}>
+                      Manhattan
+                    </div>
+                  </motion.div>
 
-                  {/* Flying booking cards */}
-                  <div className="mt-4 mx-5 space-y-2.5">
+                  {/* Booking list rows */}
+                  <div className="space-y-2.5">
                     {bookings.map((b, i) => (
                       <motion.div
                         key={b.title}
-                        initial={{ opacity: 0, y: 60, scale: 0.94 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={{ once: true, margin: "-10%" }}
+                        initial={{ opacity: 0, y: 28 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-8%" }}
                         transition={{
-                          duration: 0.75,
-                          delay: 1.4 + i * 0.18,
+                          duration: 0.7,
+                          delay: 1.4 + i * 0.16,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className="flex items-center gap-3 px-3 py-2.5 border border-rule/60"
+                        className="flex items-center gap-3 px-3.5 py-3"
                         style={{
                           background:
-                            "linear-gradient(180deg, hsl(var(--bg-2) / 0.72) 0%, hsl(var(--bg) / 0.72) 100%)",
-                          backdropFilter: "blur(8px)",
-                          borderRadius: "10px",
+                            "linear-gradient(180deg, hsl(36 10% 11%) 0%, hsl(36 10% 8%) 100%)",
+                          borderRadius: "14px",
+                          border: "0.5px solid hsl(var(--rule-hi) / 0.6)",
                         }}
                       >
                         <div
-                          className="w-7 h-7 flex items-center justify-center shrink-0 border border-accent/40"
+                          className="w-9 h-9 flex items-center justify-center shrink-0"
                           style={{
-                            background: "hsl(var(--accent) / 0.08)",
-                            borderRadius: "7px",
+                            background:
+                              "linear-gradient(135deg, hsl(var(--accent) / 0.18) 0%, hsl(var(--accent) / 0.04) 100%)",
+                            borderRadius: "10px",
                           }}
                         >
-                          <b.Icon
-                            size={13}
-                            strokeWidth={1.8}
-                            className="text-accent"
-                          />
+                          <b.Icon size={15} strokeWidth={2.2} className="text-accent" />
                         </div>
-                        <div className="flex-1 min-w-0 text-left">
+                        <div className="flex-1 min-w-0" style={{ fontFamily: "'Hanken Grotesk', system-ui" }}>
                           <div className="flex items-baseline justify-between gap-2">
-                            <div className="text-[11px] text-fg font-medium truncate">
+                            <div className="text-[12.5px] text-fg font-semibold tracking-[-0.01em] truncate">
                               {b.title}
                             </div>
-                            <div className="f-mono text-[0.52rem] tracking-[0.04em] text-accent tabular-nums shrink-0">
+                            <div className="text-[12px] text-fg font-bold tabular-nums tracking-[-0.01em] shrink-0">
                               {b.price}
                             </div>
                           </div>
-                          <div className="text-[9px] text-fg-4 truncate">
-                            {b.meta}
+                          <div className="text-[10.5px] text-fg-3 font-medium tracking-[-0.005em] truncate">
+                            {b.sub}
                           </div>
                         </div>
+                        <ArrowRight size={11} strokeWidth={2.5} className="text-fg-4 shrink-0" />
                       </motion.div>
                     ))}
                   </div>
+                </div>
 
-                  {/* CTA pinned to bottom */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 0.8, delay: 2.6 }}
-                    className="absolute bottom-6 left-5 right-5"
+                {/* Bottom safe area + CTA */}
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.85, delay: 2.1 }}
+                  className="absolute bottom-0 left-0 right-0 px-5 pt-3 pb-7"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent 0%, hsl(36 10% 4%) 35%)",
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="w-full py-3.5 bg-accent text-bg font-bold tracking-[-0.01em]"
+                    style={{
+                      fontFamily: "'Hanken Grotesk', system-ui",
+                      fontSize: "14px",
+                      borderRadius: "14px",
+                      boxShadow:
+                        "0 0 0 0.5px hsl(var(--accent) / 0.4), 0 18px 36px -12px hsl(var(--accent) / 0.65)",
+                    }}
                   >
-                    <button
-                      type="button"
-                      className="w-full py-3 bg-accent text-bg f-mono text-[0.54rem] font-semibold tracking-[0.2em] uppercase"
-                      style={{
-                        borderRadius: "12px",
-                        boxShadow:
-                          "0 0 0 1px hsl(var(--accent) / 0.3), 0 14px 30px -10px hsl(var(--accent) / 0.6)",
-                      }}
-                    >
-                      Approve &amp; book
-                    </button>
-                  </motion.div>
+                    Approve · book all 3
+                  </button>
+                  {/* Home indicator */}
+                  <div
+                    className="mx-auto mt-4 rounded-full"
+                    style={{ width: "108px", height: "5px", background: "hsl(var(--fg) / 0.4)" }}
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Metrics row underneath */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 0.9, delay: 2.4, ease: [0.22, 1, 0.36, 1] }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 mt-12 md:mt-16 max-w-[760px]"
+          >
+            {[
+              { k: "Research", v: "38 sec" },
+              { k: "Tabs opened", v: "0" },
+              { k: "Held now", v: "3" },
+              { k: "Total", v: "$938" },
+            ].map((m) => (
+              <div key={m.k} className="text-center">
+                <div className="f-mono text-[0.5rem] tracking-[0.22em] uppercase text-fg-4 mb-1.5">
+                  {m.k}
+                </div>
+                <div
+                  className="text-fg"
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+                    fontSize: "clamp(1.5rem, 2.2vw, 2rem)",
+                    letterSpacing: "-0.028em",
+                    lineHeight: 1,
+                  }}
+                >
+                  {m.v}
                 </div>
               </div>
-            </motion.div>
-          </div>
+            ))}
+          </motion.div>
         </div>
       }
     />

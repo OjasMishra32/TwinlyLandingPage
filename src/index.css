@@ -348,6 +348,15 @@
     50% { opacity: 0.4; }
   }
 
+  /* Syntax tokens for SlideCode editor */
+  .tk-k { color: hsl(74 74% 68%); }                /* keyword lime */
+  .tk-s { color: hsl(30 65% 70%); }                /* string amber */
+  .tk-f { color: hsl(var(--fg)); font-weight: 500; }
+  .tk-c { color: hsl(200 45% 75%); }               /* component blue-grey */
+  .tk-t { color: hsl(340 55% 75%); }               /* tag pink */
+  .tk-a { color: hsl(44 50% 80%); }                /* attribute warm */
+  .tk-p { color: hsl(var(--fg-3)); }               /* punctuation */
+
   /* Marquee animation, used by Marquee.tsx */
   .animate-marq { animation: marq 55s linear infinite; }
   @keyframes marq {

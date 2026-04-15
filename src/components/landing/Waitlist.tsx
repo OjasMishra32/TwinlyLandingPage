@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const intents = [
+  "Ship my landing page",
+  "Apply to 40 jobs",
+  "Negotiate my rent",
+  "Debug my prod",
+  "Run my outreach",
   "File my taxes",
-  "Plan the whole trip",
-  "Do my homework",
-  "Chase the refund",
-  "Find me a place",
-  "Run my inbox",
 ];
 
 const FOUNDER_EMAIL = "founders@twinly.tech";
