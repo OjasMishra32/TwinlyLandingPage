@@ -1,263 +1,150 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import TwinOrb from "./TwinOrb";
 
 /**
- * TwinReveal — full-bleed canvas image-sequence scrubber.
+ * TwinReveal — a typography-forward moment of silence between the hero
+ * and the pitch. No scroll-scrubbed video, no frame preload, no decoder
+ * lag. Just a massive italic wordmark that builds letter-by-letter when
+ * scrolled into view, a faint twin-orb canvas breathing behind it, and
+ * one line of prose underneath.
  *
- * Preloads 192 high-res JPEG frames and draws the active one straight
- * into a canvas. No <video>, no seek stutter — true 1:1 frame-per-
- * scroll. Canvas is sized to cover the full viewport (letterboxing
- * cropped by JS-measured cover fit).
+ * This replaces the earlier 192-JPEG canvas scrubber. Same concept
+ * (the birth of the twin), radically lighter execution.
  */
 
-const FRAME_COUNT = 192;
-const NATIVE_W = 3840;
-const NATIVE_H = 2160;
-const CONTENT_RATIO = NATIVE_W / NATIVE_H;
-
-function framePath(i: number) {
-  return `/reveal/f${String(i + 1).padStart(3, "0")}.jpg`;
-}
+const WORD = "twinly";
 
 export default function TwinReveal() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
-  const currentFrameRef = useRef(0);
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const [loaded, setLoaded] = useState(0);
-  const [ready, setReady] = useState(false);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  const captionOpacity = useTransform(
-    scrollYProgress,
-    [0.34, 0.46, 0.84, 0.94],
-    [0, 1, 1, 0]
-  );
-  const metaOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.06, 0.94, 1],
-    [0, 1, 1, 0]
-  );
-
-  // Preload all frames — priority wave: frame 0, then the 70-140
-  // reveal band, then the rest
-  useEffect(() => {
-    let cancelled = false;
-    const imgs: HTMLImageElement[] = new Array(FRAME_COUNT);
-    let count = 0;
-
-    const priority: number[] = [];
-    priority.push(0);
-    for (let i = 70; i <= 140; i++) priority.push(i);
-    for (let i = 0; i < FRAME_COUNT; i++) {
-      if (i !== 0 && !(i >= 70 && i <= 140)) priority.push(i);
-    }
-
-    const loadOne = (idx: number): Promise<void> =>
-      new Promise((resolve) => {
-        const img = new Image();
-        img.decoding = "async";
-        img.onload = () => {
-          if (cancelled) return resolve();
-          imgs[idx] = img;
-          count++;
-          setLoaded(count);
-          if (idx === 0 && ctxRef.current) {
-            ctxRef.current.drawImage(img, 0, 0, NATIVE_W, NATIVE_H);
-          }
-          resolve();
-        };
-        img.onerror = () => resolve();
-        img.src = framePath(idx);
-      });
-
-    (async () => {
-      const CONCURRENCY = 12;
-      for (let i = 0; i < priority.length; i += CONCURRENCY) {
-        if (cancelled) break;
-        const slice = priority.slice(i, i + CONCURRENCY);
-        await Promise.all(slice.map(loadOne));
-      }
-      if (!cancelled) {
-        imagesRef.current = imgs;
-        setReady(true);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Canvas context + cover-fit sizing
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
-    if (!ctx) return;
-    ctxRef.current = ctx;
-    ctx.fillStyle = "#05060a";
-    ctx.fillRect(0, 0, NATIVE_W, NATIVE_H);
-
-    const fit = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const viewportRatio = vw / vh;
-      let w: number;
-      let h: number;
-      if (viewportRatio > CONTENT_RATIO) {
-        w = vw;
-        h = vw / CONTENT_RATIO;
-      } else {
-        h = vh;
-        w = vh * CONTENT_RATIO;
-      }
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-    };
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
-  }, []);
-
-  // Scroll → frame mapping, direct 1:1
-  useMotionValueEvent(scrollYProgress, "change", (p) => {
-    const ctx = ctxRef.current;
-    const imgs = imagesRef.current;
-    if (!ctx || !imgs.length) return;
-
-    const target = Math.max(
-      0,
-      Math.min(FRAME_COUNT - 1, Math.round(p * (FRAME_COUNT - 1)))
-    );
-    if (target === currentFrameRef.current) return;
-    const img = imgs[target];
-    if (!img || !img.complete) {
-      let nearest = target;
-      for (let d = 1; d < FRAME_COUNT; d++) {
-        const lo = target - d;
-        const hi = target + d;
-        if (lo >= 0 && imgs[lo] && imgs[lo].complete) {
-          nearest = lo;
-          break;
-        }
-        if (hi < FRAME_COUNT && imgs[hi] && imgs[hi].complete) {
-          nearest = hi;
-          break;
-        }
-      }
-      const fallback = imgs[nearest];
-      if (!fallback || !fallback.complete) return;
-      ctx.drawImage(fallback, 0, 0, NATIVE_W, NATIVE_H);
-      currentFrameRef.current = nearest;
-      return;
-    }
-    ctx.drawImage(img, 0, 0, NATIVE_W, NATIVE_H);
-    currentFrameRef.current = target;
-  });
-
-  const loadPct = Math.round((loaded / FRAME_COUNT) * 100);
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const inView = useInView(ref, { once: true, margin: "-20%" });
 
   return (
     <section
-      ref={sectionRef}
+      ref={ref}
       id="reveal"
-      className="relative border-t border-rule bg-bg"
-      style={{ height: "420vh" }}
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden border-t border-rule bg-bg"
     >
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden flex items-center justify-center">
-        {/* Full-bleed canvas, JS-sized for cover-fit */}
-        <canvas
-          ref={canvasRef}
-          width={NATIVE_W}
-          height={NATIVE_H}
-          className="block absolute"
-          style={{
-            opacity: ready ? 1 : 0.35,
-            transition: "opacity 0.6s ease",
-          }}
-        />
+      {/* Breathing twin-orb canvas, low opacity, low positioned */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ opacity: 0.42 }}
+      >
+        <TwinOrb />
+      </div>
 
-        {/* Subtle top vignette so meta line reads over any frame */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 top-0 h-[20%] pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, hsl(var(--bg) / 0.7) 0%, transparent 100%)",
-          }}
-        />
+      {/* Radial wash that focuses attention on the wordmark */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 45% at 50% 50%, hsl(var(--accent) / 0.08) 0%, transparent 65%), radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, hsl(var(--bg) / 0.55) 90%)",
+        }}
+      />
 
-        {/* Subtle bottom vignette for caption */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 h-[35%] pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(0deg, hsl(var(--bg) / 0.85) 0%, transparent 100%)",
-          }}
-        />
+      {/* Top fade in from prior section */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-[22%] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, hsl(var(--bg)) 0%, transparent 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-[22%] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(0deg, hsl(var(--bg)) 0%, transparent 100%)",
+        }}
+      />
 
-        {/* Top-left meta (mono label) */}
+      {/* Content */}
+      <div className="relative z-[2] w-full flex flex-col items-center text-center px-6">
+        {/* Kicker label */}
         <motion.div
-          style={{ opacity: metaOpacity }}
-          className="absolute top-8 left-6 md:top-12 md:left-14 z-[2] flex items-center gap-3"
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-center gap-4 mb-14 md:mb-20"
         >
-          <span className="live-dot" />
-          <span className="f-mono text-[0.58rem] font-medium tracking-[0.24em] uppercase text-fg-2">
-            Origin · scene 01
+          <span className="h-px w-10 bg-accent" />
+          <span className="f-mono text-[0.58rem] font-medium tracking-[0.28em] uppercase text-fg-2">
+            The moment a twin is born
           </span>
+          <span className="h-px w-10 bg-accent" />
         </motion.div>
 
-        {/* Top-right loading / ready meta */}
-        <motion.div
-          style={{ opacity: metaOpacity }}
-          className="absolute top-8 right-6 md:top-12 md:right-14 z-[2] f-mono text-[0.54rem] tracking-[0.2em] uppercase text-accent"
+        {/* Massive italic wordmark with letter-by-letter rise */}
+        <h2
+          className="tw-italic"
+          style={{
+            fontFamily: "'Instrument Serif', serif",
+            fontSize: "clamp(6rem, 20vw, 22rem)",
+            lineHeight: 0.84,
+            letterSpacing: "-0.035em",
+            color: "hsl(var(--accent))",
+            margin: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "baseline",
+            filter: "drop-shadow(0 20px 60px hsl(var(--accent) / 0.18))",
+          }}
+          aria-label={WORD}
         >
-          {ready ? "Ready" : `Loading ${loadPct}%`}
-        </motion.div>
-
-        {/* Loading progress bar (only while preloading) */}
-        {!ready && (
-          <div className="absolute bottom-8 left-6 right-6 md:bottom-14 md:left-14 md:right-14 z-[3]">
-            <div className="flex items-center justify-between mb-2 f-mono text-[0.56rem] tracking-[0.22em] uppercase text-fg-3">
-              <span>Assembling the reveal</span>
-              <span className="text-accent">{loadPct}%</span>
-            </div>
-            <div className="h-[2px] bg-rule overflow-hidden">
-              <div
-                className="h-full bg-accent transition-[width] duration-150"
-                style={{ width: `${loadPct}%` }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Bottom caption — appears during the reveal band */}
-        {ready && (
-          <motion.div
-            style={{ opacity: captionOpacity }}
-            className="absolute bottom-14 md:bottom-20 left-1/2 -translate-x-1/2 z-[3] text-center px-6 max-w-[860px]"
-          >
-            <p
-              className="text-fg font-serif italic mx-auto"
-              style={{
-                fontSize: "clamp(1.2rem, 2vw, 1.9rem)",
-                lineHeight: 1.22,
-                letterSpacing: "-0.01em",
-                maxWidth: "32ch",
+          {Array.from(WORD).map((char, i) => (
+            <motion.span
+              key={i}
+              aria-hidden
+              initial={{
+                opacity: 0,
+                y: 120,
+                filter: "blur(18px)",
+                rotateX: reduced ? 0 : -25,
               }}
+              animate={
+                inView
+                  ? { opacity: 1, y: 0, filter: "blur(0px)", rotateX: 0 }
+                  : {}
+              }
+              transition={{
+                duration: 1.3,
+                delay: 0.25 + i * 0.09,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="inline-block"
+              style={{ transformOrigin: "50% 80%" }}
             >
-              One self. Split in two. One of them stays here. The other runs
-              your week.
-            </p>
-          </motion.div>
-        )}
+              {char}
+            </motion.span>
+          ))}
+        </h2>
+
+        {/* Caption underneath */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-16 md:mt-24 text-fg-2 font-serif italic mx-auto"
+          style={{
+            fontSize: "clamp(1.15rem, 2vw, 1.85rem)",
+            lineHeight: 1.32,
+            letterSpacing: "-0.01em",
+            maxWidth: "34ch",
+            fontStyle: "italic",
+            fontFamily: "'Instrument Serif', serif",
+          }}
+        >
+          One self. Split in two.
+          <br />
+          One of them stays here.
+          <br />
+          The other runs your week.
+        </motion.p>
       </div>
     </section>
   );
