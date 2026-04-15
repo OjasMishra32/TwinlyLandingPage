@@ -1,9 +1,37 @@
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import SplineRobot from "./SplineRobot";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
 const BASE = 0.1;
+
+function CountUp({
+  to,
+  decimals = 0,
+  duration = 1600,
+  start,
+}: {
+  to: number;
+  decimals?: number;
+  duration?: number;
+  start: boolean;
+}) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let raf = 0;
+    const from = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - from) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setV(eased * to);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [start, to, duration]);
+  return <>{v.toFixed(decimals)}</>;
+}
 
 function Line({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
@@ -35,6 +63,8 @@ function Fade({ children, delay = 0 }: { children: ReactNode; delay?: number }) 
 export default function Hero() {
   const primaryRef = useMagnetic<HTMLAnchorElement>({ radius: 150, strength: 0.32 });
   const secondaryRef = useMagnetic<HTMLAnchorElement>({ radius: 130, strength: 0.22 });
+  const statsRef = useRef<HTMLDivElement>(null);
+  const statsInView = useInView(statsRef, { once: true, margin: "-10%" });
 
   return (
     <section
@@ -106,7 +136,7 @@ export default function Hero() {
         </Fade>
 
         <Fade delay={0.62}>
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap mb-16">
             <a ref={primaryRef} href="#waitlist" className="btn primary will-change-transform">
               Request access
               <span className="arrow" />
@@ -115,6 +145,46 @@ export default function Hero() {
               See a playbook
               <span className="arrow" />
             </a>
+          </div>
+        </Fade>
+
+        {/* Real numbers from early beta — adds weight */}
+        <Fade delay={0.78}>
+          <div
+            ref={statsRef}
+            className="grid gap-12 pt-8 border-t border-rule max-w-[680px]"
+            style={{ gridTemplateColumns: "repeat(3, auto)" }}
+          >
+            {[
+              { k: "Tasks / day", v: 12, d: 0, em: "avg" },
+              { k: "Hours saved / wk", v: 8.5, d: 1, em: "median" },
+              { k: "Approved auto", v: 94, d: 0, em: "%" },
+            ].map((kv) => (
+              <div key={kv.k} className="flex flex-col gap-2">
+                <span className="f-mono text-[0.56rem] font-medium tracking-[0.22em] uppercase text-fg-4">
+                  {kv.k}
+                </span>
+                <span
+                  className="text-fg flex items-baseline gap-1.5"
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontVariationSettings: "'SOFT' 40, 'WONK' 0",
+                    fontSize: "2.2rem",
+                    letterSpacing: "-0.028em",
+                    lineHeight: 1,
+                    fontWeight: 400,
+                  }}
+                >
+                  <CountUp to={kv.v} decimals={kv.d} start={statsInView} />
+                  <em
+                    className="not-italic text-accent f-mono font-normal"
+                    style={{ fontSize: "0.68rem", letterSpacing: "0.08em" }}
+                  >
+                    {kv.em}
+                  </em>
+                </span>
+              </div>
+            ))}
           </div>
         </Fade>
       </div>
