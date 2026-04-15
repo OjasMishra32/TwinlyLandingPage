@@ -1,18 +1,19 @@
 import { motion } from "framer-motion";
-import { FileText, Rocket, MapPin } from "lucide-react";
+import { Bug, Users, PhoneCall } from "lucide-react";
 import KeynoteSlide from "./KeynoteSlide";
 
 /**
  * SlideParallel: three rich product-card tiles with real depth.
- * Each card has a gradient backing, an icon, big title, metric row,
- * state chip, and an accent rail that glows on running / approve.
+ * Each card is a parallel job that a normal AI assistant genuinely
+ * cannot do — debugging production code, running personalized cold
+ * outreach at scale, or holding a live phone negotiation.
  */
 
 type State = "running" | "approve" | "done";
 
 type Job = {
   tag: string;
-  Icon: typeof FileText;
+  Icon: typeof Bug;
   title: string;
   state: State;
   progress: number;
@@ -23,34 +24,34 @@ type Job = {
 
 const jobs: Job[] = [
   {
-    tag: "TAX",
-    Icon: FileText,
-    title: "Filing 2025 return",
+    tag: "DEBUG",
+    Icon: Bug,
+    title: "Fixing a Sentry crash from 2am",
     state: "running",
-    progress: 0.74,
-    metricLabel: "Est. refund",
-    metricValue: "$4,217",
-    subLabel: "14 docs classified · schedule C drafted",
+    progress: 0.72,
+    metricLabel: "ETA · PR",
+    metricValue: "4 min",
+    subLabel: "git-blamed PR #812 · wrote regression test · pushing fix",
   },
   {
-    tag: "CODE",
-    Icon: Rocket,
-    title: "Shipping mealmap.app",
+    tag: "OUTREACH",
+    Icon: Users,
+    title: "DM'ing 240 VCs in your voice",
     state: "approve",
     progress: 0.96,
-    metricLabel: "Deploy",
-    metricValue: "Held",
-    subLabel: "Next.js built · Lighthouse 98 · ready",
+    metricLabel: "Drafted",
+    metricValue: "240 / 240",
+    subLabel: "Crunchbase scraped · each opener tuned to their last tweet",
   },
   {
-    tag: "TRIP",
-    Icon: MapPin,
-    title: "Tokyo · 8 days",
+    tag: "CALL",
+    Icon: PhoneCall,
+    title: "On the phone with Geico · 47 min",
     state: "done",
     progress: 1,
-    metricLabel: "Bundle",
-    metricValue: "$3,847",
-    subLabel: "9 holds confirmed · itinerary live",
+    metricLabel: "Won",
+    metricValue: "$842",
+    subLabel: "navigated IVR, argued with 2 reps, escalated to supervisor",
   },
 ];
 
@@ -79,9 +80,10 @@ export default function SlideParallel() {
       }
       body={
         <>
-          Twin doesn't take turns. Three jobs in flight right now: one
-          running, one waiting on your nod, one already delivered. A clone of
-          you, running in parallel.
+          Three jobs in flight right now: Twinly is debugging a crash in
+          your production code, drafting 240 personalized VC cold DMs, and
+          holding a live phone call with your insurance company. All at the
+          same time. None of them things a chatbot could touch.
         </>
       }
       align="center"
