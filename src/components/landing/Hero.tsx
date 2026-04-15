@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import TwinOrb from "./TwinOrb";
+import SplineRobot from "./SplineRobot";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
 const BASE = 0.1;
@@ -89,15 +89,14 @@ export default function Hero() {
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
 
-      {/* The orb. Mobile: subtle behind the text. Desktop: fills right half */}
+      {/* Spline robot — the hero visual, right half on desktop, dimmed bg on mobile */}
       <div
-        aria-hidden
-        className="absolute inset-y-0 right-0 pointer-events-none
-                   w-full md:w-[72%] md:right-[-12%]
-                   opacity-55 md:opacity-100"
+        className="absolute inset-y-0 right-0
+                   w-full md:w-[72%] md:right-[-12%] z-[1]
+                   opacity-50 md:opacity-100"
       >
         <div className="relative h-full w-full">
-          <TwinOrb />
+          <SplineRobot />
         </div>
       </div>
 
