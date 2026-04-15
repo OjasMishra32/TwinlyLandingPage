@@ -351,6 +351,14 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
   }
+  @keyframes homework-caret {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+  @keyframes homework-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px hsl(var(--accent) / 0.3), 0 14px 30px -10px hsl(var(--accent) / 0.6); }
+    50% { box-shadow: 0 0 0 3px hsl(var(--accent) / 0.5), 0 20px 40px -10px hsl(var(--accent) / 0.8); }
+  }
 
   /* Syntax tokens for SlideCode editor */
   .tk-k { color: hsl(74 74% 68%); }                /* keyword lime */

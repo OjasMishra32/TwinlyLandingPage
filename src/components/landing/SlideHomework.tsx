@@ -1,12 +1,27 @@
 import { motion } from "framer-motion";
 import KeynoteSlide from "./KeynoteSlide";
+import { Check } from "./icons";
 
 /**
- * SlideHomework, "Do my homework." Source PDFs float in from the left,
- * a document writes itself in the middle, Canvas submit button on the
- * right pulses then flashes "SUBMITTED". An 8-year-old could trigger
- * this.
+ * SlideHomework — "Do my homework." Three-panel flow: sources read,
+ * paper drafts itself in the center, Canvas submit card on the right
+ * fires an animated click at the end. Passes GPTZero because it's
+ * trained on exactly how the student writes.
  */
+
+const sources = [
+  { tag: "01", title: "Chap 4 — Supply curves", kind: "PDF · 22p" },
+  { tag: "02", title: "Lecture — Elasticity", kind: "SLIDES · 48" },
+  { tag: "03", title: "Case — Apple Q3 pricing", kind: "PDF · 14p" },
+  { tag: "04", title: "Prof. Kim · office hours", kind: "NOTES · 6p" },
+];
+
+const paragraphs = [
+  "Price elasticity of demand is almost never the headline number — it's the ratio that hides underneath every pricing decision Apple has made since the App Store opened.",
+  "Consider the 2023 Services hike. A 20% bump on Apple Music, Arcade, and News+ looks aggressive on paper, but Apple's historical elasticity coefficient sits near -0.4, meaning quantity demanded barely moved when prices rose.",
+  "The reason has nothing to do with the product. It has to do with switching costs, ecosystem lock-in, and the fact that once you have four apps, a rating history, and three family-plan slots, you don't leave over $3.",
+];
+
 export default function SlideHomework() {
   return (
     <KeynoteSlide
@@ -20,51 +35,51 @@ export default function SlideHomework() {
       }
       body={
         <>
-          14 readings, an argued thesis, MLA bibliography, 1.2% Turnitin,
-          in your voice at your grade level. Uploaded to Canvas before
-          you finish your coffee.
+          Econ 201 case study. Four sources read, a 12-page argued draft
+          written in your exact voice, 0.2% AI-detection score, one-tap
+          submission to Canvas. Before your coffee gets cold.
         </>
       }
       align="center"
       spotlight
       visual={
-        <div className="max-w-[1180px] mx-auto">
-          <div className="grid md:grid-cols-[0.8fr_1.3fr_0.9fr] gap-5 md:gap-6 items-stretch">
-            {/* Left: source PDFs */}
+        <div className="max-w-[1280px] mx-auto">
+          <div className="grid md:grid-cols-[0.8fr_1.35fr_0.85fr] gap-5 md:gap-6 items-start">
+            {/* LEFT: sources being read */}
             <div className="flex flex-col gap-3">
-              <div className="f-mono text-[0.5rem] tracking-[0.22em] uppercase text-fg-4 mb-1 pl-1">
-                Reading 14 sources
+              <div className="f-mono text-[0.5rem] tracking-[0.24em] uppercase text-fg-4 mb-1 pl-1">
+                Reading 4 sources
               </div>
-              {[
-                { t: "Shklovsky · Art as Technique", p: "PDF · 18p" },
-                { t: "Jakobson · Linguistics & Poetics", p: "PDF · 32p" },
-                { t: "Eikhenbaum · Formal Method", p: "PDF · 24p" },
-                { t: "Bakhtin · Discourse in the Novel", p: "PDF · 47p" },
-              ].map((s, i) => (
+              {sources.map((s, i) => (
                 <motion.div
-                  key={s.t}
-                  initial={{ opacity: 0, x: -30 }}
+                  key={s.title}
+                  initial={{ opacity: 0, x: -28 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{
-                    duration: 0.7,
-                    delay: 0.2 + i * 0.12,
+                    duration: 0.65,
+                    delay: 0.18 + i * 0.12,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="relative border border-rule bg-bg-2/60 px-3 py-2.5 text-left group"
+                  className="relative border border-rule bg-bg-2/55 px-3 py-2.5 text-left"
                 >
-                  <div className="text-[11px] text-fg leading-tight mb-1 font-medium">
-                    {s.t}
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="f-mono text-[0.48rem] font-semibold tracking-[0.2em] text-accent">
+                      {s.tag}
+                    </span>
+                    <span className="f-mono text-[0.44rem] tracking-[0.12em] uppercase text-fg-4">
+                      {s.kind}
+                    </span>
                   </div>
-                  <div className="f-mono text-[0.48rem] tracking-[0.1em] uppercase text-fg-4">
-                    {s.p}
+                  <div className="text-[11.5px] text-fg leading-tight font-medium">
+                    {s.title}
                   </div>
                   <motion.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true, margin: "-8%" }}
                     transition={{
-                      duration: 1.4,
+                      duration: 1.2,
                       delay: 0.8 + i * 0.15,
                       ease: "linear",
                     }}
@@ -72,144 +87,281 @@ export default function SlideHomework() {
                   />
                 </motion.div>
               ))}
-              <div className="pl-1 f-mono text-[0.48rem] tracking-[0.18em] uppercase text-fg-3 mt-1">
-                + 10 more · 31 total cited
-              </div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 0.6, delay: 1.4 }}
+                className="pl-1 mt-1 flex items-center gap-2 f-mono text-[0.48rem] tracking-[0.18em] uppercase text-accent"
+              >
+                <span className="w-[5px] h-[5px] rounded-full bg-accent" />
+                all absorbed
+              </motion.div>
             </div>
 
-            {/* Center: the paper writing itself */}
+            {/* CENTER: the paper drafting itself */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-8%" }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="relative border border-rule-hi overflow-hidden text-left"
               style={{
-                background: "hsl(var(--fg) / 0.96)",
-                boxShadow: "0 50px 120px -40px rgba(0,0,0,0.8)",
+                background: "hsl(var(--fg) / 0.97)",
+                boxShadow:
+                  "0 60px 140px -40px rgba(0,0,0,0.85), 0 0 0 1px hsl(var(--fg) / 0.1)",
               }}
             >
               <div className="px-5 py-3 border-b border-black/10 flex items-center justify-between bg-black/5">
-                <div className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-black/50">
-                  ENGL 402 · Final
+                <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
+                  ECON 201 · Case brief
                 </div>
-                <div className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-black/50">
+                <div className="f-mono text-[0.48rem] tracking-[0.14em] uppercase text-black/50">
                   Page 1 of 12
                 </div>
               </div>
-              <div className="px-6 md:px-8 py-6 md:py-8 min-h-[340px] text-black/85">
+              <div className="px-6 md:px-8 py-7 md:py-8 min-h-[360px] text-black/85">
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.7, delay: 1.1 }}
-                  className="text-[10px] text-black/50 mb-2 text-center"
-                  style={{ fontFamily: "'Times New Roman', serif" }}
+                  transition={{ duration: 0.6, delay: 1.1 }}
+                  className="text-center mb-3"
+                  style={{
+                    fontFamily: "'Times New Roman', serif",
+                    fontSize: "9.5px",
+                    color: "rgba(0,0,0,0.55)",
+                  }}
                 >
-                  Ojasva Mishra · April 15, 2026
+                  Ojasva Mishra · ECON 201 · Prof. Kim · April 18, 2026
                 </motion.div>
                 <motion.h4
-                  initial={{ opacity: 0, y: 14 }}
+                  initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.8, delay: 1.3 }}
+                  transition={{ duration: 0.7, delay: 1.25 }}
                   className="text-center mb-6"
                   style={{
                     fontFamily: "'Times New Roman', serif",
                     fontSize: "14px",
                     fontWeight: 700,
                     letterSpacing: "-0.005em",
+                    lineHeight: 1.3,
                   }}
                 >
-                  Ostranenie and the Ordinary:
+                  Why Price Elasticity Doesn't Explain Apple:
                   <br />
-                  Shklovsky in Late-Modernist Prose
+                  Switching Costs and the Illusion of Choice
                 </motion.h4>
                 <div
-                  className="text-[11px] leading-[1.75]"
+                  className="text-[10.5px] leading-[1.85]"
                   style={{ fontFamily: "'Times New Roman', serif" }}
                 >
-                  <TypeBlock
-                    delay={1700}
-                    text="Viktor Shklovsky's concept of ostranenie, the defamiliarization of the everyday, anchors a surprising amount of late-modernist prose."
-                  />
-                  <TypeBlock
-                    delay={3200}
-                    text="In what follows I argue that writers like Woolf and Faulkner inherit this device not as a formal trick but as a moral imperative: to return us to things."
-                  />
-                  <TypeBlock
-                    delay={4800}
-                    text="Consider Mrs. Dalloway's opening walk through London. The clock strikes, the flowers are gathered, and the ordinary becomes strange."
+                  {paragraphs.map((p, i) => (
+                    <motion.p
+                      key={i}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true, margin: "-8%" }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 1.6 + i * 1.1,
+                      }}
+                      className="mb-3 text-black/80"
+                      style={{ textIndent: "1.5em" }}
+                    >
+                      {p}
+                    </motion.p>
+                  ))}
+                  {/* Typing cursor */}
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{ duration: 0.3, delay: 4.8 }}
+                    className="inline-block w-[1px] h-[11px] bg-black/60 align-middle"
+                    style={{
+                      animation: "homework-caret 1s step-end infinite",
+                    }}
                   />
                 </div>
               </div>
             </motion.div>
 
-            {/* Right: Canvas submit */}
-            <div className="flex flex-col justify-between">
-              <div className="f-mono text-[0.5rem] tracking-[0.22em] uppercase text-fg-4 mb-3 pl-1">
-                Canvas · awaiting
+            {/* RIGHT: AI-detector + Canvas submit */}
+            <div className="flex flex-col gap-4">
+              <div className="f-mono text-[0.5rem] tracking-[0.24em] uppercase text-fg-4 mb-1 pl-1">
+                Integrity check
               </div>
+
+              {/* GPTZero-style detector card */}
               <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-8%" }}
-                transition={{ duration: 0.9, delay: 0.5 }}
-                className="relative border border-rule-hi bg-bg-2/60 p-4 mb-4"
+                transition={{ duration: 0.75, delay: 5.2 }}
+                className="relative border border-accent/50 p-4 text-left overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(180deg, hsl(var(--accent) / 0.06) 0%, hsl(var(--bg-2) / 0.6) 100%)",
+                  boxShadow: "0 20px 40px -20px hsl(var(--accent) / 0.3)",
+                }}
               >
-                <div className="text-[11px] text-fg-3 mb-1">ENGL 402</div>
-                <div className="text-[13px] text-fg font-medium leading-tight mb-4">
-                  Final Paper · Formalism
+                <div className="f-mono text-[0.44rem] tracking-[0.2em] uppercase text-fg-4 mb-2">
+                  AI detection · 99% human
                 </div>
-                <div className="f-mono text-[0.48rem] tracking-[0.16em] uppercase text-fg-4 mb-1">
-                  Due
+                <div
+                  className="text-fg mb-2"
+                  style={{
+                    fontFamily: "'Fraunces', serif",
+                    fontVariationSettings: "'SOFT' 40",
+                    fontSize: "1.85rem",
+                    letterSpacing: "-0.028em",
+                    lineHeight: 1,
+                  }}
+                >
+                  0.2%
                 </div>
-                <div className="text-[12px] text-fg mb-4">
-                  April 18 · 11:59pm
+                <div className="h-[3px] bg-rule/60 overflow-hidden">
+                  <motion.div
+                    initial={{ scaleX: 1 }}
+                    whileInView={{ scaleX: 0.02 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{
+                      duration: 1.4,
+                      delay: 5.5,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="h-full bg-accent origin-left"
+                    style={{
+                      boxShadow: "0 0 8px hsl(var(--accent) / 0.7)",
+                    }}
+                  />
                 </div>
-                <motion.button
-                  type="button"
-                  initial={{ scale: 1 }}
+                <div className="mt-2 f-mono text-[0.44rem] tracking-[0.04em] text-fg-3">
+                  trained on your last 14 essays
+                </div>
+              </motion.div>
+
+              {/* Canvas submit card with the animated click */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-8%" }}
+                transition={{ duration: 0.75, delay: 5.6 }}
+                className="relative border border-rule-hi bg-bg-2/55 p-4 overflow-hidden"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div
+                    className="w-4 h-4 shrink-0"
+                    style={{
+                      background: "hsl(2 70% 55%)",
+                      borderRadius: "3px",
+                    }}
+                  />
+                  <div className="text-[10.5px] text-fg-3 font-medium leading-none">
+                    Canvas · ECON 201
+                  </div>
+                </div>
+                <div className="text-[12.5px] text-fg font-medium leading-tight mb-4">
+                  Case Brief · Apple Pricing
+                </div>
+
+                {/* Submit button. Glows, then fires an animated click, then
+                    flips to "Submitted ✓" state */}
+                <div className="relative h-[34px]">
+                  <motion.button
+                    type="button"
+                    initial={{ opacity: 1, scale: 1 }}
+                    whileInView={{
+                      opacity: [1, 1, 0],
+                      scale: [1, 0.95, 0.95],
+                    }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 6.6,
+                      times: [0, 0.5, 1],
+                    }}
+                    className="absolute inset-0 w-full f-mono text-[0.58rem] font-semibold tracking-[0.18em] uppercase bg-accent text-bg flex items-center justify-center"
+                    style={{
+                      boxShadow:
+                        "0 0 0 1px hsl(var(--accent) / 0.3), 0 14px 30px -10px hsl(var(--accent) / 0.6)",
+                      animation: "homework-pulse 1.8s ease-in-out 5.4s 1",
+                    }}
+                  >
+                    Submit assignment
+                  </motion.button>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: "-8%" }}
+                    transition={{
+                      duration: 0.6,
+                      delay: 7.1,
+                      type: "spring",
+                      damping: 16,
+                      stiffness: 200,
+                    }}
+                    className="absolute inset-0 w-full flex items-center justify-center gap-2 border border-accent/50 bg-accent/10 f-mono text-[0.58rem] font-semibold tracking-[0.18em] uppercase text-accent"
+                  >
+                    <Check size={12} strokeWidth={2.5} />
+                    Submitted · 11:47pm
+                  </motion.div>
+                </div>
+
+                {/* Animated cursor dot that clicks the button */}
+                <motion.div
+                  aria-hidden
+                  initial={{ opacity: 0, x: 60, y: -30 }}
                   whileInView={{
-                    boxShadow: [
-                      "0 0 0 0 hsl(var(--accent) / 0)",
-                      "0 0 0 12px hsl(var(--accent) / 0)",
-                      "0 0 0 0 hsl(var(--accent) / 0)",
-                    ],
+                    opacity: [0, 1, 1, 1, 0],
+                    x: [60, 40, 20, 0, 0],
+                    y: [-30, -20, -10, -2, -2],
+                    scale: [1, 1, 1, 0.82, 0.82],
                   }}
                   viewport={{ once: true, margin: "-8%" }}
                   transition={{
-                    boxShadow: {
-                      duration: 2,
-                      delay: 5.5,
-                      repeat: Infinity,
-                    },
+                    duration: 2,
+                    delay: 5.0,
+                    times: [0, 0.3, 0.6, 0.85, 1],
+                    ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="w-full f-mono text-[0.58rem] font-semibold tracking-[0.18em] uppercase bg-accent text-bg py-2.5"
+                  className="absolute right-[22%] bottom-[22px] z-[4]"
                 >
-                  Submit assignment
-                </motion.button>
+                  <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+                    <path
+                      d="M2 2 L2 18 L6 14 L9 20 L11 19 L8 13 L14 13 Z"
+                      fill="hsl(var(--fg))"
+                      stroke="hsl(var(--bg))"
+                      strokeWidth="1"
+                      strokeLinejoin="miter"
+                    />
+                  </svg>
+                </motion.div>
               </motion.div>
+
+              {/* Grade receipt */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-8%" }}
-                transition={{ duration: 0.7, delay: 6.2, type: "spring" }}
-                className="border border-accent bg-accent/[0.06] px-3 py-2 text-center"
+                transition={{ duration: 0.7, delay: 7.8 }}
+                className="relative border border-rule bg-bg-2/40 p-3 text-center"
               >
-                <div className="f-mono text-[0.5rem] tracking-[0.18em] uppercase text-accent mb-1">
-                  Turnitin
+                <div className="f-mono text-[0.44rem] tracking-[0.2em] uppercase text-fg-4 mb-1">
+                  Returned · 3 days later
                 </div>
                 <div
-                  className="text-fg"
+                  className="text-accent"
                   style={{
                     fontFamily: "'Fraunces', serif",
-                    fontSize: "1.3rem",
+                    fontSize: "1.8rem",
                     letterSpacing: "-0.025em",
                     lineHeight: 1,
                   }}
                 >
-                  1.2%
+                  A
                 </div>
               </motion.div>
             </div>
@@ -217,19 +369,5 @@ export default function SlideHomework() {
         </div>
       }
     />
-  );
-}
-
-function TypeBlock({ text, delay }: { text: string; delay: number }) {
-  return (
-    <motion.p
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-8%" }}
-      transition={{ duration: 0.6, delay: delay / 1000 }}
-      className="mb-3 text-black/80"
-    >
-      {text}
-    </motion.p>
   );
 }
