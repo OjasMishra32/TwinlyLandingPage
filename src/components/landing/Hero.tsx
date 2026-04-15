@@ -84,10 +84,7 @@ export default function Hero() {
     <section
       id="top"
       className="relative min-h-[100svh] flex flex-col justify-center overflow-x-clip"
-      style={{
-        paddingTop: "clamp(104px, 15vh, 140px)",
-        paddingBottom: "clamp(60px, 8vh, 80px)",
-      }}
+      style={{ paddingTop: "140px", paddingBottom: "80px" }}
     >
       {/* Warm ambient wash */}
       <div className="absolute inset-0 hero-wash pointer-events-none" aria-hidden />
@@ -101,9 +98,9 @@ export default function Hero() {
           (TwinReveal has bg-bg, which would otherwise paint over the arm
           and make it look faded). */}
       <div
-        className="absolute top-0 -bottom-[140px] md:-bottom-[240px] right-[-20%] md:left-[52%] md:right-[-10%]
-                   w-[140%] md:w-auto z-[30]
-                   opacity-[0.22] md:opacity-100
+        className="absolute top-0 -bottom-[240px] right-[-10%] md:left-[52%] md:right-[-10%]
+                   w-full md:w-auto z-[30]
+                   opacity-40 md:opacity-100
                    pointer-events-none"
       >
         <div className="relative h-full w-full pointer-events-auto">

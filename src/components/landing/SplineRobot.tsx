@@ -6,21 +6,22 @@ const Spline = lazy(() => import("@splinetool/react-spline"));
 const SCENE_URL = "https://prod.spline.design/ItJYhtZ3LZ50BPer/scene.splinecode";
 
 /**
- * SplineRobot — the hero-side 3D robot.
+ * SplineRobot — hero-side 3D figure.
  *
- * Two hard requirements from the user:
- *   1. The robot must be stationary — no mouse-parallax tilt, no drift.
- *      A previous pass attached the whole canvas to a spring-tracked
- *      mouse position; it felt floaty and the robot wandered away
- *      from its baseline pose.
- *   2. Scroll events over the robot must scroll the page. Spline's
- *      canvas captures wheel/pointer input by default, which meant
- *      scrolling over the robot moved the robot inside its own 3D
- *      viewport (panning the camera) while the page stayed locked.
- *      Solved here with `pointer-events: none` on the Spline layer so
- *      wheel/pointer events pass straight through to the document.
- *      The robot is now a pure visual — no interaction, but also no
- *      scroll hijack.
+ * Behavior contract:
+ *   1. Stationary. No mouse-parallax tilt.
+ *   2. Scrolling over it scrolls the page. The old version set
+ *      pointer-events-auto on the inner Spline wrapper so it could
+ *      track the mouse for the tilt; that same pointer-events-auto
+ *      also let Spline's canvas eat wheel events. We drop the inner
+ *      pointer-events-auto override and let the outer wrapper's
+ *      pointer-events-none cascade down, so wheel events fall through
+ *      to the document.
+ *
+ * Structure is kept intentionally close to the prior working version
+ * so the compositor layers + z-stack + perspective wrapper render
+ * identically on desktop; only the tilt motion values and the
+ * mousemove listener are removed.
  */
 export default function SplineRobot() {
   const [enabled, setEnabled] = useState(false);
@@ -49,20 +50,19 @@ export default function SplineRobot() {
   }, [enabled, splineReady]);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{ perspective: "1400px" }}
+    >
       {enabled && !fallback && (
         <Suspense fallback={null}>
-          {/* pointer-events: none on the Spline layer is the fix for
-              scroll hijack. The canvas renders, but does not steal
-              wheel/pointer events from the page. */}
-          <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute inset-0"
+            style={{ transformStyle: "preserve-3d" }}
+          >
             <Spline
               scene={SCENE_URL}
-              style={{
-                width: "100%",
-                height: "100%",
-                pointerEvents: "none",
-              }}
+              style={{ width: "100%", height: "100%" }}
               onLoad={() => setSplineReady(true)}
               onError={() => setFallback(true)}
             />
@@ -70,7 +70,10 @@ export default function SplineRobot() {
         </Suspense>
       )}
       {(fallback || !enabled) && (
-        <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0"
+          style={{ transformStyle: "preserve-3d" }}
+        >
           <TwinOrb />
         </div>
       )}

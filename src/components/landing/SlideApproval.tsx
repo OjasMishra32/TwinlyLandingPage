@@ -486,7 +486,7 @@ export default function SlideApproval() {
                           delay: 0.35 + i * 0.09,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        className="relative px-3 py-2.5 border border-rule/40"
+                        className="relative px-3 py-2 sm:py-2.5 border border-rule/40 min-w-0"
                         style={{
                           background: item.active
                             ? "linear-gradient(90deg, hsl(var(--accent) / 0.12) 0%, hsl(var(--accent) / 0.03) 100%)"
@@ -518,22 +518,22 @@ export default function SlideApproval() {
                             />
                           </>
                         )}
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 min-w-0">
                           <span
-                            className={`f-mono text-[0.44rem] font-semibold tracking-[0.2em] uppercase ${tagColor(
+                            className={`f-mono text-[0.42rem] sm:text-[0.44rem] font-semibold tracking-[0.18em] sm:tracking-[0.2em] uppercase shrink-0 ${tagColor(
                               item.tag
                             )}`}
                           >
                             {item.tag}
                           </span>
-                          <span className="f-mono text-[0.42rem] tracking-[0.1em] uppercase text-fg-4 truncate">
+                          <span className="f-mono text-[0.4rem] sm:text-[0.42rem] tracking-[0.08em] sm:tracking-[0.1em] uppercase text-fg-4 truncate min-w-0">
                             {item.who}
                           </span>
                         </div>
-                        <div className="text-[11.5px] text-fg-2 truncate leading-tight">
+                        <div className="text-[11px] sm:text-[11.5px] text-fg-2 leading-tight">
                           {item.summary}
                         </div>
-                        <div className="f-mono text-[0.42rem] tracking-[0.1em] text-fg-4 mt-1">
+                        <div className="f-mono text-[0.4rem] sm:text-[0.42rem] tracking-[0.08em] sm:tracking-[0.1em] text-fg-4 mt-1 truncate">
                           {item.meta}
                         </div>
                       </motion.div>
@@ -569,7 +569,7 @@ export default function SlideApproval() {
                     }}
                   >
                     <div
-                      className="flex items-center gap-2 px-4 py-2 border-b border-ember/20"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-ember/20 min-w-0"
                       style={{ background: "hsl(var(--ember) / 0.06)" }}
                     >
                       <div
@@ -583,22 +583,23 @@ export default function SlideApproval() {
                           G
                         </span>
                       </div>
-                      <span className="f-mono text-[0.46rem] tracking-[0.18em] uppercase text-ember/90 truncate">
-                        Greenwood Property Mgmt · legal@greenwood-pm.com
+                      <span className="f-mono text-[0.42rem] sm:text-[0.46rem] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-ember/90 truncate min-w-0">
+                        <span className="sm:hidden">Greenwood PM</span>
+                        <span className="hidden sm:inline">Greenwood Property Mgmt · legal@greenwood-pm.com</span>
                       </span>
-                      <span className="ml-auto f-mono text-[0.44rem] tracking-[0.12em] uppercase text-fg-4">
-                        Tue 9:41am
+                      <span className="ml-auto f-mono text-[0.4rem] sm:text-[0.44rem] tracking-[0.1em] sm:tracking-[0.12em] uppercase text-fg-4 shrink-0">
+                        9:41am
                       </span>
                     </div>
-                    <div className="px-4 py-3">
-                      <div className="f-mono text-[0.46rem] tracking-[0.14em] uppercase text-fg-4 mb-1.5">
-                        Subject · Lease renewal — rate adjustment
+                    <div className="px-3 sm:px-4 py-3">
+                      <div className="f-mono text-[0.42rem] sm:text-[0.46rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-4 mb-1.5">
+                        Subject · Lease renewal
                       </div>
                       <p
                         className="text-fg-2 italic"
                         style={{
-                          fontSize: "12.5px",
-                          lineHeight: 1.55,
+                          fontSize: "11.5px",
+                          lineHeight: 1.5,
                           fontFamily: "'Fraunces', serif",
                         }}
                       >
@@ -663,32 +664,32 @@ export default function SlideApproval() {
                   </motion.div>
 
                   {/* Status row */}
-                  <div className="flex flex-wrap items-center gap-3 mb-5">
-                    <span className="flex items-center gap-2 px-2.5 py-1 border border-ember/50 bg-ember/[0.06]">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5">
+                    <span className="flex items-center gap-2 px-2 sm:px-2.5 py-1 border border-ember/50 bg-ember/[0.06]">
                       <span
-                        className="w-[6px] h-[6px] rounded-full bg-ember"
+                        className="w-[5px] h-[5px] sm:w-[6px] sm:h-[6px] rounded-full bg-ember"
                         style={{
                           animation: "approval-blink 1.6s ease-in-out infinite",
                           boxShadow: "0 0 10px hsl(var(--ember) / 0.7)",
                         }}
                       />
-                      <span className="f-mono text-[0.52rem] font-semibold tracking-[0.22em] uppercase text-ember">
+                      <span className="f-mono text-[0.46rem] sm:text-[0.52rem] font-semibold tracking-[0.18em] sm:tracking-[0.22em] uppercase text-ember">
                         Awaiting approval
                       </span>
                     </span>
-                    <span className="f-mono text-[0.5rem] tracking-[0.18em] uppercase text-fg-4">
+                    <span className="hidden sm:inline f-mono text-[0.5rem] tracking-[0.18em] uppercase text-fg-4">
                       Rent counter · lease renewal
                     </span>
-                    <span className="ml-auto flex items-center gap-1.5 f-mono text-[0.48rem] tracking-[0.14em] uppercase text-fg-3">
+                    <span className="flex items-center gap-1.5 f-mono text-[0.42rem] sm:text-[0.48rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-3 sm:ml-auto">
                       Auto-sends in
                       <span className="text-accent"><Countdown /></span>
                     </span>
                   </div>
 
                   {/* Avatar + metadata */}
-                  <div className="flex items-start gap-4 mb-5">
+                  <div className="flex items-start gap-3 sm:gap-4 mb-5">
                     <motion.div
-                      className="w-11 h-11 flex items-center justify-center shrink-0 border border-accent/50 relative"
+                      className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center shrink-0 border border-accent/50 relative"
                       style={{
                         background:
                           "linear-gradient(135deg, hsl(var(--accent) / 0.14) 0%, hsl(var(--accent) / 0.04) 100%)",
@@ -707,17 +708,17 @@ export default function SlideApproval() {
                     </motion.div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2 mb-0.5 flex-wrap">
-                        <span className="text-[13.5px] text-fg font-medium">
+                        <span className="text-[12px] sm:text-[13.5px] text-fg font-medium">
                           Your twin
                         </span>
-                        <span className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4">
-                          drafted · 2 min ago
+                        <span className="f-mono text-[0.46rem] sm:text-[0.5rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-4">
+                          drafted · 2m ago
                         </span>
-                        <span className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4">
+                        <span className="hidden sm:inline f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4">
                           · confidence 94%
                         </span>
                       </div>
-                      <div className="text-[11.5px] text-fg-3 f-mono tracking-[0.04em]">
+                      <div className="text-[10.5px] sm:text-[11.5px] text-fg-3 f-mono tracking-[0.04em] truncate">
                         to: greenwood-property-mgmt@...
                       </div>
                     </div>
@@ -725,7 +726,7 @@ export default function SlideApproval() {
 
                   {/* The draft */}
                   <div
-                    className="relative mb-6 p-5 border-l-2 border-accent/50 overflow-hidden"
+                    className="relative mb-6 p-3.5 sm:p-5 border-l-2 border-accent/50 overflow-hidden"
                     style={{ background: "hsl(var(--bg) / 0.5)" }}
                   >
                     {/* Shimmer line across the draft — "freshly written" vibe */}
@@ -751,8 +752,8 @@ export default function SlideApproval() {
                     <p
                       className="relative text-fg-2"
                       style={{
-                        fontSize: "14.5px",
-                        lineHeight: 1.6,
+                        fontSize: "12.5px",
+                        lineHeight: 1.55,
                       }}
                     >
                       "Based on 18 comparable units on your block running at{" "}
@@ -962,17 +963,17 @@ export default function SlideApproval() {
                     </div>
                     <button
                       type="button"
-                      className="flex items-center gap-2 px-4 py-3 border border-rule-hi text-fg-2 f-mono text-[0.56rem] font-medium tracking-[0.16em] uppercase hover:text-fg hover:border-fg-3 transition-colors"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 border border-rule-hi text-fg-2 f-mono text-[0.5rem] sm:text-[0.56rem] font-medium tracking-[0.14em] sm:tracking-[0.16em] uppercase hover:text-fg hover:border-fg-3 transition-colors"
                     >
                       Edit draft
                     </button>
                     <button
                       type="button"
-                      className="flex items-center gap-2 px-4 py-3 border border-rule/60 text-fg-3 f-mono text-[0.56rem] font-medium tracking-[0.16em] uppercase hover:text-fg-2 transition-colors"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 border border-rule/60 text-fg-3 f-mono text-[0.5rem] sm:text-[0.56rem] font-medium tracking-[0.14em] sm:tracking-[0.16em] uppercase hover:text-fg-2 transition-colors"
                     >
                       Hold 24h
                     </button>
-                    <span className="ml-auto flex items-center gap-1.5 f-mono text-[0.5rem] tracking-[0.16em] uppercase text-fg-4">
+                    <span className="hidden sm:flex ml-auto items-center gap-1.5 f-mono text-[0.5rem] tracking-[0.16em] uppercase text-fg-4">
                       Reject
                       <Arrow size={9} strokeWidth={2} />
                       Discard
@@ -983,10 +984,10 @@ export default function SlideApproval() {
 
               {/* Policy footer */}
               <div
-                className="relative flex flex-wrap items-center gap-x-6 gap-y-2 px-5 md:px-6 py-3 border-t border-rule/70"
+                className="relative flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 px-3 sm:px-5 md:px-6 py-3 border-t border-rule/70"
                 style={{ background: "hsl(var(--bg-3) / 0.5)" }}
               >
-                <div className="f-mono text-[0.44rem] tracking-[0.22em] uppercase text-fg-4">
+                <div className="f-mono text-[0.4rem] sm:text-[0.44rem] tracking-[0.18em] sm:tracking-[0.22em] uppercase text-fg-4">
                   Standing policy
                 </div>
                 {[
@@ -1005,7 +1006,7 @@ export default function SlideApproval() {
                       delay: 1.5 + i * 0.08,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="flex items-center gap-1.5 f-mono text-[0.44rem] tracking-[0.14em] uppercase text-fg-3"
+                    className="flex items-center gap-1.5 f-mono text-[0.4rem] sm:text-[0.44rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-3"
                   >
                     <span className="w-[3px] h-[3px] rounded-full bg-accent/70" />
                     {p}

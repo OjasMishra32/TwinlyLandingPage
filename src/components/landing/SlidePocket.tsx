@@ -282,37 +282,37 @@ export default function SlidePocket() {
               >
                 {/* Title bar */}
                 <div
-                  className="flex items-center gap-3 px-5 py-3 border-b border-rule/70"
+                  className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 border-b border-rule/70"
                   style={{ background: "hsl(36 10% 11%)" }}
                 >
-                  <div className="flex gap-1.5">
-                    <span className="w-[12px] h-[12px] rounded-full bg-ember/70" />
-                    <span className="w-[12px] h-[12px] rounded-full bg-fg-4" />
-                    <span className="w-[12px] h-[12px] rounded-full bg-accent/60" />
+                  <div className="flex gap-1.5 shrink-0">
+                    <span className="w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-ember/70" />
+                    <span className="w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-fg-4" />
+                    <span className="w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-accent/60" />
                   </div>
-                  <div className="flex-1 text-center f-mono text-[0.58rem] tracking-[0.14em] uppercase text-fg-4">
-                    Twinly Operator · macOS
+                  <div className="flex-1 text-center f-mono text-[0.48rem] sm:text-[0.58rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-4 truncate">
+                    Twinly · macOS
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <span
-                      className="w-[6px] h-[6px] rounded-full bg-accent"
+                      className="w-[5px] h-[5px] sm:w-[6px] sm:h-[6px] rounded-full bg-accent"
                       style={{
                         animation: "approval-blink 1.4s ease-in-out infinite",
                         boxShadow: "0 0 6px hsl(var(--accent) / 0.7)",
                       }}
                     />
-                    <span className="f-mono text-[0.54rem] tracking-[0.14em] uppercase text-accent">
+                    <span className="f-mono text-[0.46rem] sm:text-[0.54rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-accent">
                       Working
                     </span>
                   </div>
                 </div>
 
                 {/* Tab strip */}
-                <div className="flex items-end gap-1 px-2 pt-2" style={{ background: "hsl(36 10% 9.5%)" }}>
+                <div className="flex items-end gap-1 px-1.5 sm:px-2 pt-2" style={{ background: "hsl(36 10% 9.5%)" }}>
                   {browserTabs.map((tab, i) => (
                     <motion.div
                       key={tab.label}
-                      className="relative flex-1 max-w-[220px] px-3 py-2.5 flex items-center gap-2 overflow-hidden"
+                      className="relative flex-1 max-w-[220px] px-2 sm:px-3 py-2 sm:py-2.5 flex items-center gap-1.5 sm:gap-2 overflow-hidden min-w-0"
                       initial={{
                         background: "hsl(36 10% 8%)",
                         opacity: 0.5,
@@ -341,34 +341,34 @@ export default function SlidePocket() {
                       }}
                     >
                       <div
-                        className="w-[8px] h-[8px] rounded-full shrink-0"
+                        className="w-[6px] h-[6px] sm:w-[8px] sm:h-[8px] rounded-full shrink-0"
                         style={{ background: "hsl(var(--accent) / 0.7)" }}
                       />
-                      <span className="flex-1 f-mono text-[0.56rem] tracking-[0.08em] text-fg-2 truncate">
+                      <span className="flex-1 min-w-0 f-mono text-[0.46rem] sm:text-[0.56rem] tracking-[0.06em] sm:tracking-[0.08em] text-fg-2 truncate">
                         {tab.label}
                       </span>
-                      <span className="text-fg-4 text-[12px] shrink-0">×</span>
+                      <span className="hidden sm:inline text-fg-4 text-[12px] shrink-0">×</span>
                     </motion.div>
                   ))}
-                  <div className="flex-none px-2.5 py-2.5 text-fg-4 text-[14px]">+</div>
+                  <div className="hidden sm:block flex-none px-2.5 py-2.5 text-fg-4 text-[14px]">+</div>
                 </div>
 
                 {/* URL bar */}
                 <div
-                  className="flex items-center gap-3 px-4 py-2.5 border-b border-rule/60"
+                  className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 border-b border-rule/60"
                   style={{ background: "hsl(36 10% 10%)" }}
                 >
-                  <div className="flex items-center gap-2 text-fg-4">
-                    <span style={{ fontSize: "16px" }}>‹</span>
-                    <span style={{ fontSize: "16px" }}>›</span>
-                    <span style={{ fontSize: "14px" }}>↻</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-fg-4 shrink-0">
+                    <span style={{ fontSize: "14px" }}>‹</span>
+                    <span style={{ fontSize: "14px" }}>›</span>
+                    <span className="hidden sm:inline" style={{ fontSize: "14px" }}>↻</span>
                   </div>
                   <div
-                    className="flex-1 flex items-center gap-2 px-3 py-1.5 border border-rule/60"
+                    className="flex-1 flex items-center gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 border border-rule/60 min-w-0"
                     style={{ background: "hsl(36 10% 7%)", borderRadius: "999px" }}
                   >
-                    <span className="text-accent text-[11px]">🔒</span>
-                    <div className="relative h-[14px] flex-1 overflow-hidden">
+                    <span className="text-accent text-[10px] sm:text-[11px] shrink-0">🔒</span>
+                    <div className="relative h-[12px] sm:h-[14px] flex-1 overflow-hidden min-w-0">
                       {browserTabs.map((tab) => (
                         <motion.div
                           key={tab.url}
@@ -380,7 +380,7 @@ export default function SlidePocket() {
                             delay: tab.activeAt - 0.1,
                             times: [0, 0.15, 0.25, 0.9, 1],
                           }}
-                          className="absolute inset-0 f-mono text-[0.58rem] tracking-[0.04em] text-fg-3 leading-[14px]"
+                          className="absolute inset-0 f-mono text-[0.46rem] sm:text-[0.58rem] tracking-[0.04em] text-fg-3 leading-[12px] sm:leading-[14px] truncate"
                         >
                           {tab.url}
                         </motion.div>
@@ -393,7 +393,7 @@ export default function SlidePocket() {
                 <div
                   className="relative"
                   style={{
-                    minHeight: "460px",
+                    minHeight: "clamp(380px, 60vw, 460px)",
                     background:
                       "linear-gradient(180deg, hsl(36 10% 4%) 0%, hsl(36 10% 3%) 100%)",
                   }}
@@ -408,12 +408,12 @@ export default function SlidePocket() {
                       delay: 0.55,
                       times: [0, 0.12, 0.82, 1],
                     }}
-                    className="absolute inset-0 p-6"
+                    className="absolute inset-0 p-4 sm:p-6"
                   >
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between mb-4 sm:mb-5 gap-2">
+                      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                         <div
-                          className="w-8 h-8 flex items-center justify-center"
+                          className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center shrink-0"
                           style={{
                             background: "hsl(195 80% 55%)",
                             borderRadius: "7px",
@@ -421,22 +421,22 @@ export default function SlidePocket() {
                         >
                           <span
                             className="text-white"
-                            style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "-0.05em" }}
+                            style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "-0.05em" }}
                           >
                             K
                           </span>
                         </div>
                         <div
-                          className="text-fg font-semibold"
-                          style={{ fontSize: "16px", letterSpacing: "-0.015em" }}
+                          className="text-fg font-semibold shrink-0"
+                          style={{ fontSize: "14px", letterSpacing: "-0.015em" }}
                         >
                           SFO → NRT
                         </div>
-                        <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
+                        <div className="hidden sm:block f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
                           Fri · 1 adult · 1 way
                         </div>
                       </div>
-                      <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
+                      <div className="f-mono text-[0.5rem] sm:text-[0.58rem] tracking-[0.12em] uppercase text-fg-4 shrink-0">
                         47 results
                       </div>
                     </div>
@@ -458,7 +458,7 @@ export default function SlidePocket() {
                             delay: 0.95 + i * 0.18,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className={`relative flex items-center gap-4 px-4 py-3 border ${
+                          className={`relative flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2.5 sm:py-3 border ${
                             r.hit ? "border-accent/70" : "border-rule/50"
                           }`}
                           style={{
@@ -472,18 +472,18 @@ export default function SlidePocket() {
                           }}
                         >
                           <div
-                            className="w-14 text-center f-mono text-[0.62rem] tracking-[0.12em] uppercase"
+                            className="w-12 sm:w-14 text-left sm:text-center f-mono text-[0.52rem] sm:text-[0.62rem] tracking-[0.1em] sm:tracking-[0.12em] uppercase shrink-0"
                             style={{ color: r.hit ? "hsl(var(--accent))" : "hsl(var(--fg-3))" }}
                           >
                             {r.air}
                           </div>
-                          <div className="flex-1 text-[13px] text-fg-2">{r.time}</div>
+                          <div className="flex-1 text-[11px] sm:text-[13px] text-fg-2 truncate min-w-0">{r.time}</div>
                           <div
-                            className={`tabular-nums ${r.hit ? "text-accent" : "text-fg"}`}
+                            className={`tabular-nums shrink-0 ${r.hit ? "text-accent" : "text-fg"}`}
                             style={{
                               fontFamily: "'Fraunces', serif",
                               fontVariationSettings: "'SOFT' 40",
-                              fontSize: "17px",
+                              fontSize: "14px",
                               letterSpacing: "-0.02em",
                             }}
                           >
@@ -528,7 +528,7 @@ export default function SlidePocket() {
                         times: [0, 0.3, 0.65, 0.88, 1],
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className="absolute left-[240px] top-[130px] z-[4]"
+                      className="hidden sm:block absolute left-[240px] top-[130px] z-[4]"
                     >
                       <svg width="16" height="20" viewBox="0 0 18 22" fill="none">
                         <path
@@ -552,27 +552,27 @@ export default function SlidePocket() {
                       delay: 3.85,
                       times: [0, 0.15, 0.8, 1],
                     }}
-                    className="absolute inset-0 p-6"
+                    className="absolute inset-0 p-4 sm:p-6"
                   >
-                    <div className="flex items-center gap-3 mb-5">
+                    <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 flex-wrap">
                       <div
-                        className="w-8 h-8 flex items-center justify-center"
+                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center shrink-0"
                         style={{ background: "hsl(2 70% 55%)", borderRadius: "7px" }}
                       >
                         <span
                           className="text-white"
-                          style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "-0.05em" }}
+                          style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "-0.05em" }}
                         >
                           A
                         </span>
                       </div>
                       <div
                         className="text-fg font-semibold"
-                        style={{ fontSize: "16px", letterSpacing: "-0.015em" }}
+                        style={{ fontSize: "14px", letterSpacing: "-0.015em" }}
                       >
-                        Passenger information
+                        Passenger info
                       </div>
-                      <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
+                      <div className="f-mono text-[0.5rem] sm:text-[0.58rem] tracking-[0.1em] sm:tracking-[0.12em] uppercase text-fg-4">
                         JAL 002 · Fri 11:30pm
                       </div>
                     </div>
@@ -596,16 +596,16 @@ export default function SlidePocket() {
                             delay: 4.1 + i * 0.13,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className="px-3.5 py-2.5 border border-rule/50"
+                          className="px-3 sm:px-3.5 py-2 sm:py-2.5 border border-rule/50 min-w-0"
                           style={{
                             background: "hsl(36 10% 6%)",
                             borderRadius: "3px",
                           }}
                         >
-                          <div className="f-mono text-[0.5rem] tracking-[0.14em] uppercase text-fg-4 mb-1">
+                          <div className="f-mono text-[0.44rem] sm:text-[0.5rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-4 mb-1">
                             {f.k}
                           </div>
-                          <div className="text-[13.5px] text-fg font-medium">{f.v}</div>
+                          <div className="text-[11.5px] sm:text-[13.5px] text-fg font-medium truncate">{f.v}</div>
                         </motion.div>
                       ))}
                     </div>
@@ -615,19 +615,19 @@ export default function SlidePocket() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: "-10%" }}
                       transition={{ duration: 0.5, delay: 5.2 }}
-                      className="flex items-center justify-between px-4 py-3 border border-accent/60"
+                      className="flex items-center justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 border border-accent/60"
                       style={{
                         background: "linear-gradient(90deg, hsl(var(--accent) / 0.08) 0%, hsl(var(--bg) / 0.3) 100%)",
                         borderRadius: "3px",
                       }}
                     >
-                      <div className="text-[13px] text-fg-2">Total · round trip tax included</div>
+                      <div className="text-[11px] sm:text-[13px] text-fg-2 min-w-0">Total · tax incl.</div>
                       <div
-                        className="text-accent tabular-nums"
+                        className="text-accent tabular-nums shrink-0"
                         style={{
                           fontFamily: "'Fraunces', serif",
                           fontVariationSettings: "'SOFT' 40",
-                          fontSize: "22px",
+                          fontSize: "18px",
                           letterSpacing: "-0.025em",
                         }}
                       >
@@ -646,19 +646,19 @@ export default function SlidePocket() {
                       delay: 6.35,
                       times: [0, 0.15, 1],
                     }}
-                    className="absolute inset-0 p-6"
+                    className="absolute inset-0 p-4 sm:p-6"
                   >
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="flex items-center gap-1">
-                        <span style={{ fontSize: "17px", color: "#ea4335", fontWeight: 800 }}>M</span>
+                    <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 flex-wrap">
+                      <div className="flex items-center gap-1 shrink-0">
+                        <span style={{ fontSize: "15px", color: "#ea4335", fontWeight: 800 }}>M</span>
                       </div>
                       <div
                         className="text-fg font-semibold"
-                        style={{ fontSize: "16px", letterSpacing: "-0.015em" }}
+                        style={{ fontSize: "14px", letterSpacing: "-0.015em" }}
                       >
                         Inbox · 1 new
                       </div>
-                      <div className="f-mono text-[0.58rem] tracking-[0.12em] uppercase text-fg-4">
+                      <div className="f-mono text-[0.48rem] sm:text-[0.58rem] tracking-[0.1em] sm:tracking-[0.12em] uppercase text-fg-4 truncate min-w-0">
                         founders@twinly.tech
                       </div>
                     </div>
@@ -680,7 +680,7 @@ export default function SlidePocket() {
                             delay: 6.55 + i * 0.1,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className={`flex items-center gap-3 px-4 py-2.5 border ${
+                          className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 border ${
                             e.hit ? "border-accent/70" : "border-rule/40"
                           }`}
                           style={{
@@ -692,26 +692,26 @@ export default function SlidePocket() {
                           }}
                         >
                           <div
-                            className={`w-[7px] h-[7px] rounded-full shrink-0 ${
+                            className={`w-[6px] h-[6px] sm:w-[7px] sm:h-[7px] rounded-full shrink-0 ${
                               e.hit ? "bg-accent" : "bg-transparent"
                             }`}
                             style={e.hit ? { boxShadow: "0 0 8px hsl(var(--accent) / 0.7)" } : {}}
                           />
                           <div
-                            className={`w-[110px] text-[12.5px] truncate ${
+                            className={`w-[78px] sm:w-[110px] text-[11px] sm:text-[12.5px] truncate shrink-0 ${
                               e.hit ? "text-fg font-semibold" : "text-fg-3"
                             }`}
                           >
                             {e.from}
                           </div>
                           <div
-                            className={`flex-1 text-[12.5px] truncate ${
+                            className={`flex-1 min-w-0 text-[11px] sm:text-[12.5px] truncate ${
                               e.hit ? "text-fg font-medium" : "text-fg-3"
                             }`}
                           >
                             {e.subj}
                           </div>
-                          <div className="f-mono text-[0.54rem] tracking-[0.1em] uppercase text-fg-4 shrink-0">
+                          <div className="f-mono text-[0.46rem] sm:text-[0.54rem] tracking-[0.08em] sm:tracking-[0.1em] uppercase text-fg-4 shrink-0">
                             {e.time}
                           </div>
                         </motion.div>
@@ -722,7 +722,7 @@ export default function SlidePocket() {
 
                 {/* Action log — streams under the tab content */}
                 <div
-                  className="relative border-t border-rule/60 px-5 py-4"
+                  className="relative border-t border-rule/60 px-4 sm:px-5 py-3 sm:py-4"
                   style={{ background: "hsl(36 10% 7%)" }}
                 >
                   <div className="flex items-center gap-2 mb-3">
@@ -751,13 +751,13 @@ export default function SlidePocket() {
                         }}
                         className="flex items-center gap-2 py-0.5"
                       >
-                        <span className="f-mono text-[0.54rem] tracking-[0.06em] text-fg-4 tabular-nums shrink-0">
+                        <span className="f-mono text-[0.46rem] sm:text-[0.54rem] tracking-[0.06em] text-fg-4 tabular-nums shrink-0">
                           {entry.t}
                         </span>
                         <span className="text-accent shrink-0 flex items-center">
-                          <Check size={10} strokeWidth={3.5} />
+                          <Check size={9} strokeWidth={3.5} />
                         </span>
-                        <span className="text-[12px] text-fg-2 truncate">{entry.text}</span>
+                        <span className="text-[10.5px] sm:text-[12px] text-fg-2 min-w-0 break-words">{entry.text}</span>
                       </motion.div>
                     ))}
                   </div>

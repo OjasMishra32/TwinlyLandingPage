@@ -206,7 +206,7 @@ export default function SlideTax() {
             </div>
 
             {/* INCOME SECTION */}
-            <div className="px-5 md:px-7 pt-5 pb-3">
+            <div className="px-4 sm:px-5 md:px-7 pt-5 pb-3">
               <div className="flex items-center justify-between mb-3">
                 <div className="f-mono text-[0.5rem] tracking-[0.24em] uppercase text-accent">
                   Income
@@ -243,21 +243,21 @@ export default function SlideTax() {
                         ease: [0.22, 1, 0.36, 1],
                       },
                     }}
-                    className="grid items-baseline gap-3 py-2 border-b border-rule/25"
-                    style={{ gridTemplateColumns: "44px 1fr auto" }}
+                    className="grid items-baseline gap-2 sm:gap-3 py-2 border-b border-rule/25"
+                    style={{ gridTemplateColumns: "28px 1fr auto" }}
                   >
-                    <div className="f-mono text-[0.58rem] font-semibold text-fg-4 tabular-nums">
+                    <div className="f-mono text-[0.5rem] sm:text-[0.58rem] font-semibold text-fg-4 tabular-nums">
                       {l.line}
                     </div>
-                    <div className="text-[11.5px] text-fg-2 leading-tight">
+                    <div className="text-[10.5px] sm:text-[11.5px] text-fg-2 leading-tight min-w-0">
                       {l.desc}
                     </div>
                     <div
-                      className="text-fg tabular-nums"
+                      className="text-fg tabular-nums shrink-0"
                       style={{
                         fontFamily: "'Fraunces', serif",
                         fontVariationSettings: "'SOFT' 40",
-                        fontSize: "1.1rem",
+                        fontSize: "clamp(0.95rem, 3vw, 1.1rem)",
                         letterSpacing: "-0.018em",
                         lineHeight: 1,
                       }}
@@ -270,7 +270,7 @@ export default function SlideTax() {
             </div>
 
             {/* CALCULATIONS SECTION */}
-            <div className="px-5 md:px-7 pt-4 pb-3 border-t border-rule/40">
+            <div className="px-4 sm:px-5 md:px-7 pt-4 pb-3 border-t border-rule/40">
               <div className="flex items-center justify-between mb-3">
                 <div className="f-mono text-[0.5rem] tracking-[0.24em] uppercase text-accent">
                   Calculations
@@ -291,38 +291,38 @@ export default function SlideTax() {
                       delay: 2.0 + i * 0.22,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className={`grid items-baseline gap-3 py-2 border-b border-rule/25 ${
+                    className={`grid items-baseline gap-2 sm:gap-3 py-2 border-b border-rule/25 ${
                       l.emphasis ? "px-2 -mx-2" : ""
                     }`}
                     style={{
-                      gridTemplateColumns: "44px 1fr auto",
+                      gridTemplateColumns: "28px 1fr auto",
                       background: l.emphasis
                         ? "linear-gradient(90deg, hsl(var(--accent) / 0.08) 0%, transparent 100%)"
                         : undefined,
                     }}
                   >
                     <div
-                      className={`f-mono text-[0.58rem] font-semibold tabular-nums ${
+                      className={`f-mono text-[0.5rem] sm:text-[0.58rem] font-semibold tabular-nums ${
                         l.emphasis ? "text-accent" : "text-fg-4"
                       }`}
                     >
                       {l.line}
                     </div>
                     <div
-                      className={`text-[11.5px] leading-tight ${
+                      className={`text-[10.5px] sm:text-[11.5px] leading-tight min-w-0 ${
                         l.emphasis ? "text-fg font-medium" : "text-fg-2"
                       }`}
                     >
                       {l.desc}
                     </div>
                     <div
-                      className={`tabular-nums ${
+                      className={`tabular-nums shrink-0 ${
                         l.neg ? "text-ember" : l.emphasis ? "text-fg" : "text-fg"
                       }`}
                       style={{
                         fontFamily: "'Fraunces', serif",
                         fontVariationSettings: "'SOFT' 40",
-                        fontSize: l.emphasis ? "1.2rem" : "1.1rem",
+                        fontSize: l.emphasis ? "clamp(1rem, 3.2vw, 1.2rem)" : "clamp(0.95rem, 3vw, 1.1rem)",
                         letterSpacing: "-0.018em",
                         lineHeight: 1,
                       }}
@@ -346,7 +346,7 @@ export default function SlideTax() {
                 damping: 16,
                 stiffness: 180,
               }}
-              className="relative mx-5 md:mx-7 my-4 border border-accent/70 px-5 py-4"
+              className="relative mx-4 sm:mx-5 md:mx-7 my-4 border border-accent/70 px-4 sm:px-5 py-3 sm:py-4"
               style={{
                 background:
                   "linear-gradient(135deg, hsl(var(--accent) / 0.18) 0%, hsl(var(--accent) / 0.04) 100%)",
@@ -366,17 +366,17 @@ export default function SlideTax() {
                     "radial-gradient(ellipse at center, hsl(var(--accent) / 0.2) 0%, transparent 70%)",
                 }}
               />
-              <div className="relative flex items-baseline justify-between gap-4">
-                <div className="flex items-baseline gap-4">
-                  <div className="f-mono text-[0.62rem] font-bold text-accent tabular-nums">
+              <div className="relative flex items-baseline justify-between gap-3 sm:gap-4">
+                <div className="flex items-baseline gap-2 sm:gap-4 min-w-0">
+                  <div className="f-mono text-[0.56rem] sm:text-[0.62rem] font-bold text-accent tabular-nums shrink-0">
                     34
                   </div>
-                  <div>
-                    <div className="text-[12.5px] text-fg font-semibold leading-tight">
+                  <div className="min-w-0">
+                    <div className="text-[11.5px] sm:text-[12.5px] text-fg font-semibold leading-tight">
                       Amount overpaid · REFUND
                     </div>
-                    <div className="f-mono text-[0.44rem] tracking-[0.18em] uppercase text-fg-3 mt-1">
-                      Direct deposit · Chase ****8234
+                    <div className="f-mono text-[0.4rem] sm:text-[0.44rem] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-fg-3 mt-1 truncate">
+                      Chase ****8234
                     </div>
                   </div>
                 </div>
@@ -397,9 +397,9 @@ export default function SlideTax() {
             </motion.div>
 
             {/* Signature + E-FILE action */}
-            <div className="relative border-t border-rule/60 px-5 md:px-7 py-4 flex items-center justify-between gap-4">
+            <div className="relative border-t border-rule/60 px-4 sm:px-5 md:px-7 py-4 flex flex-wrap items-center justify-between gap-3 sm:gap-4">
               <div>
-                <div className="f-mono text-[0.42rem] tracking-[0.18em] uppercase text-fg-4 mb-1">
+                <div className="f-mono text-[0.4rem] sm:text-[0.42rem] tracking-[0.16em] sm:tracking-[0.18em] uppercase text-fg-4 mb-1">
                   Signature
                 </div>
                 <div
@@ -407,7 +407,7 @@ export default function SlideTax() {
                   style={{
                     fontFamily: "'Instrument Serif', serif",
                     fontStyle: "italic",
-                    fontSize: "18px",
+                    fontSize: "16px",
                     lineHeight: 1,
                     letterSpacing: "-0.005em",
                   }}
@@ -416,7 +416,7 @@ export default function SlideTax() {
                 </div>
               </div>
 
-              <div className="relative h-[40px] w-[220px]">
+              <div className="relative h-[40px] w-full sm:w-[220px] max-w-[220px]">
                 {/* E-FILE button (disappears after click) */}
                 <motion.button
                   type="button"

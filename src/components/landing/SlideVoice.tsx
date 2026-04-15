@@ -58,17 +58,17 @@ export default function SlideVoice() {
                 delay: 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative border border-rule p-6 md:p-8 text-left bg-bg/45"
+              className="relative border border-rule p-4 sm:p-6 md:p-8 text-left bg-bg/45"
               style={{
                 transformStyle: "preserve-3d",
                 boxShadow: "0 30px 80px -40px rgba(0,0,0,0.6)",
               }}
             >
-              <div className="flex items-center justify-between mb-5 f-mono text-[0.62rem] font-medium tracking-[0.22em] uppercase">
+              <div className="flex items-center justify-between mb-4 sm:mb-5 f-mono text-[0.52rem] sm:text-[0.62rem] font-medium tracking-[0.18em] sm:tracking-[0.22em] uppercase">
                 <span className="text-fg-4">Generic agent</span>
                 <span className="text-ember">Not you</span>
               </div>
-              <div className="text-[15px] md:text-[16px] leading-[1.7] text-fg-3">
+              <div className="text-[12px] sm:text-[15px] md:text-[16px] leading-[1.55] sm:leading-[1.7] text-fg-3">
                 <p className="mb-3">
                   Dear Comcast Customer Service Representative,
                 </p>
@@ -89,9 +89,9 @@ export default function SlideVoice() {
                 <p className="text-fg-4">Respectfully yours,</p>
               </div>
               <div
-                className="absolute right-4 top-4 f-mono text-[0.54rem] tracking-[0.14em] uppercase text-ember/70"
+                className="absolute right-3 sm:right-4 top-3 sm:top-4 f-mono text-[0.46rem] sm:text-[0.54rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-ember/70"
                 style={{
-                  padding: "3px 8px",
+                  padding: "2px 6px",
                   border: "1px solid hsl(var(--ember) / 0.4)",
                 }}
               >
@@ -120,53 +120,53 @@ export default function SlideVoice() {
             >
               {/* Gmail compose header */}
               <div
-                className="flex items-center justify-between px-5 py-3"
+                className="flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3"
                 style={{ background: "hsl(36 10% 11%)" }}
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
                   <span
-                    className="w-5 h-5 flex items-center justify-center"
+                    className="w-[18px] h-[18px] sm:w-5 sm:h-5 flex items-center justify-center shrink-0"
                     style={{
                       background: "#ea4335",
                       borderRadius: "3px",
-                      fontSize: "11px",
+                      fontSize: "10px",
                       fontWeight: 800,
                       color: "#fff",
                     }}
                   >
                     M
                   </span>
-                  <span className="text-[13px] text-fg font-medium">New message</span>
+                  <span className="text-[11px] sm:text-[13px] text-fg font-medium truncate">New message</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-fg-4">
-                  <span style={{ fontSize: "13px" }}>–</span>
-                  <span style={{ fontSize: "13px" }}>□</span>
-                  <span style={{ fontSize: "13px" }}>×</span>
+                <div className="flex items-center gap-2 sm:gap-2.5 text-fg-4 shrink-0">
+                  <span style={{ fontSize: "12px" }}>–</span>
+                  <span style={{ fontSize: "12px" }}>□</span>
+                  <span style={{ fontSize: "12px" }}>×</span>
                 </div>
               </div>
 
               {/* To / Subject */}
-              <div className="px-6 py-3 border-b border-rule/40">
-                <div className="flex items-center gap-3 py-1.5">
-                  <span className="f-mono text-[0.58rem] tracking-[0.14em] uppercase text-fg-4 w-[72px]">
+              <div className="px-4 sm:px-6 py-2.5 sm:py-3 border-b border-rule/40">
+                <div className="flex items-center gap-2 sm:gap-3 py-1 sm:py-1.5">
+                  <span className="f-mono text-[0.48rem] sm:text-[0.58rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-4 w-[52px] sm:w-[72px] shrink-0">
                     To
                   </span>
-                  <span className="text-[14px] text-fg-2">
+                  <span className="text-[11.5px] sm:text-[14px] text-fg-2 truncate min-w-0">
                     billing@comcast.com
                   </span>
                 </div>
-                <div className="flex items-center gap-3 py-1.5">
-                  <span className="f-mono text-[0.58rem] tracking-[0.14em] uppercase text-fg-4 w-[72px]">
+                <div className="flex items-center gap-2 sm:gap-3 py-1 sm:py-1.5">
+                  <span className="f-mono text-[0.48rem] sm:text-[0.58rem] tracking-[0.12em] sm:tracking-[0.14em] uppercase text-fg-4 w-[52px] sm:w-[72px] shrink-0">
                     Subject
                   </span>
-                  <span className="text-[14px] text-fg font-medium">
+                  <span className="text-[11.5px] sm:text-[14px] text-fg font-medium truncate min-w-0">
                     $80 late fee · acct 8234192
                   </span>
                 </div>
               </div>
 
               {/* Compose body — typewriter drafts the real voice */}
-              <div className="px-6 py-5 min-h-[280px] text-[15.5px] md:text-[16px] leading-[1.65] text-fg">
+              <div className="px-4 sm:px-6 py-4 sm:py-5 min-h-[240px] sm:min-h-[280px] text-[12.5px] sm:text-[15.5px] md:text-[16px] leading-[1.55] sm:leading-[1.65] text-fg">
                 <TypewriterText
                   as="div"
                   text="Hey,"
@@ -204,10 +204,10 @@ export default function SlideVoice() {
 
               {/* Gmail footer with Send button + cursor click */}
               <div
-                className="relative flex items-center justify-between px-5 py-4 border-t border-rule/40"
+                className="relative flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 border-t border-rule/40"
                 style={{ background: "hsl(36 10% 9%)" }}
               >
-                <div className="relative h-[40px] w-[140px]">
+                <div className="relative h-[38px] sm:h-[40px] w-[118px] sm:w-[140px]">
                   <motion.button
                     type="button"
                     initial={{ opacity: 0 }}

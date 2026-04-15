@@ -190,17 +190,17 @@ export default function SlideCode() {
               {/* Code area with line numbers */}
               <div
                 ref={codeBodyRef}
-                className="relative flex text-[10.5px] sm:text-[11.5px] leading-[1.85] text-left overflow-hidden"
+                className="relative flex text-[8.5px] sm:text-[11.5px] leading-[1.75] sm:leading-[1.85] text-left overflow-hidden"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 {/* Line number gutter */}
-                <div className="flex-shrink-0 pt-4 pb-6 pl-3 sm:pl-4 pr-2 sm:pr-3 text-right text-fg-4 select-none border-r border-rule/40">
+                <div className="flex-shrink-0 pt-3 sm:pt-4 pb-5 sm:pb-6 pl-2 sm:pl-4 pr-1.5 sm:pr-3 text-right text-fg-4 select-none border-r border-rule/40">
                   {code.map((_, i) => (
                     <div key={i}>{i + 1}</div>
                   ))}
                 </div>
                 {/* Code lines */}
-                <div className="flex-1 min-w-0 pt-4 pb-6 pl-3 sm:pl-4 pr-3 sm:pr-5 overflow-x-auto">
+                <div className="flex-1 min-w-0 pt-3 sm:pt-4 pb-5 sm:pb-6 pl-2 sm:pl-4 pr-2 sm:pr-5 overflow-hidden">
                   {code.map((line, i) => {
                     const isLast = i === code.length - 1;
                     return (
@@ -214,7 +214,7 @@ export default function SlideCode() {
                           delay: 0.4 + i * 0.045,
                           ease: [0.22, 1, 0.36, 1],
                         }}
-                        style={{ paddingLeft: `${line.indent * 18}px` }}
+                        style={{ paddingLeft: `${line.indent * 12}px` }}
                         className="whitespace-pre relative"
                       >
                         {line.tokens.map((t, j) => (
@@ -273,14 +273,14 @@ export default function SlideCode() {
               />
 
               {/* Browser chrome */}
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-rule/70 bg-bg-3/50">
-                <div className="flex gap-1.5">
-                  <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
-                  <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
-                  <span className="w-[10px] h-[10px] rounded-full bg-fg-4" />
+              <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-rule/70 bg-bg-3/50">
+                <div className="flex gap-1.5 shrink-0">
+                  <span className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-full bg-fg-4" />
+                  <span className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-full bg-fg-4" />
+                  <span className="w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-full bg-fg-4" />
                 </div>
                 <div
-                  className="flex-1 mx-3 px-3 py-1 text-center f-mono text-[0.5rem] tracking-[0.1em] text-fg-3 truncate"
+                  className="flex-1 mx-2 sm:mx-3 px-3 py-1 text-center f-mono text-[0.46rem] sm:text-[0.5rem] tracking-[0.1em] text-fg-3 truncate"
                   style={{
                     background: "hsl(220 25% 12%)",
                     borderRadius: "6px",
@@ -288,7 +288,7 @@ export default function SlideCode() {
                 >
                   halcyon.app
                 </div>
-                <span className="f-mono text-[0.5rem] tracking-[0.18em] uppercase text-accent flex items-center gap-1.5">
+                <span className="f-mono text-[0.46rem] sm:text-[0.5rem] tracking-[0.18em] uppercase text-accent flex items-center gap-1.5 shrink-0">
                   <span
                     className="w-[5px] h-[5px] rounded-full bg-accent"
                     style={{ boxShadow: "0 0 8px hsl(var(--accent) / 0.7)" }}
@@ -303,7 +303,7 @@ export default function SlideCode() {
                 style={{
                   background:
                     "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--accent) / 0.07) 0%, transparent 55%), linear-gradient(180deg, hsl(220 25% 5%) 0%, hsl(220 30% 3%) 100%)",
-                  minHeight: "440px",
+                  minHeight: "clamp(340px, 52vw, 440px)",
                 }}
               >
                 {/* Fake nav */}
@@ -587,7 +587,7 @@ export default function SlideCode() {
 
             {/* Log body */}
             <div
-              className="relative px-3 sm:px-4 md:px-6 py-4 md:py-5 text-[9.5px] sm:text-[11.5px] leading-[1.85] sm:leading-[1.95] text-left overflow-x-auto"
+              className="relative px-3 sm:px-4 md:px-6 py-4 md:py-5 text-[9px] sm:text-[11.5px] leading-[1.8] sm:leading-[1.95] text-left"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               <motion.div
@@ -621,11 +621,11 @@ export default function SlideCode() {
                     delay: 2.95 + i * 0.16,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="flex items-center gap-3"
+                  className="flex items-start gap-2 sm:gap-3"
                 >
-                  <span className="text-fg-4 tabular-nums">[{line.t}]</span>
-                  <span className="text-accent">✓</span>
-                  <span className="text-fg-2">{line.msg}</span>
+                  <span className="text-fg-4 tabular-nums shrink-0">[{line.t}]</span>
+                  <span className="text-accent shrink-0">✓</span>
+                  <span className="text-fg-2 min-w-0 break-words">{line.msg}</span>
                 </motion.div>
               ))}
 
@@ -635,20 +635,20 @@ export default function SlideCode() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-8%" }}
                 transition={{ duration: 0.45, delay: 4.5 }}
-                className="flex items-center gap-3 mt-2 pt-2 border-t border-rule/40"
+                className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 mt-2 pt-2 border-t border-rule/40"
               >
-                <span className="text-fg-4 tabular-nums">[00:28]</span>
-                <span className="text-accent">→</span>
+                <span className="text-fg-4 tabular-nums shrink-0">[00:28]</span>
+                <span className="text-accent shrink-0">→</span>
                 <a
-                  className="text-accent font-semibold underline decoration-accent/50"
+                  className="text-accent font-semibold underline decoration-accent/50 break-all"
                   style={{ textDecorationThickness: "1px", textUnderlineOffset: "3px" }}
                   href="#"
                   onClick={(e) => e.preventDefault()}
                 >
                   https://halcyon.app
                 </a>
-                <span className="text-fg-3 f-mono text-[0.56rem] tracking-[0.12em] uppercase">
-                  · Live · 1h 42m total
+                <span className="text-fg-3 f-mono text-[0.5rem] sm:text-[0.56rem] tracking-[0.12em] uppercase">
+                  · Live · 1h 42m
                 </span>
                 <motion.span
                   className="inline-block w-[7px] h-[13px] bg-accent ml-1"
