@@ -47,21 +47,36 @@ export default function KeynoteSlide({
     offset: ["start end", "end start"],
   });
 
-  // As the slide passes through the viewport, the headline rises, the
-  // body follows faster, the visual scales slightly
-  const headlineY = useTransform(scrollYProgress, [0, 0.5, 1], [80, 0, -80]);
+  // Apple-style focal parallax: content grows from a point, peaks dead
+  // center, and shrinks back to a point as the slide exits
+  const headlineY = useTransform(scrollYProgress, [0, 0.5, 1], [120, 0, -120]);
   const headlineOpacity = useTransform(
     scrollYProgress,
     [0, 0.22, 0.78, 1],
     [0, 1, 1, 0]
   );
-  const bodyY = useTransform(scrollYProgress, [0, 0.5, 1], [60, 0, -60]);
+  const headlineScale = useTransform(
+    scrollYProgress,
+    [0.05, 0.5, 0.95],
+    [0.88, 1, 0.92]
+  );
+  const bodyY = useTransform(scrollYProgress, [0, 0.5, 1], [80, 0, -80]);
+  const bodyOpacity = useTransform(
+    scrollYProgress,
+    [0.1, 0.28, 0.78, 0.95],
+    [0, 1, 1, 0]
+  );
   const visualScale = useTransform(
     scrollYProgress,
     [0.1, 0.5, 0.9],
-    [0.94, 1, 0.96]
+    [0.84, 1, 0.88]
   );
-  const visualY = useTransform(scrollYProgress, [0, 0.5, 1], [40, 0, -40]);
+  const visualY = useTransform(scrollYProgress, [0, 0.5, 1], [80, 0, -80]);
+  const visualOpacity = useTransform(
+    scrollYProgress,
+    [0.08, 0.28, 0.78, 0.96],
+    [0, 1, 1, 0]
+  );
   const spotlightOpacity = useTransform(
     scrollYProgress,
     [0.15, 0.5, 0.85],
@@ -99,10 +114,7 @@ export default function KeynoteSlide({
       >
         {visualAbove && visual && (
           <motion.div
-            style={{ y: visualY, scale: visualScale }}
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            style={{ y: visualY, scale: visualScale, opacity: visualOpacity }}
             className="mb-12 md:mb-16 w-full"
           >
             {visual}
@@ -130,6 +142,7 @@ export default function KeynoteSlide({
           style={{
             y: headlineY,
             opacity: headlineOpacity,
+            scale: headlineScale,
             fontFamily: "'Fraunces', serif",
             fontOpticalSizing: "auto",
             fontVariationSettings: "'SOFT' 40, 'WONK' 0",
@@ -140,18 +153,10 @@ export default function KeynoteSlide({
             maxWidth: align === "center" ? "18ch" : "16ch",
             margin: align === "center" ? "0 auto" : undefined,
           }}
-          initial={{ filter: "blur(10px)", scale: 0.96 }}
-          animate={inView ? { filter: "blur(0px)", scale: 1 } : {}}
+          initial={{ filter: "blur(14px)" }}
+          animate={inView ? { filter: "blur(0px)" } : {}}
           transition={{
-            filter: { duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
-            scale: {
-              duration: 1.4,
-              delay: 0.1,
-              type: "spring",
-              damping: 18,
-              stiffness: 110,
-              mass: 1,
-            },
+            filter: { duration: 1.3, delay: 0.12, ease: [0.22, 1, 0.36, 1] },
           }}
           className="text-fg"
         >
@@ -162,18 +167,12 @@ export default function KeynoteSlide({
           <motion.p
             style={{
               y: bodyY,
+              opacity: bodyOpacity,
               fontSize: "clamp(1.1rem, 1.4vw, 1.4rem)",
               lineHeight: 1.52,
               maxWidth: "52ch",
               fontWeight: 400,
               margin: align === "center" ? "0 auto" : undefined,
-            }}
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{
-              duration: 0.95,
-              delay: 0.42,
-              ease: [0.22, 1, 0.36, 1],
             }}
             className="mt-8 md:mt-10 text-fg-2"
           >
@@ -183,14 +182,7 @@ export default function KeynoteSlide({
 
         {!visualAbove && visual && (
           <motion.div
-            style={{ y: visualY, scale: visualScale }}
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{
-              duration: 1.1,
-              delay: 0.55,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            style={{ y: visualY, scale: visualScale, opacity: visualOpacity }}
             className="mt-14 md:mt-20 w-full"
           >
             {visual}
