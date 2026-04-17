@@ -121,6 +121,13 @@ export default function KeynoteSlide({
       <div
         className={`relative w-full max-w-[1280px] mx-auto px-5 sm:px-8 md:px-14 flex flex-col ${itemsAlign} ${textAlign}`}
       >
+        {/* Oversized ghost chapter number behind the headline — editorial
+            magazine feel. Parsed from eyebrows like "PARALLEL 02" / "Capability 02".
+            We pluck the number and Roman-ize it for the ghost glyph. */}
+        {eyebrow && (
+          <GhostChapter eyebrow={eyebrow} align={align} />
+        )}
+
         {visualAbove && visual && (
           <motion.div
             style={{ y: visualY, scale: visualScale, opacity: visualOpacity }}
@@ -132,18 +139,12 @@ export default function KeynoteSlide({
 
         {eyebrow && (
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-5 md:mb-7 flex items-center gap-3 f-mono text-[0.56rem] font-medium tracking-[0.28em] uppercase text-fg-3"
+            transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-5 md:mb-6"
           >
-            <motion.span
-              initial={{ scaleX: 0 }}
-              animate={inView ? { scaleX: 1 } : {}}
-              transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="h-px w-8 bg-accent origin-left"
-            />
-            {eyebrow}
+            <EditorialLabel raw={eyebrow} />
           </motion.div>
         )}
 
@@ -203,4 +204,124 @@ export default function KeynoteSlide({
       </div>
     </section>
   );
+}
+
+/**
+ * Turns an eyebrow like "CAPABILITY 02 · PARALLEL" or
+ * "02 / Parallel" into a clean editorial line:
+ *   *ii*  Parallel
+ * No dashes. No monospace. No uppercase.
+ * A hairline italic serif mark that reads like the top of a
+ * magazine page. Accent goes on the roman numeral only.
+ */
+function EditorialLabel({ raw }: { raw: string }) {
+  const { numeral, name } = parseEyebrow(raw);
+  return (
+    <div
+      className="inline-flex items-baseline gap-3 text-fg-3"
+      style={{
+        fontFamily: "'Fraunces', serif",
+        fontStyle: "italic",
+        fontSize: "clamp(0.78rem, 0.92vw, 0.95rem)",
+        letterSpacing: "-0.005em",
+      }}
+    >
+      {numeral && (
+        <>
+          <span
+            className="text-accent"
+            style={{
+              fontFamily: "'Instrument Serif', 'Times New Roman', serif",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: "1.15em",
+              lineHeight: 1,
+            }}
+          >
+            {numeral.toLowerCase()}.
+          </span>
+        </>
+      )}
+      <span className="text-fg-2">{name}</span>
+    </div>
+  );
+}
+
+/**
+ * Oversized ghost roman numeral that sits behind the headline at
+ * low opacity. Inspired by the way print magazines lay out chapter
+ * openers.
+ */
+function GhostChapter({
+  eyebrow,
+  align,
+}: {
+  eyebrow: string;
+  align: "center" | "left";
+}) {
+  const { numeral } = parseEyebrow(eyebrow);
+  if (!numeral) return null;
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 select-none overflow-hidden"
+    >
+      <span
+        className="absolute text-fg"
+        style={{
+          fontFamily: "'Instrument Serif', 'Times New Roman', serif",
+          fontStyle: "italic",
+          fontWeight: 400,
+          fontSize: "clamp(18rem, 32vw, 34rem)",
+          lineHeight: 0.78,
+          letterSpacing: "-0.04em",
+          opacity: 0.035,
+          top: "4%",
+          left: align === "center" ? "50%" : "-1.5%",
+          transform: align === "center" ? "translateX(-50%)" : undefined,
+          whiteSpace: "nowrap",
+          color: "hsl(var(--fg))",
+        }}
+      >
+        {numeral.toLowerCase()}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Parses "Capability 02 · Parallel" or "02 / parallel" or just
+ * "Parallel" into a numeral + name pair. Falls back gracefully.
+ */
+function parseEyebrow(raw: string): { numeral: string | null; name: string } {
+  const cleaned = raw.replace(/·/g, " ").replace(/\s+/g, " ").trim();
+  const numMatch = /(\d+)/.exec(cleaned);
+  const num = numMatch ? Number(numMatch[1]) : null;
+  // Strip structural words ("CAPABILITY", "CHAPTER") and the number.
+  const name = cleaned
+    .replace(/\b(capability|capabilities|chapter|ch|section)\b/gi, "")
+    .replace(/\d+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return {
+    numeral: num != null ? toRoman(num) : null,
+    name: name || cleaned,
+  };
+}
+
+function toRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [1000, "m"], [900, "cm"], [500, "d"], [400, "cd"],
+    [100, "c"], [90, "xc"], [50, "l"], [40, "xl"],
+    [10, "x"], [9, "ix"], [5, "v"], [4, "iv"], [1, "i"],
+  ];
+  let v = n;
+  let out = "";
+  for (const [num, s] of map) {
+    while (v >= num) {
+      out += s;
+      v -= num;
+    }
+  }
+  return out;
 }
